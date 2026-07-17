@@ -1,1 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>SR Chits ERP - Groups</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/groups.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Groups Management</h1>
+
+<div class="group-form">
+
+<input
+type="text"
+id="groupName"
+placeholder="Group Name">
+
+<input
+type="number"
+id="chitAmount"
+placeholder="Chit Amount">
+
+<input
+type="number"
+id="totalMembers"
+placeholder="Total Members">
+
+<input
+type="number"
+id="monthlyAmount"
+placeholder="Monthly Amount">
+
+<input
+type="number"
+id="duration"
+placeholder="Duration (Months)">
+
+<select id="status">
+
+<option value="Active">
+Active
+</option>
+
+<option value="Closed">
+Closed
+</option>
+
+</select>
+
+<button id="saveGroupBtn">
+
+Save Group
+
+</button>
+
+</div>
+
+<div id="groupsList">
+
+</div>
+
+</div>
+
+<script type="module"
+src="js/groups.js"></script>
+
+</body>
+
+</html>
