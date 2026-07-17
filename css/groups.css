@@ -1,1 +1,86 @@
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
 
+.container h1{
+    text-align:center;
+    color:#1565C0;
+    margin-bottom:25px;
+}
+
+.group-form{
+    background:#FFFFFF;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.group-form input,
+.group-form select{
+    width:100%;
+    padding:14px;
+    border:1px solid #DDD;
+    border-radius:10px;
+    font-size:15px;
+}
+
+.group-form input:focus,
+.group-form select:focus{
+    border-color:#1565C0;
+}
+
+#saveGroupBtn{
+    width:100%;
+    padding:15px;
+    background:#1565C0;
+    color:#FFF;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+}
+
+#saveGroupBtn:hover{
+    background:#0D47A1;
+}
+
+#groupsList{
+    margin-top:25px;
+}
+
+.group-card{
+    background:#FFF;
+    padding:18px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    margin-bottom:15px;
+}
+
+.group-card h3{
+    color:#1565C0;
+    margin-bottom:10px;
+}
+
+.group-card p{
+    margin:5px 0;
+    color:#555;
+}
+
+@media(min-width:768px){
+
+.group-form{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+#saveGroupBtn{
+    grid-column:1/3;
+}
+
+}
