@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Members Management</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/members.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Members Management</h1>
+
+<div class="member-form">
+
+<input
+type="text"
+id="memberName"
+placeholder="Member Name">
+
+<input
+type="tel"
+id="mobileNumber"
+placeholder="Mobile Number">
+
+<textarea
+id="address"
+placeholder="Address"></textarea>
+
+<input
+type="text"
+id="aadhaarNumber"
+placeholder="Aadhaar Number">
+
+<select id="group">
+
+<option value="">Select Group</option>
+
+</select>
+
+<select id="status">
+
+<option value="Active">Active</option>
+
+<option value="Inactive">Inactive</option>
+
+</select>
+
+<button id="saveMemberBtn">
+
+Save Member
+
+</button>
+
+</div>
+
+<div id="membersList">
+
+</div>
+
+</div>
+
+<script type="module"
+src="js/members.js"></script>
+
+</body>
+
+</html>
