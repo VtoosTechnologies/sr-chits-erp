@@ -3,57 +3,73 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>SR Chits ERP - Dashboard</title>
+    <title>SR Chits ERP - Dashboard</title>
 
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 
 </head>
 
 <body>
 
-<div class="dashboard">
+    <div class="dashboard">
 
-<h1>SR Chits ERP</h1>
+        <div class="header">
 
-<p>Welcome, Owner 👋</p>
+            <h1>SR Chits ERP</h1>
 
-<div class="card">
+            <p>Welcome, Owner 👋</p>
 
-<h2>Total Members</h2>
+        </div>
 
-<h3>0</h3>
+        <div class="cards">
 
-</div>
+            <div class="card">
 
-<div class="card">
+                <h2>Total Members</h2>
 
-<h2>Total Groups</h2>
+                <h3 id="totalMembers">0</h3>
 
-<h3>0</h3>
+            </div>
 
-</div>
+            <div class="card">
 
-<div class="card">
+                <h2>Total Groups</h2>
 
-<h2>Today's Collection</h2>
+                <h3 id="totalGroups">0</h3>
 
-<h3>₹0</h3>
+            </div>
 
-</div>
+            <div class="card">
 
-<button id="logoutBtn">
-Logout
-</button>
+                <h2>Today's Collection</h2>
 
-</div>
+                <h3 id="todayCollection">₹0</h3>
 
-<script type="module" src="js/dashboard.js"></script>
+            </div>
+
+            <div class="card">
+
+                <h2>Total Staff</h2>
+
+                <h3 id="totalStaff">0</h3>
+
+            </div>
+
+        </div>
+
+        <button id="logoutBtn">
+            Logout
+        </button>
+
+    </div>
+
+    <script type="module" src="js/dashboard.js"></script>
 
 </body>
 
