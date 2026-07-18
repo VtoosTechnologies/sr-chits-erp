@@ -92,7 +92,7 @@ async function loadMembers() {
 
     const q = query(
         membersRef,
-        where("groupId","==",group.value)
+        where("group","==",group.value)
     );
 
     const snapshot =
