@@ -4,10 +4,9 @@
 <head>
 
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SR Chits ERP - Auction</title>
+    <title>SR Chits ERP - Auction Management</title>
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/auction.css">
@@ -16,62 +15,222 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>Monthly Auction</h1>
+    <h1>🏆 Auction Management</h1>
 
-        <div class="form">
+    <div class="form">
 
-            <label>Group</label>
-            <select id="group">
-                <option value="">Select Group</option>
-            </select>
+        <!-- ===========================
+             Auction Filter
+        ============================ -->
 
-            <label>Month</label>
-            <input type="number" id="month" readonly>
+        <label>Chit Amount</label>
 
-            <label>Auction Date</label>
-            <input type="date" id="auctionDate" readonly>
+        <select id="chitAmountFilter">
 
-            <label>Winner</label>
-            <select id="winner">
-                <option value="">Select Winner</option>
-            </select>
+            <option value="">Select Chit Amount</option>
 
-            <label>Chit Value</label>
-            <input type="number" id="chitValue" readonly>
+        </select>
 
-            <label>Thallu (Discount)</label>
-            <input type="number" id="thallu" placeholder="Enter Thallu">
 
-            <label>Kasar</label>
-            <input type="number" id="kasar" placeholder="Enter Kasar">
+        <label>Auction Date</label>
 
-            <label>Prize Amount</label>
-            <input type="number" id="prizeAmount" placeholder="Prize Amount">
+        <select id="auctionDayFilter">
 
-            <label>Monthly Payable Amount</label>
-            <input type="number" id="monthlyAmount" readonly>
+            <option value="">Select Auction Date</option>
 
-            <label>Due Date</label>
-            <input type="date" id="dueDate">
+        </select>
 
-            <label>Remarks</label>
-            <textarea id="remarks" rows="4" placeholder="Remarks"></textarea>
+
+        <!-- ===========================
+             Group Details
+        ============================ -->
+
+        <div class="group-card">
+
+            <h3>Group Details</h3>
+
+            <p>
+                <strong>Group Code :</strong>
+                <span id="groupCode">-</span>
+            </p>
+
+            <p>
+                <strong>Group Name :</strong>
+                <span id="groupName">-</span>
+            </p>
+
+            <p>
+                <strong>Total Members :</strong>
+                <span id="totalMembers">-</span>
+            </p>
+
+            <p>
+                <strong>Duration :</strong>
+                <span id="duration">-</span>
+            </p>
+
+            <p>
+                <strong>Current Auction :</strong>
+                Month
+                <span id="currentMonth">-</span>
+            </p>
+
+            <p>
+                <strong>Start Date :</strong>
+                <span id="startDate">-</span>
+            </p>
+
+            <p>
+                <strong>Status :</strong>
+
+                <span
+                    id="groupStatus"
+                    class="status-badge running">
+
+                    Running
+
+                </span>
+
+            </p>
+
+        </div>
+
+
+        <!-- ===========================
+             Auction Details
+        ============================ -->
+
+        <label>Auction Date</label>
+
+        <input
+            type="date"
+            id="auctionDate"
+            readonly>
+
+
+        <label>Winner</label>
+
+        <select id="winner">
+
+            <option value="">
+                Select Winner
+            </option>
+
+        </select>
+
+
+        <div id="winnerAlert"
+             class="alert"
+             style="display:none;">
+        </div>
+
+
+        <label>Chit Value</label>
+
+        <input
+            type="number"
+            id="chitValue"
+            readonly>
+
+
+        <div class="row">
+
+            <div>
+
+                <label>Thallu</label>
+
+                <input
+                    type="number"
+                    id="thallu"
+                    placeholder="Enter Discount">
+
+            </div>
+
+            <div>
+
+                <label>Kasar</label>
+
+                <input
+                    type="number"
+                    id="kasar"
+                    placeholder="Enter Kasar">
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div>
+
+                <label>Prize Amount</label>
+
+                <input
+                    type="number"
+                    id="prizeAmount"
+                    readonly>
+
+            </div>
+
+            <div>
+
+                <label>Monthly Payable</label>
+
+                <input
+                    type="number"
+                    id="monthlyAmount"
+                    readonly>
+
+            </div>
+
+        </div>
+
+
+        <label>Due Date</label>
+
+        <input
+            type="date"
+            id="dueDate">
+
+
+        <label>Remarks</label>
+
+        <textarea
+            id="remarks"
+            rows="4"
+            placeholder="Enter Remarks"></textarea>
+
+
+        <!-- ===========================
+             Buttons
+        ============================ -->
+
+        <div class="action-buttons">
 
             <button id="saveAuction">
-                Save Auction
+
+                💾 Save Auction
+
             </button>
 
-            <button onclick="location.href='dashboard.html'">
-                Back to Dashboard
+            <button
+                type="button"
+                onclick="location.href='dashboard.html'">
+
+                ⬅ Back To Dashboard
+
             </button>
 
         </div>
 
     </div>
 
-    <script type="module" src="js/auction.js"></script>
+</div>
+
+<script type="module" src="js/auction.js"></script>
 
 </body>
 
