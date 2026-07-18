@@ -103,7 +103,7 @@ await loadChitAmounts();
 //==================================================
 
 async function loadChitAmounts(){
-
+alert("JS Loaded");
 const snapshot =
 await getDocs(collection(db,"groups"));
 
