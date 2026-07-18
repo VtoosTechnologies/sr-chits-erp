@@ -287,7 +287,7 @@ members.sort((a,b)=>
 Number(a.memberNo || 0) -
 Number(b.memberNo || 0)
 );
-
+alert(JSON.stringify(members));
 members.forEach(data=>{
 
 member.innerHTML +=
