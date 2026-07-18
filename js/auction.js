@@ -556,11 +556,12 @@ function calculateAmounts() {
 
     // Monthly Amount
 
-    monthlyAmount.value =
-    Math.ceil(
-        selectedGroup.monthlyAmount -
-        dividend
-    );
+   const baseMonthly =
+Number(selectedGroup.chitAmount) /
+Number(selectedGroup.totalMembers);
+
+monthlyAmount.value =
+Math.ceil(baseMonthly - dividend); 
 
 }
 //==================================================
