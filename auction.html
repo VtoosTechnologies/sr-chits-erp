@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SR Chits ERP - Auction</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auction.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Monthly Auction</h1>
+
+        <div class="form">
+
+            <label>Group</label>
+            <select id="group">
+                <option value="">Select Group</option>
+            </select>
+
+            <label>Month</label>
+            <input type="number" id="month" placeholder="Enter Month Number">
+
+            <label>Auction Date</label>
+            <input type="date" id="auctionDate">
+
+            <label>Winner</label>
+            <select id="winner">
+                <option value="">Select Winner</option>
+            </select>
+
+            <label>Chit Value</label>
+            <input type="number" id="chitValue" placeholder="100000">
+
+            <label>Thallu (Discount)</label>
+            <input type="number" id="thallu" placeholder="Enter Thallu">
+
+            <label>Kasar</label>
+            <input type="number" id="kasar" placeholder="Enter Kasar">
+
+            <label>Prize Amount</label>
+            <input type="number" id="prizeAmount" placeholder="Prize Amount">
+
+            <label>Monthly Payable Amount</label>
+            <input type="number" id="monthlyAmount" placeholder="Amount for Members">
+
+            <label>Due Date</label>
+            <input type="date" id="dueDate">
+
+            <label>Remarks</label>
+            <textarea id="remarks" rows="4" placeholder="Remarks"></textarea>
+
+            <button id="saveAuction">
+                Save Auction
+            </button>
+
+            <button onclick="location.href='dashboard.html'">
+                Back to Dashboard
+            </button>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="js/auction.js"></script>
+
+</body>
+
+</html>
