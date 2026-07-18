@@ -163,7 +163,7 @@ where("chitAmount","==",Number(chitAmountFilter.value))
 );
 
 const snapshot = await getDocs(q);
-
+alert("Total Members : " + snapshot.size);
 groups = [];
 
 snapshot.forEach(doc=>{
