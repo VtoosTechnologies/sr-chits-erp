@@ -563,3 +563,219 @@ function calculateAmounts() {
     );
 
 }
+//==================================================
+// Save Auction
+//==================================================
+
+saveAuction.addEventListener(
+    "click",
+    saveAuctionData
+);
+
+async function saveAuctionData() {
+
+    try {
+
+        if (!selectedGroup) {
+            alert("Please select a group.");
+            return;
+        }
+
+        if (winner.value == "") {
+            alert("Please select winner.");
+            winner.focus();
+            return;
+        }
+
+        if (thallu.value == "") {
+            alert("Enter Thallu Amount.");
+            thallu.focus();
+            return;
+        }
+
+        if (kasar.value == "") {
+            kasar.value = 0;
+        }
+
+        saveAuction.disabled = true;
+        saveAuction.textContent = "Saving...";
+
+        //==========================================
+        // Duplicate Month Check
+        //==========================================
+
+        const monthQuery = query(
+            auctionsRef,
+            where("groupId", "==", selectedGroup.groupCode),
+            where("month", "==", currentAuctionMonth)
+        );
+
+        const monthSnapshot =
+        await getDocs(monthQuery);
+
+        if (!monthSnapshot.empty) {
+
+            alert(
+                "Auction already saved for Month " +
+                currentAuctionMonth
+            );
+
+            saveAuction.disabled = false;
+            saveAuction.textContent = "Save Auction";
+
+            return;
+
+        }
+
+        //==========================================
+        // Duplicate Winner Check
+        //==========================================
+
+        const winnerQuery = query(
+            auctionsRef,
+            where("winnerId", "==", winner.value)
+        );
+
+        const winnerSnapshot =
+        await getDocs(winnerQuery);
+
+        if (!winnerSnapshot.empty) {
+
+            alert(
+                "This member has already won."
+            );
+
+            saveAuction.disabled = false;
+            saveAuction.textContent =
+            "Save Auction";
+
+            return;
+
+        }
+
+        //==========================================
+        // Save Firestore
+        //==========================================
+
+        await addDoc(
+            auctionsRef,
+            {
+
+                groupId:
+                selectedGroup.groupCode,
+
+                groupName:
+                selectedGroup.groupName,
+
+                month:
+                currentAuctionMonth,
+
+                chitAmount:
+                Number(chitValue.value),
+
+                auctionDate:
+                auctionDate.value,
+
+                dueDate:
+                dueDate.value,
+
+                winnerId:
+                winner.value,
+
+                thallu:
+                Number(thallu.value),
+
+                kasar:
+                Number(kasar.value),
+
+                prizeAmount:
+                Number(prizeAmount.value),
+
+                monthlyAmount:
+                Number(monthlyAmount.value),
+
+                remarks:
+                remarks.value.trim(),
+
+                createdAt:
+                serverTimestamp()
+
+            }
+        );
+                //==========================================
+        // Success
+        //==========================================
+
+        alert("Auction saved successfully.");
+
+        resetAuctionForm();
+
+        await loadCurrentAuctionMonth();
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Failed to save auction.\n" +
+            error.message
+        );
+
+    }
+    finally {
+
+        saveAuction.disabled = false;
+
+        saveAuction.textContent =
+        "Save Auction";
+
+    }
+
+}
+
+//==================================================
+// Reset Auction Form
+//==================================================
+
+function resetAuctionForm() {
+
+    winner.value = "";
+
+    winnerAlert.style.display = "none";
+
+    thallu.value = "";
+
+    kasar.value = "";
+
+    prizeAmount.value = "";
+
+    monthlyAmount.value = "";
+
+    remarks.value = "";
+
+}
+
+//==================================================
+// Page Refresh after Save
+//==================================================
+
+async function refreshAuctionPage() {
+
+    await loadCurrentAuctionMonth();
+
+}
+
+//==================================================
+// Optional
+// Auto Recalculate
+//==================================================
+
+winner.addEventListener(
+    "change",
+    () => {
+
+        calculateAmounts();
+
+    }
+);
