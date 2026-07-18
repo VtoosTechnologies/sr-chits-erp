@@ -382,6 +382,60 @@ async function loadCurrentAuctionMonth() {
 
 }
 //==================================================
+// Calculate Auction Date
+//==================================================
+
+function calculateAuctionDate() {
+
+    if (!selectedGroup) return;
+
+    const start = new Date(selectedGroup.startDate);
+
+    start.setMonth(
+        start.getMonth() + (currentAuctionMonth - 1)
+    );
+
+    const year = start.getFullYear();
+
+    const monthValue = String(
+        start.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        start.getDate()
+    ).padStart(2, "0");
+
+    auctionDate.value =
+        `${year}-${monthValue}-${day}`;
+
+}
+//==================================================
+// Calculate Due Date
+//==================================================
+
+function calculateDueDate() {
+
+    if (!auctionDate.value) return;
+
+    const due = new Date(auctionDate.value);
+
+    due.setMonth(due.getMonth() + 1);
+
+    const year = due.getFullYear();
+
+    const monthValue = String(
+        due.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        due.getDate()
+    ).padStart(2, "0");
+
+    dueDate.value =
+        `${year}-${monthValue}-${day}`;
+
+}
+//==================================================
 // Load Members
 //==================================================
 
@@ -411,5 +465,101 @@ async function loadMembers() {
         </option>`;
 
     });
+
+}
+//==================================================
+// Winner Change
+//==================================================
+
+winner.addEventListener(
+    "change",
+    checkPreviousWinner
+);
+
+async function checkPreviousWinner() {
+
+    winnerAlert.style.display = "none";
+
+    if (winner.value == "") return;
+
+    const q = query(
+        auctionsRef,
+        where("winnerId", "==", winner.value)
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (!snapshot.empty) {
+
+        winnerAlert.className =
+        "alert warning";
+
+        winnerAlert.style.display =
+        "block";
+
+        winnerAlert.innerHTML =
+        "⚠ This member has already won a chit.";
+
+    } else {
+
+        winnerAlert.className =
+        "alert success";
+
+        winnerAlert.style.display =
+        "block";
+
+        winnerAlert.innerHTML =
+        "✅ Eligible for Auction";
+
+    }
+
+}
+//==================================================
+// Auto Calculation
+//==================================================
+
+thallu.addEventListener(
+    "input",
+    calculateAmounts
+);
+
+kasar.addEventListener(
+    "input",
+    calculateAmounts
+);
+
+function calculateAmounts() {
+
+    if (!selectedGroup) return;
+
+    const chit =
+    Number(chitValue.value) || 0;
+
+    const discount =
+    Number(thallu.value) || 0;
+
+    const expense =
+    Number(kasar.value) || 0;
+
+    const members =
+    Number(selectedGroup.totalMembers) || 1;
+
+    // Prize Amount
+
+    prizeAmount.value =
+    chit - discount - expense;
+
+    // Dividend
+
+    const dividend =
+    (discount + expense) / members;
+
+    // Monthly Amount
+
+    monthlyAmount.value =
+    Math.ceil(
+        selectedGroup.monthlyAmount -
+        dividend
+    );
 
 }
