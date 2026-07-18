@@ -67,7 +67,7 @@ async function loadGroups() {
         const data = doc.data();
 
         group.innerHTML += `
-        <option value="${doc.id}">
+        <option value="${data.groupName}">
             ${data.groupName}
         </option>`;
 
@@ -144,7 +144,7 @@ async function loadGroupDetails() {
 
             selectedGroup = data;
 
-            chitValue.value = data.chitValue || 0;
+            chitValue.value = data.chitAmount || 0;
 
             calculateAmounts();
 
