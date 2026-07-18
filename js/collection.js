@@ -267,8 +267,7 @@ where("groupId","==",selectedGroup.id)
 
 const snapshot =
 await getDocs(q);
-alert("Selected Group ID : " + selectedGroup.id);
-alert("Members Found : " + snapshot.size);
+throw new Error("Selected Group ID = " + selectedGroup.id + " | Members = " + snapshot.size);
 members = [];
 
 snapshot.forEach(doc=>{
