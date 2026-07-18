@@ -67,7 +67,7 @@ async function loadGroups() {
         const data = doc.data();
 
         group.innerHTML += `
-        <option value="${data.groupName}">
+        <option value="${data.groupCode}">
             ${data.groupName}
         </option>`;
 
@@ -140,13 +140,14 @@ async function loadGroupDetails() {
 
         const data = doc.data();
 
-        if(data.groupName == group.value){
+        if(data.groupCode == group.value){
 
             selectedGroup = data;
 
             chitValue.value = data.chitAmount || 0;
 
             calculateAmounts();
+            loadNextMonth();
 
         }
 
@@ -177,6 +178,56 @@ function calculateAmounts() {
     const monthly = Math.ceil((chit - discount) / members);
 
     monthlyAmount.value = monthly;
+
+}
+//==================================================
+// Load Next Auction Month
+//==================================================
+
+async function loadNextMonth() {
+
+    if (!selectedGroup) return;
+
+    const q = query(
+        auctionsRef,
+        where("groupCode", "==", selectedGroup.groupCode)
+    );
+
+    const snapshot = await getDocs(q);
+
+    const nextMonth = snapshot.size + 1;
+
+    if (nextMonth > selectedGroup.duration) {
+
+        alert("All auctions completed for this group.");
+
+        month.value = "";
+        auctionDate.value = "";
+
+        return;
+    }
+
+    month.value = nextMonth;
+    calculateAuctionDate(nextMonth);
+
+}
+//==================================================
+// Calculate Auction Date
+//==================================================
+
+function calculateAuctionDate(monthNo) {
+
+    if (!selectedGroup) return;
+
+    const start = new Date(selectedGroup.startDate);
+
+    start.setMonth(start.getMonth() + (monthNo - 1));
+
+    const year = start.getFullYear();
+    const monthValue = String(start.getMonth() + 1).padStart(2, "0");
+    const day = String(start.getDate()).padStart(2, "0");
+
+    auctionDate.value = `${year}-${monthValue}-${day}`;
 
 }
 //==================================================
