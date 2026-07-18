@@ -250,7 +250,16 @@ Number(selectedGroup.totalMembers)
 
 calculateTotal();
 
-await loadMembers();
+try {
+
+    await loadMembers();
+
+} catch (e) {
+
+    alert(e.message);
+    console.error(e);
+
+}
 
 });
 
