@@ -10,53 +10,62 @@ const saveMemberBtn = document.getElementById("saveMemberBtn");
 const membersList = document.getElementById("membersList");
 const groupSelect = document.getElementById("group");
 
+// ================================
 // Load Groups
-async function loadGroups(){
+// ================================
+async function loadGroups() {
 
-    const snapshot = await getDocs(collection(db,"groups"));
+    groupSelect.innerHTML = `
+        <option value="">Select Group</option>
+    `;
 
-    snapshot.forEach((doc)=>{
+    const snapshot = await getDocs(collection(db, "groups"));
+
+    snapshot.forEach((doc) => {
 
         const data = doc.data();
 
         groupSelect.innerHTML += `
-        <option value="${data.groupCode}">
-            ${data.groupName}
-        </option>
+            <option value="${data.groupCode}">
+                ${data.groupCode} - ${data.groupName}
+            </option>
         `;
 
     });
 
 }
 
+// ================================
 // Load Members
-async function loadMembers(){
+// ================================
+async function loadMembers() {
 
-    membersList.innerHTML="";
+    membersList.innerHTML = "";
 
-    const snapshot = await getDocs(collection(db,"members"));
+    const snapshot = await getDocs(collection(db, "members"));
 
-    snapshot.forEach((doc)=>{
+    snapshot.forEach((doc) => {
 
         const data = doc.data();
 
         membersList.innerHTML += `
-        <div class="member-card">
-        <p><b>${data.memberCode}</b></p>
+            <div class="member-card">
 
-            <h3>${data.memberName}</h3>
+                <p><b>${data.memberCode}</b></p>
 
-            <p>Mobile : ${data.mobileNumber}</p>
+                <h3>${data.memberName}</h3>
 
-            <p>Address : ${data.address}</p>
+                <p><b>Mobile :</b> ${data.mobileNumber}</p>
 
-            <p>Aadhaar : ${data.aadhaarNumber}</p>
+                <p><b>Address :</b> ${data.address}</p>
 
-            <p>Group : ${data.group}</p>
+                <p><b>Aadhaar :</b> ${data.aadhaarNumber}</p>
 
-            <p>Status : ${data.status}</p>
+                <p><b>Group Code :</b> ${data.group}</p>
 
-        </div>
+                <p><b>Status :</b> ${data.status}</p>
+
+            </div>
         `;
 
     });
@@ -66,66 +75,79 @@ async function loadMembers(){
 loadGroups();
 loadMembers();
 
+// ================================
 // Save Member
-saveMemberBtn.addEventListener("click",async()=>{
+// ================================
+saveMemberBtn.addEventListener("click", async () => {
 
-const memberName=document.getElementById("memberName").value.trim();
+    const memberName = document.getElementById("memberName").value.trim();
 
-const mobileNumber=document.getElementById("mobileNumber").value.trim();
+    const mobileNumber = document.getElementById("mobileNumber").value.trim();
 
-const address=document.getElementById("address").value.trim();
+    const address = document.getElementById("address").value.trim();
 
-const aadhaarNumber=document.getElementById("aadhaarNumber").value.trim();
+    const aadhaarNumber = document.getElementById("aadhaarNumber").value.trim();
 
-const group=document.getElementById("group").value;
+    const group = document.getElementById("group").value;
 
-const status=document.getElementById("status").value;
+    const status = document.getElementById("status").value;
 
-if(
-!memberName||
-!mobileNumber||
-!address||
-!aadhaarNumber||
-!group
-){
-alert("Please fill all fields");
-return;
-}
+    if (
+        !memberName ||
+        !mobileNumber ||
+        !address ||
+        !aadhaarNumber ||
+        !group
+    ) {
+        alert("Please fill all fields");
+        return;
+    }
 
-try{
-const memberCode =
-"M" + String(Date.now()).slice(-4);
-    
-await 
-    addDoc(collection(db,"members"),{
-memberCode,
-        
-memberName,
-mobileNumber,
-address,
-aadhaarNumber,
-group,
-status
+    try {
 
-});
+        // Generate Member Code
+        const memberSnapshot = await getDocs(collection(db, "members"));
 
-alert("Member Added Successfully");
+        const memberCount = memberSnapshot.size + 1;
 
-// Clear Form
-document.getElementById("memberName").value="";
-document.getElementById("mobileNumber").value="";
-document.getElementById("address").value="";
-document.getElementById("aadhaarNumber").value="";
-document.getElementById("group").selectedIndex=0;
-document.getElementById("status").value="Active";
+        const memberCode =
+            `${group}-M${String(memberCount).padStart(3, "0")}`;
 
-loadMembers();
+        await addDoc(collection(db, "members"), {
 
-}
-catch(error){
+            memberCode,
 
-alert(error.message);
+            memberName,
 
-}
+            mobileNumber,
+
+            address,
+
+            aadhaarNumber,
+
+            group,
+
+            status
+
+        });
+
+        alert("Member Added Successfully");
+
+        // Clear Form
+        document.getElementById("memberName").value = "";
+        document.getElementById("mobileNumber").value = "";
+        document.getElementById("address").value = "";
+        document.getElementById("aadhaarNumber").value = "";
+        document.getElementById("group").selectedIndex = 0;
+        document.getElementById("status").value = "Active";
+
+        loadMembers();
+
+    }
+    catch (error) {
+
+        alert(error.message);
+
+    }
 
 });
