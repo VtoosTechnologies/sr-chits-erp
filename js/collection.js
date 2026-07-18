@@ -280,7 +280,8 @@ id:doc.id,
 });
 
 members.sort((a,b)=>
-a.memberNo-b.memberNo
+Number(a.memberNo || 0) -
+Number(b.memberNo || 0)
 );
 
 members.forEach(data=>{
@@ -321,7 +322,7 @@ memberName.textContent =
 selectedMember.memberName;
 
 mobileNumber.textContent =
-selectedMember.mobile || "-";
+selectedMember.mobileNumber || "-";
 
 });
 
