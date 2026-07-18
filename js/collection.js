@@ -262,7 +262,7 @@ member.innerHTML =
 
 const q = query(
 collection(db,"members"),
-where("group","==",selectedGroup.groupCode)
+where("groupId","==",selectedGroup.id)
 );
 
 const snapshot =
