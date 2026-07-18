@@ -218,13 +218,15 @@ totalMembers.textContent =
 selectedGroup.totalMembers;
 
 // Current Collection Month
-const auctionSnapshot =
-await getDocs(query(
-collection(db,"auctions"),
-where("groupId","==",selectedGroup.id),
-orderBy("auctionMonth","desc")
+const auctionSnapshot = await getDocs(
+    query(
+        collection(db, "auctions"),
+        where("groupId", "==", selectedGroup.id),
+        orderBy("auctionMonth", "desc")
+    )
 );
-   alert("Auction Found : " + auctionSnapshot.size));
+
+alert("Auction Found : " + auctionSnapshot.size);
 
 let month = 1;
 
@@ -446,7 +448,7 @@ memberCode:selectedMember.memberCode,
 
 memberName:selectedMember.memberName,
 
-mobile:selectedMember.mobile || "",
+mobileNumber:selectedMember.mobileNumber || "",
 
 collectionMonth:month,
 
