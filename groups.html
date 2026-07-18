@@ -5,8 +5,7 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SR Chits ERP - Groups</title>
 
@@ -24,11 +23,6 @@ content="width=device-width, initial-scale=1.0">
 <div class="group-form">
 
 <input
-type="text"
-id="groupName"
-placeholder="Group Name">
-
-<input
 type="number"
 id="chitAmount"
 placeholder="Chit Amount">
@@ -40,13 +34,41 @@ placeholder="Total Members">
 
 <input
 type="number"
-id="monthlyAmount"
-placeholder="Monthly Amount">
+id="duration"
+placeholder="Duration (Months)">
 
 <input
 type="number"
-id="duration"
-placeholder="Duration (Months)">
+id="auctionDay"
+placeholder="Auction Day (1-31)"
+min="1"
+max="31">
+
+<label>Start Date</label>
+
+<input
+type="date"
+id="startDate">
+
+<div class="checkbox-container">
+
+<label>
+
+<input
+type="checkbox"
+id="fixedMonthly">
+
+Fixed Monthly Installment
+
+</label>
+
+</div>
+
+<input
+type="number"
+id="monthlyAmount"
+placeholder="Monthly Amount"
+disabled>
 
 <select id="status">
 
@@ -68,14 +90,19 @@ Save Group
 
 </div>
 
+<hr>
+
+<h2>Groups List</h2>
+
 <div id="groupsList">
 
-</div>
+<!-- Groups will be loaded here -->
 
 </div>
 
-<script type="module"
-src="js/groups.js"></script>
+</div>
+
+<script type="module" src="js/groups.js"></script>
 
 </body>
 
