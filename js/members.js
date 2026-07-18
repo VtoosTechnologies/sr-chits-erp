@@ -20,7 +20,7 @@ async function loadGroups(){
         const data = doc.data();
 
         groupSelect.innerHTML += `
-        <option value="${data.groupName}">
+        <option value="${data.groupCode}">
             ${data.groupName}
         </option>
         `;
@@ -42,6 +42,7 @@ async function loadMembers(){
 
         membersList.innerHTML += `
         <div class="member-card">
+        <p><b>${data.memberCode}</b></p>
 
             <h3>${data.memberName}</h3>
 
@@ -92,9 +93,13 @@ return;
 }
 
 try{
-
-await addDoc(collection(db,"members"),{
-
+const memberCode =
+"M" + String(Date.now()).slice(-4);
+    
+await 
+    addDoc(collection(db,"members"),{
+memberCode,
+        
 memberName,
 mobileNumber,
 address,
