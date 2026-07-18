@@ -41,26 +41,29 @@ id="aadhaarNumber"
 placeholder="Aadhaar Number">
 
 <select id="group">
-
 <option value="">Select Group</option>
-
 </select>
 
+<input
+type="text"
+id="memberCode"
+placeholder="Member Code"
+readonly>
+
 <select id="status">
-
 <option value="Active">Active</option>
-
 <option value="Inactive">Inactive</option>
-
 </select>
 
 <button id="saveMemberBtn">
-
 Save Member
-
 </button>
 
 </div>
+
+<hr>
+
+<h2>Members List</h2>
 
 <div id="membersList">
 
@@ -68,8 +71,7 @@ Save Member
 
 </div>
 
-<script type="module"
-src="js/members.js"></script>
+<script type="module" src="js/members.js"></script>
 
 </body>
 
