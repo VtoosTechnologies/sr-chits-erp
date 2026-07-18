@@ -1,13 +1,14 @@
 import { db } from "./firebase.js";
 
 import {
-    collection,
-    addDoc,
-    getDocs,
-    serverTimestamp,
-    doc,
-    deleteDoc,
-    updateDoc
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
@@ -17,22 +18,28 @@ import {
 const saveGroupBtn = document.getElementById("saveGroupBtn");
 const groupsList = document.getElementById("groupsList");
 
+const chitAmount = document.getElementById("chitAmount");
+const totalMembers = document.getElementById("totalMembers");
+const duration = document.getElementById("duration");
+const auctionDay = document.getElementById("auctionDay");
+const startDate = document.getElementById("startDate");
 const fixedMonthly = document.getElementById("fixedMonthly");
-const monthlyAmountInput = document.getElementById("monthlyAmount");
+const monthlyAmount = document.getElementById("monthlyAmount");
+const status = document.getElementById("status");
 
 let editId = null;
 
 //==================================================
-// Fixed Monthly Checkbox
+// Fixed Monthly
 //==================================================
 
 fixedMonthly.addEventListener("change", () => {
 
-    monthlyAmountInput.disabled = !fixedMonthly.checked;
+    monthlyAmount.disabled = !fixedMonthly.checked;
 
     if (!fixedMonthly.checked) {
 
-        monthlyAmountInput.value = "";
+        monthlyAmount.value = "";
 
     }
 
@@ -77,20 +84,14 @@ ${data.fixedMonthly
 
 <p><b>Status :</b> ${data.status}</p>
 
-<div style="margin-top:15px;display:flex;gap:10px;">
+<div style="display:flex;gap:10px;margin-top:15px">
 
-<button
-onclick="editGroup('${groupDoc.id}')">
-
+<button onclick="editGroup('${groupDoc.id}')">
 ✏️ Edit
-
 </button>
 
-<button
-onclick="deleteGroup('${groupDoc.id}')">
-
+<button onclick="deleteGroup('${groupDoc.id}')">
 🗑 Delete
-
 </button>
 
 </div>
@@ -110,22 +111,22 @@ loadGroups();
 
 saveGroupBtn.addEventListener("click", async () => {
 
-    const chitAmount = Number(document.getElementById("chitAmount").value);
-    const totalMembers = Number(document.getElementById("totalMembers").value);
-    const duration = Number(document.getElementById("duration").value);
-    const auctionDay = Number(document.getElementById("auctionDay").value);
-    const startDate = document.getElementById("startDate").value;
-    const status = document.getElementById("status").value;
+    const chit = Number(chitAmount.value);
+    const members = Number(totalMembers.value);
+    const months = Number(duration.value);
+    const day = Number(auctionDay.value);
+    const start = startDate.value;
+    const groupStatus = status.value;
 
-    const isFixedMonthly = document.getElementById("fixedMonthly").checked;
+    const isFixed = fixedMonthly.checked;
 
-    let monthlyAmount = 0;
+    let monthly = 0;
 
-    if (isFixedMonthly) {
+    if (isFixed) {
 
-        monthlyAmount = Number(document.getElementById("monthlyAmount").value);
+        monthly = Number(monthlyAmount.value);
 
-        if (!monthlyAmount || monthlyAmount <= 0) {
+        if (!monthly || monthly <= 0) {
 
             alert("Please enter Monthly Amount");
             return;
@@ -135,11 +136,11 @@ saveGroupBtn.addEventListener("click", async () => {
     }
 
     if (
-        !chitAmount ||
-        !totalMembers ||
-        !duration ||
-        !auctionDay ||
-        !startDate
+        !chit ||
+        !members ||
+        !months ||
+        !day ||
+        !start
     ) {
 
         alert("Please fill all required fields");
@@ -147,41 +148,46 @@ saveGroupBtn.addEventListener("click", async () => {
 
     }
 
+    //=========================================
+    // Group Name
+    //=========================================
+
     let groupName = "";
 
-    if (chitAmount >= 100000) {
+    if (chit >= 100000) {
 
-        groupName = `${chitAmount / 100000} Lakh Monthly Chit`;
+        groupName = `${chit / 100000} Lakh Monthly Chit`;
 
     } else {
 
-        groupName = `${chitAmount / 1000}K Monthly Chit`;
+        groupName = `${chit / 1000}K Monthly Chit`;
 
     }
 
     try {
 
-        //========================================
+        //=====================================
         // UPDATE
-        //========================================
+        //=====================================
 
         if (editId) {
 
-            const groupCode =
-                document.getElementById("groupCode").value;
+            const oldDoc = await getDoc(doc(db, "groups", editId));
+
+            const oldData = oldDoc.data();
 
             await updateDoc(doc(db, "groups", editId), {
 
-                groupCode,
+                groupCode: oldData.groupCode,
                 groupName,
-                chitAmount,
-                totalMembers,
-                duration,
-                auctionDay,
-                startDate,
-                fixedMonthly: isFixedMonthly,
-                monthlyAmount,
-                status
+                chitAmount: chit,
+                totalMembers: members,
+                duration: months,
+                auctionDay: day,
+                startDate: start,
+                fixedMonthly: isFixed,
+                monthlyAmount: monthly,
+                status: groupStatus
 
             });
 
@@ -193,41 +199,41 @@ saveGroupBtn.addEventListener("click", async () => {
 
         }
 
-        //========================================
-        // ADD NEW
-        //========================================
+        //=====================================
+        // NEW GROUP
+        //=====================================
 
         else {
 
             const amountCode =
-                chitAmount >= 100000
-                    ? String(chitAmount / 100000).padStart(2, "0") + "L"
-                    : Math.floor(chitAmount / 1000) + "K";
+                chit >= 100000
+                    ? String(chit / 100000).padStart(2, "0") + "L"
+                    : Math.floor(chit / 1000) + "K";
 
             const dayCode =
-                String(auctionDay).padStart(2, "0");
+                String(day).padStart(2, "0");
 
             const groupSnapshot =
                 await getDocs(collection(db, "groups"));
 
-            const nextGroupNo =
+            const nextNo =
                 String(groupSnapshot.size + 1).padStart(2, "0");
 
             const groupCode =
-                `SR-${amountCode}-D${dayCode}-G${nextGroupNo}`;
+                `SR-${amountCode}-D${dayCode}-G${nextNo}`;
 
             await addDoc(collection(db, "groups"), {
 
                 groupCode,
                 groupName,
-                chitAmount,
-                totalMembers,
-                duration,
-                auctionDay,
-                startDate,
-                fixedMonthly: isFixedMonthly,
-                monthlyAmount,
-                status,
+                chitAmount: chit,
+                totalMembers: members,
+                duration: months,
+                auctionDay: day,
+                startDate: start,
+                fixedMonthly: isFixed,
+                monthlyAmount: monthly,
+                status: groupStatus,
                 createdAt: serverTimestamp()
 
             });
@@ -235,26 +241,23 @@ saveGroupBtn.addEventListener("click", async () => {
             alert("Group Added Successfully");
 
         }
-
-        //========================================
+                //=========================================
         // Reset Form
-        //========================================
+        //=========================================
 
-        document.getElementById("chitAmount").value = "";
-        document.getElementById("totalMembers").value = "";
-        document.getElementById("duration").value = "";
-        document.getElementById("auctionDay").value = "";
-        document.getElementById("startDate").value = "";
-        document.getElementById("fixedMonthly").checked = false;
-        document.getElementById("monthlyAmount").value = "";
-        document.getElementById("monthlyAmount").disabled = true;
-        document.getElementById("status").value = "Active";
+        chitAmount.value = "";
+        totalMembers.value = "";
+        duration.value = "";
+        auctionDay.value = "";
+        startDate.value = "";
+        fixedMonthly.checked = false;
+        monthlyAmount.value = "";
+        monthlyAmount.disabled = true;
+        status.value = "Active";
 
         loadGroups();
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         alert(error.message);
 
@@ -272,11 +275,19 @@ window.deleteGroup = async function (id) {
 
     if (!ok) return;
 
-    await deleteDoc(doc(db, "groups", id));
+    try {
 
-    alert("Group Deleted Successfully");
+        await deleteDoc(doc(db, "groups", id));
 
-    loadGroups();
+        alert("Group Deleted Successfully");
+
+        loadGroups();
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
 
 };
 
@@ -286,6 +297,46 @@ window.deleteGroup = async function (id) {
 
 window.editGroup = async function (id) {
 
-    alert("Edit feature will be completed in Part 3.");
+    try {
+
+        const groupRef = doc(db, "groups", id);
+
+        const snapshot = await getDoc(groupRef);
+
+        if (!snapshot.exists()) {
+
+            alert("Group not found");
+            return;
+
+        }
+
+        const data = snapshot.data();
+
+        editId = id;
+
+        chitAmount.value = data.chitAmount;
+        totalMembers.value = data.totalMembers;
+        duration.value = data.duration;
+        auctionDay.value = data.auctionDay;
+        startDate.value = data.startDate;
+
+        fixedMonthly.checked = data.fixedMonthly;
+        monthlyAmount.disabled = !data.fixedMonthly;
+        monthlyAmount.value = data.monthlyAmount || "";
+
+        status.value = data.status;
+
+        saveGroupBtn.innerText = "Update Group";
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
 
 };
