@@ -288,13 +288,16 @@ Number(a.memberNo || 0) -
 Number(b.memberNo || 0)
 );
 alert(JSON.stringify(members));
-members.forEach(data=>{
+members.forEach(data => {
 
-member.innerHTML +=
-`
-<option value="${data.id}">${data.memberName}
-</option>
-`;
+    alert(JSON.stringify(data));
+
+    const option = document.createElement("option");
+
+    option.value = data.id;
+    option.textContent = data.memberName;
+
+    member.appendChild(option);
 
 });
 
