@@ -132,3 +132,104 @@ Select Member
 </div>
 
 </div>
+<!--==============================-->
+<!-- Collection Entry -->
+<!--==============================-->
+
+<div class="card">
+
+<h2>Collection Details</h2>
+
+<label>Collection Month</label>
+
+<input
+type="text"
+id="collectionMonth"
+readonly>
+
+<label>Monthly Amount</label>
+
+<input
+type="number"
+id="monthlyAmount"
+readonly>
+
+<label>Fine Amount</label>
+
+<input
+type="number"
+id="fineAmount"
+value="0"
+min="0">
+
+<label>Total Amount</label>
+
+<input
+type="number"
+id="totalAmount"
+readonly>
+
+<label>Collection Date</label>
+
+<input
+type="date"
+id="collectionDate">
+
+<label>Payment Mode</label>
+
+<select id="paymentMode">
+
+<option value="Cash">
+Cash
+</option>
+
+<option value="UPI">
+UPI
+</option>
+
+<option value="Bank Transfer">
+Bank Transfer
+</option>
+
+</select>
+
+<label>Remarks</label>
+
+<textarea
+id="remarks"
+rows="4"
+placeholder="Enter Remarks"></textarea>
+
+</div>
+
+<!--==============================-->
+<!-- Action Buttons -->
+<!--==============================-->
+
+<div class="button-group">
+
+<button id="saveCollection">
+
+Save Collection
+
+</button>
+
+<button
+type="button"
+onclick="history.back()">
+
+Back To Dashboard
+
+</button>
+
+</div>
+
+</div>
+
+<script
+type="module"
+src="js/collection.js"></script>
+
+</body>
+
+</html>
