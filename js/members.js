@@ -26,9 +26,11 @@ async function loadGroups() {
         const data = doc.data();
 
         groupSelect.innerHTML += `
-            <option value="${data.groupCode}">
-                ${data.groupCode} - ${data.groupName}
-            </option>
+           <option
+    value="${doc.id}"
+    data-code="${data.groupCode}">
+    ${data.groupCode} - ${data.groupName}
+</option> 
         `;
 
     });
@@ -61,7 +63,7 @@ async function loadMembers() {
 
                 <p><b>Aadhaar :</b> ${data.aadhaarNumber}</p>
 
-                <p><b>Group Code :</b> ${data.group}</p>
+                <p><b>Group Code :</b> ${data.groupCode}</p>
 
                 <p><b>Status :</b> ${data.status}</p>
 
@@ -89,7 +91,12 @@ saveMemberBtn.addEventListener("click", async () => {
     const aadhaarNumber = document.getElementById("aadhaarNumber").value.trim();
 
     const group = document.getElementById("group").value;
+    const groupSelect =
+document.getElementById("group");
 
+const groupCode =
+groupSelect.options[groupSelect.selectedIndex]
+.dataset.code;
     const status = document.getElementById("status").value;
 
     if (
@@ -125,7 +132,9 @@ saveMemberBtn.addEventListener("click", async () => {
 
             aadhaarNumber,
 
-            group,
+           groupId: group,
+
+    groupCode: groupCode, 
 
             status
 
