@@ -223,8 +223,8 @@ await getDocs(query(
 collection(db,"auctions"),
 where("groupId","==",selectedGroup.id),
 orderBy("auctionMonth","desc")
-  alert("Auction Found : " + auctionSnapshot.size);
-));
+);
+   alert("Auction Found : " + auctionSnapshot.size));
 
 let month = 1;
 
@@ -290,8 +290,7 @@ members.forEach(data=>{
 
 member.innerHTML +=
 `
-<option value="${data.id}">
-${data.memberNo} - ${data.memberName}
+<option value="${data.id}">${data.memberName}
 </option>
 `;
 
