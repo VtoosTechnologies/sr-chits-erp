@@ -7,12 +7,12 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDvc55aBx-wv8JqHdXv0HKz5DFT-Mm6WN0",
-  authDomain: "sr-chits-erp.firebaseapp.com",
-  projectId: "sr-chits-erp",
-  storageBucket: "sr-chits-erp.firebasestorage.app",
-  messagingSenderId: "62741844196",
-  appId: "1:62741844196:web:d8c2ad943838cdf9a35cf1"
+  apiKey: "AIzaSyBrDmjvUEqdX58W5KTF3jVn0ejZYqXBwnM",
+  authDomain: "sr-chits-erp-5e2d1.firebaseapp.com",
+  projectId: "sr-chits-erp-5e2d1",
+  storageBucket: "sr-chits-erp-5e2d1.firebasestorage.app",
+  messagingSenderId: "540491586931",
+  appId: "1:540491586931:web:8b0869ca86a344e1857906"
 };
 
 const app = initializeApp(firebaseConfig);
