@@ -223,6 +223,7 @@ await getDocs(query(
 collection(db,"auctions"),
 where("groupId","==",selectedGroup.id),
 orderBy("auctionMonth","desc")
+  alert("Auction Found : " + auctionSnapshot.size);
 ));
 
 let month = 1;
