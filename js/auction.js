@@ -68,7 +68,7 @@ async function loadGroups() {
 
         group.innerHTML += `
         <option value="${doc.id}">
-            ${data.groupId}
+            ${data.groupName}
         </option>`;
 
     });
@@ -140,7 +140,7 @@ async function loadGroupDetails() {
 
         const data = doc.data();
 
-        if(data.groupId == group.value){
+        if(data.groupName == group.value){
 
             selectedGroup = data;
 
@@ -172,7 +172,7 @@ function calculateAmounts() {
     prizeAmount.value = prize;
 
     // Monthly Payable
-    const members = Number(selectedGroup.members) || 1;
+    const members = Number(selectedGroup.totalMembers) || 1;
 
     const monthly = Math.ceil((chit - discount) / members);
 
