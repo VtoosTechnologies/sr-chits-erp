@@ -663,7 +663,10 @@ async function saveAuctionData() {
             {
 
                 groupId:
-                selectedGroup.groupCode,
+selectedGroup.id,
+
+groupCode:
+selectedGroup.groupCode,
 
                 groupName:
                 selectedGroup.groupName,
