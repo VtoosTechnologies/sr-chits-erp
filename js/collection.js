@@ -12,7 +12,6 @@ getDocs,
 addDoc,
 query,
 where,
-orderBy
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
