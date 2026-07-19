@@ -231,11 +231,17 @@ alert("Auction Found : " + auctionSnapshot.size);
 
 let month = 1;
 
-if(!auctionSnapshot.empty){
+auctionSnapshot.forEach(doc => {
 
-month = auctionSnapshot.docs[0].data().month + 1;
+    const data = doc.data();
 
-}
+    if ((data.month || 0) >= month) {
+
+        month = data.month + 1;
+
+    }
+
+});
 
 currentMonth.textContent = month;
 
