@@ -1,170 +1,276 @@
-/*==================================================
+/*=========================================
 SR Chits ERP
-Collection History
-Part - 4C
-==================================================*/
+Collection History V2
+VTOOS Software Solutions
+=========================================*/
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-background:#f5f7fb;
-padding:20px;
+
+background:#eef3f9;
+
 }
 
 .container{
-max-width:1200px;
+
+max-width:1400px;
+
 margin:auto;
+
+padding:15px;
+
 }
 
-h1{
-text-align:center;
+/*=========================================
+Header
+=========================================*/
+
+.page-header{
+
+background:#ffffff;
+
+padding:18px 20px;
+
+border-radius:15px;
+
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+
 margin-bottom:20px;
-color:#1e3a8a;
+
+text-align:center;
+
 }
+
+.page-header h1{
+
+color:#0d47a1;
+
+font-size:28px;
+
+}
+
+.page-header p{
+
+color:#666;
+
+margin-top:6px;
+
+font-size:14px;
+
+}
+
+/*=========================================
+Cards
+=========================================*/
 
 .card{
-background:#fff;
+
+background:#ffffff;
+
 padding:20px;
+
 margin-bottom:20px;
-border-radius:10px;
-box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+border-radius:15px;
+
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+
 }
 
 .card h2{
-margin-bottom:15px;
-color:#1e3a8a;
+
+color:#1565c0;
+
+margin-bottom:18px;
+
 }
 
-label{
+/*=========================================
+Filters
+=========================================*/
+
+.card label{
+
 display:block;
-font-weight:bold;
+
+font-weight:600;
+
 margin-top:12px;
+
 margin-bottom:6px;
+
+color:#444;
+
 }
 
-select,
-input{
+.card select{
+
 width:100%;
-padding:10px;
-border:1px solid #ccc;
-border-radius:6px;
-outline:none;
-}
 
-select:focus,
-input:focus{
-border-color:#2563eb;
-}
-
-button{
-width:100%;
-margin-top:20px;
 padding:12px;
-border:none;
-border-radius:6px;
-background:#2563eb;
-color:#fff;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
+
+border:1px solid #d6d6d6;
+
+border-radius:10px;
+
+outline:none;
+
+font-size:15px;
+
 transition:.3s;
+
 }
 
-button:hover{
-background:#1d4ed8;
+.card select:focus{
+
+border-color:#1976d2;
+
 }
+
+#loadHistory{
+
+width:100%;
+
+margin-top:18px;
+
+padding:12px;
+
+background:#1976d2;
+
+color:#ffffff;
+
+border:none;
+
+border-radius:10px;
+
+font-size:16px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+#loadHistory:hover{
+
+background:#125db2;
+
+}
+
+/*=========================================
+Summary
+=========================================*/
 
 .info-row{
+
 display:flex;
+
 justify-content:space-between;
-padding:10px 0;
-border-bottom:1px solid #eee;
+
+align-items:center;
+
+padding:12px 0;
+
+border-bottom:1px solid #eeeeee;
+
 }
 
 .info-row:last-child{
+
 border-bottom:none;
+
 }
+
+.info-row span{
+
+color:#555;
+
+font-weight:600;
+
+}
+
+.info-row strong{
+
+color:#0d47a1;
+
+font-size:18px;
+
+}
+/*=========================================
+Table
+=========================================*/
 
 .table-container{
 overflow-x:auto;
+border-radius:12px;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:10px;
+min-width:1000px;
+background:#fff;
 }
 
-table th{
-background:#2563eb;
-color:white;
+table thead th{
+position:sticky;
+top:0;
+background:#1976d2;
+color:#fff;
+padding:14px;
+font-size:14px;
+text-align:center;
+}
+
+table tbody td{
 padding:12px;
 text-align:center;
+border-bottom:1px solid #e5e5e5;
+font-size:14px;
 }
 
-table td{
-padding:10px;
-text-align:center;
-border-bottom:1px solid #ddd;
+table tbody tr:nth-child(even){
+background:#f8fbff;
 }
 
-table tr:hover{
-background:#f8f9fa;
+table tbody tr:hover{
+background:#e8f1ff;
 }
 
-.button-group{
-display:flex;
-justify-content:center;
-margin-top:20px;
-}
-
-#backButton{
-max-width:250px;
-background:#6b7280;
-}
-
-#backButton:hover{
-background:#4b5563;
-}
+/*=========================================
+Action Buttons
+=========================================*/
 
 .action-btn{
-padding:6px 12px;
+padding:7px 12px;
 border:none;
-border-radius:5px;
+border-radius:8px;
+font-size:13px;
+font-weight:600;
 cursor:pointer;
-color:white;
 margin:2px;
+color:#fff;
+transition:.3s;
 }
 
 .edit-btn{
 background:#16a34a;
 }
 
+.edit-btn:hover{
+background:#15803d;
+}
+
 .delete-btn{
 background:#dc2626;
 }
 
-@media(max-width:768px){
-
-.container{
-padding:5px;
-}
-
-.card{
-padding:15px;
-}
-
-table{
-font-size:13px;
-}
-
-button{
-font-size:15px;
-}
-
-}
+.delete-btn:hover
