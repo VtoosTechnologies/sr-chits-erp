@@ -661,12 +661,11 @@ async function saveAuctionData() {
         await addDoc(
             auctionsRef,
             {
-
                 groupId:
-selectedGroup.id,
+                selectedGroup.id,
 
-groupCode:
-selectedGroup.groupCode,
+                groupCode:
+                selectedGroup.groupCode,
 
                 groupName:
                 selectedGroup.groupName,
