@@ -222,7 +222,7 @@ const auctionSnapshot = await getDocs(
     query(
         collection(db, "auctions"),
         where("groupId", "==", selectedGroup.id),
-        orderBy("auctionMonth", "desc")
+        orderBy("month", "desc")
     )
 );
 
@@ -233,7 +233,7 @@ let month = 1;
 if(!auctionSnapshot.empty){
 
 month =
-auctionSnapshot.docs[0].data().auctionMonth;
+auctionSnapshot.docs[0].data().month;
 
 }
 
