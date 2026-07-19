@@ -283,39 +283,6 @@ const q = query(
 
 const snapshot =
 await getDocs(q);
-alert("Selected Group : " + selectedGroup.groupCode);
-alert("Members Found : " + snapshot.size);
-
-snapshot.forEach(doc => {
-    alert(JSON.stringify(doc.data()));
-});
-members = [];
-
-snapshot.forEach(doc=>{
-
-members.push({
-id:doc.id,
-...doc.data()
-});
-
-});
-
-members.sort((a,b)=>
-Number(a.memberNo || 0) -
-Number(b.memberNo || 0)
-);
-alert(JSON.stringify(members));
-members.forEach(data => {
-
-    alert(JSON.stringify(data));
-
-    const option = document.createElement("option");
-
-    option.value = data.id;
-    option.textContent = data.memberName;
-
-    member.appendChild(option);
-
 });
 
 }
