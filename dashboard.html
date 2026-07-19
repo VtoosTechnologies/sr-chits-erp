@@ -18,61 +18,138 @@
 
     <div class="dashboard">
 
-        <div class="header">
+        <!-- Top Header -->
 
-            <h1>SR Chits ERP</h1>
+        <div class="topbar">
 
-            <p>Welcome, Owner 👋</p>
+            <div class="title">
+
+                <h1>SR Chits ERP</h1>
+
+                <p>Smart Chit Fund Management System</p>
+
+            </div>
+
+            <div class="profile">
+
+                <span class="welcome">
+                    Welcome, Owner 👋
+                </span>
+
+                <button id="logoutBtn" class="logoutBtn">
+                    ⏻
+                </button>
+
+            </div>
 
         </div>
+
+        <!-- Dashboard Cards -->
 
         <div class="cards">
 
             <div class="card">
+
                 <h2>Total Members</h2>
+
                 <h3 id="totalMembers">0</h3>
+
             </div>
 
             <div class="card">
+
                 <h2>Total Groups</h2>
+
                 <h3 id="totalGroups">0</h3>
+
             </div>
 
             <div class="card">
+
                 <h2>Today's Collection</h2>
+
                 <h3 id="todayCollection">₹0</h3>
+
             </div>
 
             <div class="card">
+
                 <h2>Total Staff</h2>
+
                 <h3 id="totalStaff">0</h3>
+
             </div>
 
         </div>
+
+        <!-- ERP Modules -->
+
+        <h2 class="sectionTitle">
+            ERP Modules
+        </h2>
 
         <div class="menu">
 
-    <button onclick="location.href='groups.html'">
-        Groups
-    </button>
+            <button onclick="location.href='groups.html'">
+                🏦
+                <span>Groups</span>
+            </button>
 
-    <button onclick="location.href='members.html'">
-        Members
-    </button>
+            <button onclick="location.href='members.html'">
+                👥
+                <span>Members</span>
+            </button>
 
-    <button onclick="location.href='auction.html'">
-        Auction
-    </button>
+            <button onclick="location.href='auction.html'">
+                🔨
+                <span>Auction</span>
+            </button>
 
-    <button onclick="location.href='collection.html'">
-        Collection
-    </button>
+            <button onclick="location.href='collection.html'">
+                💰
+                <span>Collection</span>
+            </button>
+
+            <button onclick="location.href='collection-history.html'">
+                📋
+                <span>Collection History</span>
+            </button>
+
+            <button onclick="alert('Coming Soon')">
+                📖
+                <span>Member Ledger</span>
+            </button>
+                        <button onclick="alert('Coming Soon')">
+                ⏳
+                <span>Pending Collection</span>
+            </button>
+
+            <button onclick="alert('Coming Soon')">
+                📅
+                <span>Monthly Report</span>
+            </button>
+
+            <button onclick="alert('Coming Soon')">
+                🧾
+                <span>Receipt</span>
+            </button>
+
+            <button onclick="alert('Coming Soon')">
+                👨‍💼
+                <span>Staff</span>
+            </button>
+
+            <button onclick="alert('Coming Soon')">
+                ⚙️
+                <span>Settings</span>
+            </button>
+
+            <button onclick="alert('Coming Soon')">
+                💾
+                <span>Backup & Restore</span>
+            </button>
 
         </div>
-
-        <button id="logoutBtn">
-            Logout
-        </button>
 
     </div>
 
