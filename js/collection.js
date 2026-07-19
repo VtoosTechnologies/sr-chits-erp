@@ -221,7 +221,7 @@ selectedGroup.totalMembers;
 const auctionSnapshot = await getDocs(
     query(
         collection(db, "auctions"),
-        where("groupId", "==", selectedGroup.id),
+        where("groupId", "==", selectedGroup.groupCode),
         orderBy("month", "desc")
     )
 );
@@ -232,8 +232,7 @@ let month = 1;
 
 if(!auctionSnapshot.empty){
 
-month =
-auctionSnapshot.docs[0].data().month;
+month = auctionSnapshot.docs[0].data().month + 1;
 
 }
 
@@ -279,8 +278,12 @@ const q = query(
 
 const snapshot =
 await getDocs(q);
-alert("Selected Group ID : " + selectedGroup.id);
+alert("Selected Group : " + selectedGroup.groupCode);
 alert("Members Found : " + snapshot.size);
+
+snapshot.forEach(doc => {
+    alert(JSON.stringify(doc.data()));
+});
 members = [];
 
 snapshot.forEach(doc=>{
