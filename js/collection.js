@@ -222,8 +222,6 @@ const auctionSnapshot = await getDocs(
     )
 );
 
-alert("Auction Found : " + auctionSnapshot.size);
-
 let month = 1;
 
 auctionSnapshot.forEach(doc => {
