@@ -3,157 +3,232 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    <title>SR Chits ERP - Dashboard</title>
+<title>SR Chits ERP</title>
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet"
+href="css/style.css">
+
+<link rel="stylesheet"
+href="css/dashboard.css">
 
 </head>
 
 <body>
 
-    <div class="dashboard">
+<div class="dashboard">
 
-        <!-- Top Header -->
+<!--==============================
+Header
+===============================-->
 
-        <div class="topbar">
+<header class="header">
 
-            <div class="title">
+<div class="brand">
 
-                <h1>SR Chits ERP</h1>
+<h1>SR Chits ERP</h1>
 
-                <p>Smart Chit Fund Management System</p>
+<p>Smart Chit Fund Management System</p>
 
-            </div>
+</div>
 
-            <div class="profile">
+<div class="userBox">
 
-                <span class="welcome">
-                    Welcome, Owner 👋
-                </span>
+<div>
 
-                <button id="logoutBtn" class="logoutBtn">
-                    ⏻
-                </button>
+<h3>Welcome, Owner 👋</h3>
 
-            </div>
+<p>Administrator</p>
 
-        </div>
+</div>
 
-        <!-- Dashboard Cards -->
+<button
+id="logoutBtn"
+class="logoutBtn">
 
-        <div class="cards">
+⏻
 
-            <div class="card">
+</button>
 
-                <h2>Total Members</h2>
+</div>
 
-                <h3 id="totalMembers">0</h3>
+</header>
 
-            </div>
+<!--==============================
+Summary Cards
+===============================-->
 
-            <div class="card">
+<section class="summary">
 
-                <h2>Total Groups</h2>
+<div class="summaryCard">
 
-                <h3 id="totalGroups">0</h3>
+<h4>Total Members</h4>
 
-            </div>
+<h2 id="totalMembers">0</h2>
 
-            <div class="card">
+</div>
 
-                <h2>Today's Collection</h2>
+<div class="summaryCard">
 
-                <h3 id="todayCollection">₹0</h3>
+<h4>Total Groups</h4>
 
-            </div>
+<h2 id="totalGroups">0</h2>
 
-            <div class="card">
+</div>
 
-                <h2>Total Staff</h2>
+<div class="summaryCard">
 
-                <h3 id="totalStaff">0</h3>
+<h4>Today's Collection</h4>
 
-            </div>
+<h2 id="todayCollection">₹0</h2>
 
-        </div>
+</div>
 
-        <!-- ERP Modules -->
+<div class="summaryCard">
 
-        <h2 class="sectionTitle">
-            ERP Modules
-        </h2>
+<h4>Total Staff</h4>
 
-        <div class="menu">
+<h2 id="totalStaff">1</h2>
 
-            <button onclick="location.href='groups.html'">
-                🏦
-                <span>Groups</span>
-            </button>
+</div>
 
-            <button onclick="location.href='members.html'">
-                👥
-                <span>Members</span>
-            </button>
+</section>
 
-            <button onclick="location.href='auction.html'">
-                🔨
-                <span>Auction</span>
-            </button>
+<!--==============================
+Modules
+===============================-->
 
-            <button onclick="location.href='collection.html'">
-                💰
-                <span>Collection</span>
-            </button>
+<h2 class="title">
 
-            <button onclick="location.href='collection-history.html'">
-                📋
-                <span>Collection History</span>
-            </button>
+ERP Modules
 
-            <button onclick="alert('Coming Soon')">
-                📖
-                <span>Member Ledger</span>
-            </button>
-                        <button onclick="alert('Coming Soon')">
-                ⏳
-                <span>Pending Collection</span>
-            </button>
+</h2>
 
-            <button onclick="alert('Coming Soon')">
-                📅
-                <span>Monthly Report</span>
-            </button>
+<div class="modules">
 
-            <button onclick="alert('Coming Soon')">
-                🧾
-                <span>Receipt</span>
-            </button>
+<button onclick="location.href='groups.html'">
 
-            <button onclick="alert('Coming Soon')">
-                👨‍💼
-                <span>Staff</span>
-            </button>
+<span>🏦</span>
 
-            <button onclick="alert('Coming Soon')">
-                ⚙️
-                <span>Settings</span>
-            </button>
+<p>Groups</p>
 
-            <button onclick="alert('Coming Soon')">
-                💾
-                <span>Backup & Restore</span>
-            </button>
+</button>
 
-        </div>
+<button onclick="location.href='members.html'">
 
-    </div>
+<span>👥</span>
 
-    <script type="module" src="js/dashboard.js"></script>
+<p>Members</p>
+
+</button>
+
+<button onclick="location.href='auction.html'">
+
+<span>🔨</span>
+
+<p>Auction</p>
+
+</button>
+
+<button onclick="location.href='collection.html'">
+
+<span>💰</span>
+
+<p>Collection</p>
+
+</button>
+
+<button
+onclick="location.href='collection-history.html'">
+
+<span>📋</span>
+
+<p>Collection History</p>
+
+</button>
+
+<button onclick="alert('Coming Soon')">
+
+<span>📖</span>
+
+<p>Member Ledger</p>
+
+</button>
+<button onclick="alert('Coming Soon')">
+
+<span>⏳</span>
+
+<p>Pending Collection</p>
+
+</button>
+
+<button onclick="alert('Coming Soon')">
+
+<span>📅</span>
+
+<p>Monthly Report</p>
+
+</button>
+
+<button onclick="alert('Coming Soon')">
+
+<span>🧾</span>
+
+<p>Receipt</p>
+
+</button>
+
+<button onclick="alert('Coming Soon')">
+
+<span>👨‍💼</span>
+
+<p>Staff</p>
+
+</button>
+
+<button onclick="alert('Coming Soon')">
+
+<span>⚙️</span>
+
+<p>Settings</p>
+
+</button>
+
+<button onclick="alert('Coming Soon')">
+
+<span>💾</span>
+
+<p>Backup</p>
+
+</button>
+
+</div>
+
+<!--==============================
+Footer
+===============================-->
+
+<footer class="footer">
+
+<h3>VTOOS Software Solutions</h3>
+
+<p>SR Chits ERP v1.0</p>
+
+<p>© 2026 All Rights Reserved</p>
+
+</footer>
+
+</div>
+
+<script
+type="module"
+src="js/dashboard.js">
+
+</script>
 
 </body>
 
