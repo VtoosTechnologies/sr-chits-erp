@@ -100,7 +100,7 @@ await loadChitAmounts();
 //==================================================
 // Load Chit Amount Filter
 //==================================================
-
+alert("Collection JS Latest Version");
 async function loadChitAmounts(){
 const snapshot =
 await getDocs(collection(db,"groups"));
