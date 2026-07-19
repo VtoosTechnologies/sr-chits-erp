@@ -1,34 +1,42 @@
 /*=========================================
-SR Chits ERP Dashboard
+SR Chits ERP Dashboard V3
+VTOOS Software Solutions
 =========================================*/
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
 
-    background:#f4f7fb;
+    background:#eef3f9;
 
 }
 
 .dashboard{
 
-    width:100%;
-    min-height:100vh;
+    max-width:1400px;
 
-    padding:20px;
+    margin:auto;
+
+    padding:15px;
 
 }
 
 /*=========================================
-Top Bar
+Header
 =========================================*/
 
-.topbar{
+.header{
+
+    background:#ffffff;
+
+    border-radius:15px;
+
+    padding:18px 20px;
 
     display:flex;
 
@@ -38,35 +46,31 @@ Top Bar
 
     flex-wrap:wrap;
 
-    background:#ffffff;
-
-    padding:20px;
-
-    border-radius:15px;
-
     box-shadow:0 5px 15px rgba(0,0,0,.08);
 
-    margin-bottom:25px;
+    margin-bottom:20px;
 
 }
 
-.title h1{
+.brand h1{
 
     color:#0d47a1;
 
-    font-size:30px;
+    font-size:28px;
 
 }
 
-.title p{
+.brand p{
 
     color:#666;
 
     margin-top:5px;
 
+    font-size:14px;
+
 }
 
-.profile{
+.userBox{
 
     display:flex;
 
@@ -76,21 +80,27 @@ Top Bar
 
 }
 
-.welcome{
+.userBox h3{
 
-    font-size:16px;
+    color:#222;
 
-    font-weight:bold;
+    font-size:18px;
 
-    color:#333;
+}
+
+.userBox p{
+
+    color:#666;
+
+    font-size:13px;
 
 }
 
 .logoutBtn{
 
-    width:45px;
+    width:42px;
 
-    height:45px;
+    height:42px;
 
     border:none;
 
@@ -100,9 +110,9 @@ Top Bar
 
     color:#fff;
 
-    font-size:20px;
-
     cursor:pointer;
+
+    font-size:18px;
 
     transition:.3s;
 
@@ -115,28 +125,28 @@ Top Bar
 }
 
 /*=========================================
-Cards
+Summary Cards
 =========================================*/
 
-.cards{
+.summary{
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    grid-template-columns:repeat(4,1fr);
 
-    gap:20px;
+    gap:15px;
 
-    margin-bottom:30px;
+    margin-bottom:20px;
 
 }
 
-.card{
+.summaryCard{
 
     background:#fff;
 
-    padding:20px;
-
     border-radius:15px;
+
+    padding:18px;
 
     text-align:center;
 
@@ -144,72 +154,68 @@ Cards
 
 }
 
-.card h2{
+.summaryCard h4{
 
-    font-size:17px;
+    color:#666;
 
-    color:#555;
+    font-size:15px;
 
 }
 
-.card h3{
+.summaryCard h2{
 
-    margin-top:15px;
-
-    font-size:30px;
+    margin-top:12px;
 
     color:#1565c0;
 
+    font-size:28px;
+
 }
+
 /*=========================================
-Section Title
+Title
 =========================================*/
 
-.sectionTitle{
-
-    font-size:24px;
+.title{
 
     color:#0d47a1;
 
-    margin-bottom:20px;
+    margin:20px 0 15px;
 
-    font-weight:bold;
+    font-size:24px;
 
 }
-
 /*=========================================
 ERP Modules
 =========================================*/
 
-.menu{
+.modules{
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    grid-template-columns:repeat(4,1fr);
 
-    gap:20px;
+    gap:15px;
 
-    margin-bottom:30px;
+    margin-bottom:25px;
 
 }
 
-.menu button{
+.modules button{
+
+    background:#ffffff;
 
     border:none;
 
     border-radius:15px;
 
-    padding:25px 15px;
+    padding:18px 10px;
 
-    background:linear-gradient(135deg,#1976d2,#42a5f5);
-
-    color:#fff;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
 
     cursor:pointer;
 
-    font-size:30px;
-
-    font-weight:bold;
+    transition:.3s;
 
     display:flex;
 
@@ -219,112 +225,190 @@ ERP Modules
 
     justify-content:center;
 
-    gap:12px;
-
-    transition:all .3s ease;
-
-    box-shadow:0 8px 18px rgba(25,118,210,.25);
+    min-height:110px;
 
 }
 
-.menu button span{
+.modules button:hover{
 
-    font-size:16px;
+    transform:translateY(-5px);
 
-    font-weight:600;
+    background:#1565c0;
+
+    color:#ffffff;
+
+}
+
+.modules button span{
+
+    font-size:30px;
+
+    margin-bottom:10px;
+
+}
+
+.modules button p{
+
+    font-size:14px;
+
+    font-weight:bold;
 
     text-align:center;
 
-    line-height:22px;
-
-}
-
-.menu button:hover{
-
-    transform:translateY(-6px);
-
-    box-shadow:0 14px 28px rgba(25,118,210,.35);
-
-}
-
-.menu button:active{
-
-    transform:scale(.97);
+    line-height:18px;
 
 }
 
 /*=========================================
-Mobile Responsive
+Footer
 =========================================*/
 
-@media(max-width:768px){
+.footer{
 
-    .dashboard{
+    margin-top:20px;
 
-        padding:15px;
+    padding:18px;
 
-    }
+    background:#ffffff;
 
-    .topbar{
+    border-radius:15px;
 
-        flex-direction:column;
+    text-align:center;
 
-        align-items:flex-start;
-
-        gap:15px;
-
-    }
-
-    .profile{
-
-        width:100%;
-
-        justify-content:space-between;
-
-    }
-
-    .title h1{
-
-        font-size:24px;
-
-    }
-
-    .cards{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .menu{
-
-        grid-template-columns:repeat(2,1fr);
-
-        gap:15px;
-
-    }
-
-    .menu button{
-
-        padding:20px 10px;
-
-        font-size:26px;
-
-    }
-
-    .menu button span{
-
-        font-size:14px;
-
-    }
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
 
 }
 
-@media(max-width:480px){
+.footer h3{
 
-    .menu{
+    color:#0d47a1;
 
-        grid-template-columns:1fr;
+    margin-bottom:6px;
 
-    }
+}
+
+.footer p{
+
+    color:#666;
+
+    font-size:13px;
+
+    margin:3px 0;
+
+}
+
+/*=========================================
+Tablet
+=========================================*/
+
+@media(max-width:992px){
+
+.summary{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+.modules{
+
+grid-template-columns:repeat(3,1fr);
+
+}
+
+}
+
+/*=========================================
+Mobile
+=========================================*/
+
+@media(max-width:600px){
+
+.dashboard{
+
+padding:10px;
+
+}
+
+.header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:15px;
+
+}
+
+.userBox{
+
+width:100%;
+
+justify-content:space-between;
+
+}
+
+.brand h1{
+
+font-size:24px;
+
+}
+
+.summary{
+
+grid-template-columns:repeat(2,1fr);
+
+gap:10px;
+
+}
+
+.summaryCard{
+
+padding:15px;
+
+}
+
+.summaryCard h2{
+
+font-size:22px;
+
+}
+
+.modules{
+
+grid-template-columns:repeat(3,1fr);
+
+gap:10px;
+
+}
+
+.modules button{
+
+min-height:85px;
+
+padding:10px 5px;
+
+}
+
+.modules button span{
+
+font-size:24px;
+
+margin-bottom:6px;
+
+}
+
+.modules button p{
+
+font-size:11px;
+
+line-height:14px;
+
+}
+
+.footer{
+
+padding:15px;
+
+}
 
 }
