@@ -278,6 +278,32 @@ const q = query(
 
 const snapshot =
 await getDocs(q);
+
+members = [];
+
+snapshot.forEach(doc => {
+
+    members.push({
+        id: doc.id,
+        ...doc.data()
+    });
+
+});
+
+members.sort((a,b)=>
+Number(a.memberNo || 0) -
+Number(b.memberNo || 0)
+);
+
+members.forEach(data => {
+
+    const option = document.createElement("option");
+
+    option.value = data.id;
+    option.textContent = data.memberName;
+
+    member.appendChild(option);
+
 });
 
 }
