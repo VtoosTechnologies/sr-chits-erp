@@ -103,7 +103,6 @@ await loadChitAmounts();
 //==================================================
 
 async function loadChitAmounts(){
-alert("JS Loaded");
 const snapshot =
 await getDocs(collection(db,"groups"));
 
@@ -163,7 +162,6 @@ where("chitAmount","==",Number(chitAmountFilter.value))
 );
 
 const snapshot = await getDocs(q);
-alert("Total Members : " + snapshot.size);
 groups = [];
 
 snapshot.forEach(doc=>{
