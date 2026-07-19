@@ -205,7 +205,9 @@ selectedMember = null;
 
 selectedGroup =
 groups.find(g=>g.id===auctionDayFilter.value);
+alert("Auction Day Value : " + auctionDayFilter.value);
 
+alert("Selected Group : " + JSON.stringify(selectedGroup));
 if(!selectedGroup) return;
 
 groupCode.textContent =
