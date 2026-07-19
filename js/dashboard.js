@@ -6,105 +6,105 @@
 import { auth, db } from "./firebase.js";
 
 import {
-signOut,
-onAuthStateChanged
+    signOut,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
-collection,
-getDocs
+    collection,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
 // Elements
 //==================================================
 
-const totalMembers =
-document.getElementById("totalMembers");
-
-const totalGroups =
-document.getElementById("totalGroups");
-
-const todayCollection =
-document.getElementById("todayCollection");
-
-const totalStaff =
-document.getElementById("totalStaff");
-
-const logoutBtn =
-document.getElementById("logoutBtn");
+const totalMembers = document.getElementById("totalMembers");
+const totalGroups = document.getElementById("totalGroups");
+const todayCollection = document.getElementById("todayCollection");
+const totalStaff = document.getElementById("totalStaff");
+const logoutBtn = document.getElementById("logoutBtn");
 
 //==================================================
 // Check Login
 //==================================================
 
-onAuthStateChanged(auth, async(user)=>{
+onAuthStateChanged(auth, async (user) => {
 
-if(!user){
+    if (!user) {
 
-window.location.href="login.html";
+        window.location.href = "login.html";
+        return;
 
-return;
+    }
 
-}
+    console.log("Logged in :", user.email);
 
-console.log("Logged in as:",user.email);
-
-await loadDashboard();
+    await loadDashboard();
 
 });
 
 //==================================================
-// Dashboard Load
+// Dashboard
 //==================================================
 
-async function loadDashboard(){
+async function loadDashboard() {
 
-try{
+    try {
 
-// Members
+        totalMembers.textContent = "...";
+        totalGroups.textContent = "...";
+        todayCollection.textContent = "Loading...";
+        totalStaff.textContent = "...";
 
-const memberSnapshot =
-await getDocs(collection(db,"members"));
+        // Members
 
-totalMembers.textContent =
-memberSnapshot.size;
+        const memberSnapshot =
+            await getDocs(collection(db, "members"));
 
-// Groups
+        totalMembers.textContent =
+            memberSnapshot.size;
 
-const groupSnapshot =
-await getDocs(collection(db,"groups"));
+        // Groups
 
-totalGroups.textContent =
-groupSnapshot.size;
+        const groupSnapshot =
+            await getDocs(collection(db, "groups"));
 
-// Collections
+        totalGroups.textContent =
+            groupSnapshot.size;
 
-let total = 0;
+        // Collections
 
-const collectionSnapshot =
-await getDocs(collection(db,"collections"));
+        let total = 0;
 
-collectionSnapshot.forEach(doc=>{
+        const collectionSnapshot =
+            await getDocs(collection(db, "collections"));
 
-total +=
-Number(doc.data().totalAmount || 0);
+        collectionSnapshot.forEach(doc => {
 
-});
+            total += Number(
+                doc.data().totalAmount || 0
+            );
 
-todayCollection.textContent =
-"₹" + total.toLocaleString("en-IN");
+        });
 
-// Staff (Temporary)
+        todayCollection.textContent =
+            "₹ " +
+            total.toLocaleString("en-IN");
 
-totalStaff.textContent="1";
+        // Staff
 
-}
-catch(error){
+        totalStaff.textContent = "1";
 
-console.error(error);
+    }
 
-}
+    catch (error) {
+
+        console.error(error);
+
+        alert("Dashboard Loading Failed");
+
+    }
 
 }
 
@@ -112,21 +112,25 @@ console.error(error);
 // Logout
 //==================================================
 
-logoutBtn.addEventListener("click",async()=>{
+logoutBtn.addEventListener("click", async () => {
 
-try{
+    const ok =
+        confirm("Are you sure you want to logout?");
 
-await signOut(auth);
+    if (!ok) return;
 
-alert("Logout Successful");
+    try {
 
-window.location.href="login.html";
+        await signOut(auth);
 
-}
-catch(error){
+        window.location.href = "login.html";
 
-alert(error.message);
+    }
 
-}
+    catch (error) {
+
+        alert(error.message);
+
+    }
 
 });
