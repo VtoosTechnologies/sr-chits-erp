@@ -273,8 +273,8 @@ member.innerHTML =
 `<option value="">Select Member</option>`;
 
 const q = query(
-collection(db,"members"),
-where("groupId","==",selectedGroup.id)
+    collection(db,"members"),
+    where("group","==",selectedGroup.groupCode)
 );
 
 const snapshot =
