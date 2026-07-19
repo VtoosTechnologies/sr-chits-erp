@@ -224,7 +224,6 @@ const auctionSnapshot = await getDocs(
     query(
         collection(db, "auctions"),
         where("groupId", "==", selectedGroup.groupCode),
-        orderBy("month", "desc")
     )
 );
 
