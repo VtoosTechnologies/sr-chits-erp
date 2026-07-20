@@ -3,7 +3,9 @@ SR Chits ERP
 Collection History V2
 VTOOS Software Solutions
 =========================================*/
-
+body{
+    background:#ff0000 !important;
+}
 *{
 margin:0;
 padding:0;
