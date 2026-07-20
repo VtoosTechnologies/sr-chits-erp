@@ -213,42 +213,6 @@ winner.appendChild(option);
 });
 
 }
-//==================================================
-// Load Prize Winner
-//==================================================
-
-auctionMonth.addEventListener("change", loadWinner);
-
-async function loadWinner(){
-
-winner.innerHTML =
-'<option value="">Select Member</option>';
-
-const snapshot =
-await getDocs(collection(db,"auctions"));
-
-snapshot.forEach(doc=>{
-
-const data = doc.data();
-
-if(
-data.groupId == group.value &&
-data.auctionMonth == auctionMonth.value
-){
-
-const option =
-document.createElement("option");
-
-option.value = data.memberId;
-option.textContent = data.memberName;
-
-winner.appendChild(option);
-
-}
-
-});
-
-}
 
 //==================================================
 // Load Member Details
