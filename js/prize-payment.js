@@ -439,6 +439,20 @@ document.getElementById("summaryBalance").textContent =
 
 }
 //==================================================
+// Generate Receipt Number
+//==================================================
+
+async function generateReceiptNo(){
+
+    const snapshot =
+    await getDocs(collection(db,"prizePayments"));
+
+    const count = snapshot.size + 1;
+
+    return "PP" + String(count).padStart(6,"0");
+
+}
+//==================================================
 // Save
 //==================================================
 
