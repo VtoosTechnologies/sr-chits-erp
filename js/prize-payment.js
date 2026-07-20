@@ -449,7 +449,10 @@ async function generateReceiptNo(){
 
     const count = snapshot.size + 1;
 
-    return "PP" + String(count).padStart(6,"0");
+    const year =
+    new Date().getFullYear();
+
+    return `SR-PP-${year}-${String(count).padStart(6,"0")}`;
 
 }
 //==================================================
