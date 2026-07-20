@@ -128,79 +128,83 @@
     </div>
         <!-- Payment Details -->
 
-    <div class="card">
+<div class="card">
 
-        <h3>Payment Details</h3>
+    <h3>Payment Details</h3>
 
-        <div class="form-grid">
+    <div class="form-grid">
 
-            <div class="form-group">
-                <label>Paid Now</label>
-                <input
-                    type="number"
-                    id="paidAmount"
-                    placeholder="Enter Paid Amount">
-            </div>
-
-            <div class="form-group">
-                <label>Remaining Prize Balance</label>
-                <input
-                    type="number"
-                    id="balanceAmount"
-                    readonly>
-            </div>
-
-            <div class="form-group">
-                <label>Payment Method</label>
-
-                <select id="paymentMethod">
-                    <option value="Cash">Cash</option>
-                    <option value="UPI">UPI</option>
-                    <option value="Bank">Bank Transfer</option>
-                    <option value="Cheque">Cheque</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Status</label>
-
-                <select id="paymentStatus">
-                    <option value="Pending">Pending</option>
-                    <option value="Partially Paid">Partially Paid</option>
-                    <option value="Completed">Completed</option>
-                </select>
-            </div>
-
+        <div class="form-group">
+            <label>Previously Paid</label>
+            <input
+                type="number"
+                id="previousPaid"
+                value="0"
+                readonly>
         </div>
 
         <div class="form-group">
-
-            <label>Remarks</label>
-
-            <textarea
-                id="remarks"
-                rows="4"
-                placeholder="Enter Remarks..."></textarea>
-
+            <label>Paid Now</label>
+            <input
+                type="number"
+                id="paidAmount"
+                placeholder="Enter Paid Amount">
         </div>
 
-        <div class="button-group">
+        <div class="form-group">
+            <label>Remaining Prize Balance</label>
+            <input
+                type="number"
+                id="balanceAmount"
+                readonly>
+        </div>
 
-            <button id="saveBtn">
-                💾 Save
-            </button>
+        <div class="form-group">
+            <label>Payment Method</label>
+            <select id="paymentMethod">
+                <option value="Cash">Cash</option>
+                <option value="UPI">UPI</option>
+                <option value="Bank">Bank Transfer</option>
+                <option value="Cheque">Cheque</option>
+            </select>
+        </div>
 
-            <button id="resetBtn" type="reset">
-                🔄 Reset
-            </button>
-
-            <button id="printBtn">
-                🖨 Print Receipt
-            </button>
-
+        <div class="form-group">
+            <label>Status</label>
+            <select id="paymentStatus">
+                <option value="Pending">Pending</option>
+                <option value="Partially Paid">Partially Paid</option>
+                <option value="Completed">Completed</option>
+            </select>
         </div>
 
     </div>
+
+    <div class="form-group">
+        <label>Remarks</label>
+        <textarea
+            id="remarks"
+            rows="4"
+            placeholder="Enter Remarks..."></textarea>
+    </div>
+
+    <div class="button-group">
+
+        <button id="saveBtn">
+            💾 Save
+        </button>
+
+        <button id="resetBtn" type="button">
+            🔄 Reset
+        </button>
+
+        <button id="printBtn" type="button">
+            🖨️ Print Receipt
+        </button>
+
+    </div>
+
+</div>
         <!-- Summary Card -->
 
     <div class="card">
