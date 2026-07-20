@@ -5,14 +5,13 @@
 //==================================================
 
 import { db } from "./firebase.js";
-alert("Collection History JS Loaded");
 import {
 collection,
 getDocs,
 query,
 where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
+alert("Collection History JS Loaded");
 //==================================================
 // Elements
 //==================================================
