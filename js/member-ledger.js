@@ -149,23 +149,19 @@ async function loadMembers(){
 
     snapshot.forEach(doc=>{
 
-        const data = doc.data();
+    const data = doc.data();
 
-        if(data.groupId===group.value){
+    const option =
+    document.createElement("option");
 
-            const option =
-            document.createElement("option");
+    option.value = doc.id;
 
-            option.value = doc.id;
+    option.textContent =
+    data.memberName;
 
-            option.textContent =
-            data.memberName;
+    member.appendChild(option);
 
-            member.appendChild(option);
-
-        }
-
-    });
+});
 
 }
 //==================================================
