@@ -460,7 +460,118 @@ document
 .getElementById("saveBtn")
 .addEventListener("click",savePrizePayment);
 
-function savePrizePayment(){
+async function savePrizePayment(){
+
+    // Validation
+    if(chitAmount.value===""){
+        alert("Please select Chit Amount");
+        return;
+    }
+
+    if(group.value===""){
+        alert("Please select Group");
+        return;
+    }
+
+    if(auctionMonth.value===""){
+        alert("Please select Auction Month");
+        return;
+    }
+
+    if(winner.value===""){
+        alert("Please select Prize Winner");
+        return;
+    }
+
+    if(Number(paidAmount.value)<=0){
+        alert("Enter Paid Amount");
+        return;
+    }
+
+    try{
+
+        const receiptNo =
+        await generateReceiptNo();
+
+        await addDoc(
+            collection(db,"prizePayments"),
+            {
+
+                receiptNo: receiptNo,
+
+                paymentDate:
+                new Date().toLocaleDateString("en-GB"),
+
+                groupId: group.value,
+
+                groupCode:
+                group.options[group.selectedIndex].text,
+
+                memberId: winner.value,
+
+                memberName:
+                memberName.value,
+
+                auctionMonth:
+                Number(auctionMonth.value),
+
+                chitAmount:
+                Number(chitAmount.value),
+
+                prizeAmount:
+                Number(prizeAmount.value),
+
+                oldPending:
+                Number(oldPending.value),
+
+                adjustmentType:
+                adjustmentType.value,
+
+                adjustmentAmount:
+                Number(adjustAmount.value),
+
+                prizePayable:
+                Number(prizePayable.value),
+
+                paidAmount:
+                Number(paidAmount.value),
+
+                balanceAmount:
+                Number(balanceAmount.value),
+
+                paymentMethod:
+                paymentMethod.value,
+
+                paymentStatus:
+                paymentStatus.value,
+
+                remarks:
+                remarks.value,
+
+                createdAt:
+                serverTimestamp()
+
+            }
+        );
+
+        alert(
+            "✅ Prize Payment Saved Successfully!\n\nReceipt No : " + receiptNo
+        );
+
+        resetForm();
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "Error while saving Prize Payment."
+        );
+
+    }
+
+}
 
 if(chitAmount.value===""){
 
