@@ -219,39 +219,47 @@ auctionMonth.addEventListener("change", loadWinner);
 
 async function loadWinner(){
 
-winner.innerHTML =
-'<option value="">Select Member</option>';
+    winner.innerHTML =
+    '<option value="">Select Member</option>';
 
-const snapshot =
-await getDocs(collection(db,"auctions"));
+    const auctionSnapshot =
+    await getDocs(collection(db,"auctions"));
 
-snapshot.forEach(doc=>{
+    const memberSnapshot =
+    await getDocs(collection(db,"members"));
 
-const data = doc.data();
+    auctionSnapshot.forEach(auctionDoc=>{
 
-if(
+        const auction = auctionDoc.data();
 
-data.groupId === group.value &&
+        if(
+            auction.groupId === group.value &&
+            Number(auction.month) === Number(auctionMonth.value)
+        ){
 
-Number(data.month) ===
-Number(auctionMonth.value)
+            memberSnapshot.forEach(memberDoc=>{
 
-){
+                if(memberDoc.id === auction.winnerId){
 
-const option =
-document.createElement("option");
+                    const member = memberDoc.data();
 
-option.value =
-data.memberId;
+                    const option =
+                    document.createElement("option");
 
-option.textContent =
-data.memberName;
+                    option.value = auction.winnerId;
 
-winner.appendChild(option);
+                    option.textContent =
+                    member.memberName;
 
-}
+                    winner.appendChild(option);
 
-});
+                }
+
+            });
+
+        }
+
+    });
 
 }
 
