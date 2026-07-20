@@ -348,6 +348,7 @@ async function loadMemberDetails(){
 paidAmount.value = "";
     calculatePrize();
     await loadPaymentHistory();
+}
    //==================================================
 // Load Payment History
 //==================================================
