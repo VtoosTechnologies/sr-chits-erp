@@ -567,6 +567,17 @@ async function savePrizePayment(){
     if(Number(paidAmount.value)<=0){
         alert("Enter Paid Amount");
         return;
+        const remaining =
+Number(balanceAmount.value);
+
+const currentPaid =
+Number(paidAmount.value);
+
+if(currentPaid > remaining){
+
+    alert("Paid Amount cannot be greater than Remaining Balance.");
+
+    return;
     }
 
     try{
@@ -576,6 +587,11 @@ async function savePrizePayment(){
 
         await addDoc(
             collection(db,"prizePayments"),
+            await addDoc(
+collection(db,"cashBook"),
+{
+    ...
+});
             {
 
                 receiptNo: receiptNo,
