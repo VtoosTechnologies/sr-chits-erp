@@ -310,7 +310,7 @@ data.groupId === group.value &&
 Number(data.month) ===
 Number(auctionMonth.value) &&
 
-data.memberId === winner.value
+data.winnerId === winner.value
 
 ){
 
