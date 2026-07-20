@@ -10,7 +10,9 @@ import {
 collection,
 getDocs,
 addDoc,
-serverTimestamp
+serverTimestamp,
+query,
+where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
@@ -318,7 +320,32 @@ data.winnerId === winner.value
 
 prizeAmount.value =
 data.prizeAmount || 0;
+//==================================================
+// Previous Payments
+//==================================================
 
+const paymentQuery = query(
+    collection(db,"prizePayments"),
+    where("groupId","==",group.value),
+    where("memberId","==",winner.value),
+    where("auctionMonth","==",Number(auctionMonth.value))
+);
+
+const paymentSnapshot =
+await getDocs(paymentQuery);
+
+let totalPaid = 0;
+
+paymentSnapshot.forEach(paymentDoc=>{
+
+    const payment = paymentDoc.data();
+
+    totalPaid += Number(payment.paidAmount) || 0;
+
+});
+
+// Show previous paid amount
+paidAmount.value = totalPaid;
 calculatePrize();
 
 }
