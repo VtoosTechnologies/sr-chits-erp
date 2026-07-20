@@ -417,12 +417,18 @@ prizePayable.value = payable;
 //--------------------------------------------
 // Paid & Balance
 //--------------------------------------------
+const previous =
+Number(previousPaid.value) || 0;
 
-const paid =
+const current =
 Number(paidAmount.value) || 0;
 
+const totalPaid =
+previous + current;
+
 const balance =
-Math.max(0,payable-paid);
+Math.max(0, payable - totalPaid);
+
 
 balanceAmount.value = balance;
 
@@ -430,13 +436,13 @@ balanceAmount.value = balance;
 // Payment Status
 //--------------------------------------------
 
-if(balance===0 && paid>0){
+if(balance===0 && totalpaid>0){
 
 paymentStatus.value="Completed";
 
 }
 
-else if(paid>0){
+else if(totalpaid>0){
 
 paymentStatus.value="Partially Paid";
 
