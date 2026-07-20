@@ -48,7 +48,8 @@ document.getElementById("adjustAmount");
 
 const prizePayable =
 document.getElementById("prizePayable");
-
+const previousPaid =
+document.getElementById("previousPaid");
 const paidAmount =
 document.getElementById("paidAmount");
 
@@ -440,13 +441,13 @@ balanceAmount.value = balance;
 // Payment Status
 //--------------------------------------------
 
-if(balance===0 && totalpaid>0){
+if(balance===0 && totalPaid>0){
 
 paymentStatus.value="Completed";
 
 }
 
-else if(totalpaid>0){
+else if(totalPaid>0){
 
 paymentStatus.value="Partially Paid";
 
@@ -463,7 +464,7 @@ paymentStatus.value="Pending";
 //--------------------------------------------
 
 document.getElementById("summaryPrize").textContent =
-"₹ " + prize.toLocaleString("en-IN");
+"₹ " + totalpaid.toLocaleString("en-IN");
 
 document.getElementById("summaryAdjusted").textContent =
 "₹ " + adjust.toLocaleString("en-IN");
