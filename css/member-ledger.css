@@ -1,1 +1,166 @@
+/*==================================================
+SR Chits ERP
+Member Ledger
+==================================================*/
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f5f7fa;
+padding:20px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+color:#0d47a1;
+}
+
+.card{
+background:#fff;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.card h3{
+margin-bottom:15px;
+color:#333;
+}
+
+label{
+display:block;
+margin-top:12px;
+margin-bottom:5px;
+font-weight:bold;
+}
+
+select{
+width:100%;
+padding:10px;
+border:1px solid #ccc;
+border-radius:6px;
+margin-bottom:10px;
+}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-size:15px;
+}
+
+#searchBtn{
+background:#1565c0;
+color:white;
+width:100%;
+margin-top:10px;
+}
+
+#searchBtn:hover{
+background:#0d47a1;
+}
+
+.summary{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.box{
+background:white;
+padding:20px;
+border-radius:10px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.box h4{
+color:#666;
+margin-bottom:10px;
+}
+
+.box p{
+font-size:22px;
+font-weight:bold;
+color:#0d47a1;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+table thead{
+background:#1565c0;
+color:white;
+}
+
+table th,
+table td{
+padding:12px;
+border:1px solid #ddd;
+text-align:center;
+}
+
+table tbody tr:nth-child(even){
+background:#f9f9f9;
+}
+
+table tbody tr:hover{
+background:#eef5ff;
+}
+
+.buttons{
+display:flex;
+justify-content:center;
+gap:15px;
+margin-top:20px;
+}
+
+.buttons button{
+background:#2e7d32;
+color:white;
+}
+
+.buttons button:last-child{
+background:#757575;
+}
+
+.buttons button:hover{
+opacity:.9;
+}
+
+@media(max-width:768px){
+
+.summary{
+grid-template-columns:1fr;
+}
+
+table{
+font-size:13px;
+}
+
+button{
+width:100%;
+}
+
+.buttons{
+flex-direction:column;
+}
+
+}
