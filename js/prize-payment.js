@@ -572,48 +572,6 @@ async function savePrizePayment(){
     }
 
 }
-
-if(chitAmount.value===""){
-
-alert("Please select Chit Amount");
-return;
-
-}
-
-if(group.value===""){
-
-alert("Please select Group");
-return;
-
-}
-
-if(auctionMonth.value===""){
-
-alert("Please select Auction Month");
-return;
-
-}
-
-if(winner.value===""){
-
-alert("Please select Prize Winner");
-return;
-
-}
-
-if(Number(paidAmount.value)<=0){
-
-alert("Enter Paid Amount");
-return;
-
-}
-
-alert(
-"Validation Successful.\n\nFirestore Save will be added in the next step."
-);
-
-}
-
 //==================================================
 // Reset
 //==================================================
