@@ -263,17 +263,12 @@ const data = doc.data();
 
 if(
 data.groupId == group.value &&
-data.auctionMonth == auctionMonth.value &&
+String(data.month) == auctionMonth.value &&
 data.memberId == winner.value
 ){
-
-prizeAmount.value =
-data.prizeAmount || 0;
+prizeAmount.value = data.prizeAmount || 0;
 
 calculatePrize();
-
-}
-
 });
 
 }
