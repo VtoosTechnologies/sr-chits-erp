@@ -464,13 +464,13 @@ paymentStatus.value="Pending";
 //--------------------------------------------
 
 document.getElementById("summaryPrize").textContent =
-"₹ " + totalpaid.toLocaleString("en-IN");
+"₹ " + prize.toLocaleString("en-IN");
 
 document.getElementById("summaryAdjusted").textContent =
 "₹ " + adjust.toLocaleString("en-IN");
 
 document.getElementById("summaryPaid").textContent =
-"₹ " + paid.toLocaleString("en-IN");
+"₹ " + totalPaid.toLocaleString("en-IN");
 
 document.getElementById("summaryBalance").textContent =
 "₹ " + balance.toLocaleString("en-IN");
