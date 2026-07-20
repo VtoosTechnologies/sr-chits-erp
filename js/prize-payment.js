@@ -132,7 +132,20 @@ const option =
 document.createElement("option");
 
 option.value = doc.id;
-option.textContent = data.groupName;
+
+const startDate = new Date(data.startDate);
+
+const formattedDate = startDate.toLocaleDateString(
+"en-GB",
+{
+day:"2-digit",
+month:"short",
+year:"2-digit"
+}
+).replace(/ /g,"-");
+
+option.textContent =
+`${data.groupCode} | ${formattedDate}`;
 
 group.appendChild(option);
 
