@@ -147,19 +147,23 @@ async function loadMembers(){
     const snapshot =
     await getDocs(collection(db,"members"));
 
-    snapshot.forEach(doc=>{
+snapshot.forEach(doc=>{
 
     const data = doc.data();
 
-    const option =
-    document.createElement("option");
+    if(data.group === group.value){
 
-    option.value = doc.id;
+        const option =
+        document.createElement("option");
 
-    option.textContent =
-    data.memberName;
+        option.value = doc.id;
 
-    member.appendChild(option);
+        option.textContent =
+        data.memberName;
+
+        member.appendChild(option);
+
+    }
 
 });
 
