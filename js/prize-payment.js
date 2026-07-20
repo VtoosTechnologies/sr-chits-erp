@@ -209,7 +209,7 @@ const data = doc.data();
 
 if(
 data.groupId === group.value &&
-data.month === auctionMonth.value
+data.auctionMonth === auctionMonth.value
 ){
 
 const option =
