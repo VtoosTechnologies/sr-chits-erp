@@ -120,7 +120,7 @@ async function loadGroups(){
             const option =
             document.createElement("option");
 
-            option.value = doc.id;
+            option.value = data.groupCode;
 
             option.textContent =
             data.groupCode;
