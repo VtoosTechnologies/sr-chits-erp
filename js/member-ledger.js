@@ -53,12 +53,14 @@ loadChitAmounts();
 //==================================================
 
 async function loadChitAmounts(){
+    console.log("Member Ledger Loaded");
 
     chitAmount.innerHTML =
     '<option value="">Select Chit Amount</option>';
 
     const snapshot =
     await getDocs(collection(db,"groups"));
+    console.log("Groups Count :", snapshot.size);
 
     const amounts = [];
 
