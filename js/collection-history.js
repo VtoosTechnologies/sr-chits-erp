@@ -5,7 +5,7 @@
 //==================================================
 
 import { db } from "./firebase.js";
-
+alert("Collection History JS Loaded");
 import {
 collection,
 getDocs,
