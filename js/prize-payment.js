@@ -344,8 +344,57 @@ async function loadMemberDetails(){
     });
 
     previousPaid.value = totalPaid;
-
+// Clear current payment
+paidAmount.value = "";
     calculatePrize();
+    await loadPaymentHistory();
+   //==================================================
+// Load Payment History
+//==================================================
+
+async function loadPaymentHistory() {
+
+    const tbody =
+    document.getElementById("paymentHistoryBody");
+
+    tbody.innerHTML = "";
+
+    const paymentQuery = query(
+        collection(db, "prizePayments"),
+        where("groupId", "==", group.value),
+        where("memberId", "==", winner.value),
+        where("auctionMonth", "==", Number(auctionMonth.value))
+    );
+
+    const snapshot =
+    await getDocs(paymentQuery);
+
+    if (snapshot.empty) {
+
+        tbody.innerHTML = `
+        <tr>
+            <td colspan="6" style="text-align:center;">
+                No Payment History Found
+            </td>
+        </tr>`;
+
+        return;
+    }
+
+    snapshot.forEach(doc => {
+
+        const data = doc.data();
+
+        tbody.innerHTML += `
+        <tr>
+            <td>${data.paymentDate}</td>
+            <td>${data.receiptNo}</td>
+            <td>₹ ${Number(data.paidAmount).toLocaleString("en-IN")}</td>
+            <td>₹ ${Number(data.adjustmentAmount).toLocaleString("en-IN")}</td>
+            <td>₹ ${Number(data.balanceAmount).toLocaleString("en-IN")}</td>
+            <td>${data.paymentStatus}</td>
+        </tr>`;
+    });
 
 }
 //==================================================
