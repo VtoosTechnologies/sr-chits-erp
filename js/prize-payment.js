@@ -61,31 +61,40 @@ const remarks =
 document.getElementById("remarks");
 
 //==================================================
-// Load Chit Amount
+// Initial Load
+//==================================================
+
+loadChitAmounts();
+
+//==================================================
+// Load Chit Amounts
 //==================================================
 
 async function loadChitAmounts(){
 
+chitAmount.innerHTML =
+'<option value="">Select Chit Amount</option>';
+
 const snapshot =
 await getDocs(collection(db,"groups"));
 
-let amounts = [];
+const amountList = [];
 
 snapshot.forEach(doc=>{
 
 const data = doc.data();
 
-if(!amounts.includes(data.chitAmount)){
+if(!amountList.includes(Number(data.chitAmount))){
 
-amounts.push(data.chitAmount);
+amountList.push(Number(data.chitAmount));
 
 }
 
 });
 
-amounts.sort((a,b)=>a-b);
+amountList.sort((a,b)=>a-b);
 
-amounts.forEach(amount=>{
+amountList.forEach(amount=>{
 
 const option =
 document.createElement("option");
@@ -93,7 +102,7 @@ document.createElement("option");
 option.value = amount;
 
 option.textContent =
-"₹ " + Number(amount).toLocaleString();
+"₹ " + amount.toLocaleString("en-IN");
 
 chitAmount.appendChild(option);
 
@@ -101,12 +110,11 @@ chitAmount.appendChild(option);
 
 }
 
-loadChitAmounts();
 //==================================================
 // Load Groups
 //==================================================
 
-chitAmount.addEventListener("change", loadGroups);
+chitAmount.addEventListener("change",loadGroups);
 
 async function loadGroups(){
 
@@ -126,26 +134,16 @@ snapshot.forEach(doc=>{
 
 const data = doc.data();
 
-if(String(data.chitAmount) === chitAmount.value){
+if(Number(data.chitAmount) === Number(chitAmount.value)){
 
 const option =
 document.createElement("option");
 
 option.value = doc.id;
 
-const startDate = new Date(data.startDate);
-
-const formattedDate = startDate.toLocaleDateString(
-"en-GB",
-{
-day:"2-digit",
-month:"short",
-year:"2-digit"
-}
-).replace(/ /g,"-");
-
+// Temporary Display
 option.textContent =
-`${data.groupCode} | ${formattedDate}`;
+data.groupName;
 
 group.appendChild(option);
 
@@ -154,7 +152,6 @@ group.appendChild(option);
 });
 
 }
-
 //==================================================
 // Load Auction Months
 //==================================================
@@ -166,8 +163,13 @@ async function loadAuctionMonths(){
 auctionMonth.innerHTML =
 '<option value="">Select Month</option>';
 
+winner.innerHTML =
+'<option value="">Select Member</option>';
+
 const snapshot =
 await getDocs(collection(db,"auctions"));
+
+const months = [];
 
 snapshot.forEach(doc=>{
 
@@ -175,27 +177,37 @@ const data = doc.data();
 
 if(data.groupId === group.value){
 
+months.push(Number(data.month));
+
+}
+
+});
+
+months.sort((a,b)=>a-b);
+
+months.forEach(month=>{
+
 const option =
 document.createElement("option");
 
-option.value = data.month;
-option.textContent = data.month;
+option.value = month;
+
+option.textContent =
+"Month " + month;
 
 auctionMonth.appendChild(option);
-
-}
 
 });
 
 }
 
 //==================================================
-// Load Prize Winners
+// Load Prize Winner
 //==================================================
 
-auctionMonth.addEventListener("change", loadPrizeWinners);
+auctionMonth.addEventListener("change", loadWinner);
 
-async function loadPrizeWinners(){
+async function loadWinner(){
 
 winner.innerHTML =
 '<option value="">Select Member</option>';
@@ -208,14 +220,20 @@ snapshot.forEach(doc=>{
 const data = doc.data();
 
 if(
+
 data.groupId === group.value &&
-data.auctionMonth === auctionMonth.value
+
+Number(data.month) ===
+Number(auctionMonth.value)
+
 ){
 
 const option =
 document.createElement("option");
 
-option.value = doc.id;
+option.value =
+data.memberId;
+
 option.textContent =
 data.memberName;
 
@@ -235,14 +253,20 @@ winner.addEventListener("change", loadMemberDetails);
 
 async function loadMemberDetails(){
 
+memberName.value = "";
+
+oldPending.value = "";
+
+prizeAmount.value = "";
+
 const memberSnapshot =
 await getDocs(collection(db,"members"));
 
 memberSnapshot.forEach(doc=>{
 
-const data = doc.data();
+if(doc.id === winner.value){
 
-if(doc.id == winner.value){
+const data = doc.data();
 
 memberName.value =
 data.memberName || "";
@@ -262,13 +286,23 @@ auctionSnapshot.forEach(doc=>{
 const data = doc.data();
 
 if(
-data.groupId == group.value &&
-String(data.month) == auctionMonth.value &&
-data.memberId == winner.value
+
+data.groupId === group.value &&
+
+Number(data.month) ===
+Number(auctionMonth.value) &&
+
+data.memberId === winner.value
+
 ){
-prizeAmount.value = data.prizeAmount || 0;
+
+prizeAmount.value =
+data.prizeAmount || 0;
 
 calculatePrize();
+
+}
+
 });
 
 }
@@ -277,34 +311,40 @@ calculatePrize();
 //==================================================
 
 adjustmentType.addEventListener("change", calculatePrize);
+
 adjustAmount.addEventListener("input", calculatePrize);
+
 paidAmount.addEventListener("input", calculatePrize);
 
 function calculatePrize(){
 
-let prize =
+const prize =
 Number(prizeAmount.value) || 0;
 
-let pending =
+const pending =
 Number(oldPending.value) || 0;
 
 let adjust = 0;
 
-if(adjustmentType.value == "none"){
+//--------------------------------------------
+// Adjustment
+//--------------------------------------------
+
+if(adjustmentType.value === "none"){
 
 adjust = 0;
+adjustAmount.value = 0;
 
 }
 
-else if(adjustmentType.value == "full"){
+else if(adjustmentType.value === "full"){
 
 adjust = pending;
-
 adjustAmount.value = pending;
 
 }
 
-else if(adjustmentType.value == "custom"){
+else if(adjustmentType.value === "custom"){
 
 adjust =
 Number(adjustAmount.value) || 0;
@@ -318,82 +358,141 @@ adjustAmount.value = pending;
 
 }
 
+//--------------------------------------------
+// Prize Payable
+//--------------------------------------------
+
 const payable =
 prize - adjust;
 
 prizePayable.value = payable;
 
+//--------------------------------------------
+// Paid & Balance
+//--------------------------------------------
+
 const paid =
 Number(paidAmount.value) || 0;
 
 const balance =
-payable - paid;
+Math.max(0,payable-paid);
 
 balanceAmount.value = balance;
 
-// Summary
+//--------------------------------------------
+// Payment Status
+//--------------------------------------------
 
-document.getElementById("summaryPrize").innerHTML =
-"₹" + prize.toLocaleString();
+if(balance===0 && paid>0){
 
-document.getElementById("summaryAdjusted").innerHTML =
-"₹" + adjust.toLocaleString();
-
-document.getElementById("summaryPaid").innerHTML =
-"₹" + paid.toLocaleString();
-
-document.getElementById("summaryBalance").innerHTML =
-"₹" + balance.toLocaleString();
-
-if(balance <= 0){
-
-paymentStatus.value =
-"Completed";
+paymentStatus.value="Completed";
 
 }
 
-else if(paid > 0){
+else if(paid>0){
 
-paymentStatus.value =
-"Partially Paid";
+paymentStatus.value="Partially Paid";
 
 }
 
 else{
 
-paymentStatus.value =
-"Pending";
+paymentStatus.value="Pending";
 
 }
 
-}
+//--------------------------------------------
+// Summary Cards
+//--------------------------------------------
 
+document.getElementById("summaryPrize").textContent =
+"₹ " + prize.toLocaleString("en-IN");
+
+document.getElementById("summaryAdjusted").textContent =
+"₹ " + adjust.toLocaleString("en-IN");
+
+document.getElementById("summaryPaid").textContent =
+"₹ " + paid.toLocaleString("en-IN");
+
+document.getElementById("summaryBalance").textContent =
+"₹ " + balance.toLocaleString("en-IN");
+
+}
 //==================================================
-// Buttons
+// Save
 //==================================================
 
 document
 .getElementById("saveBtn")
-.addEventListener("click",()=>{
+.addEventListener("click",savePrizePayment);
+
+function savePrizePayment(){
+
+if(chitAmount.value===""){
+
+alert("Please select Chit Amount");
+return;
+
+}
+
+if(group.value===""){
+
+alert("Please select Group");
+return;
+
+}
+
+if(auctionMonth.value===""){
+
+alert("Please select Auction Month");
+return;
+
+}
+
+if(winner.value===""){
+
+alert("Please select Prize Winner");
+return;
+
+}
+
+if(Number(paidAmount.value)<=0){
+
+alert("Enter Paid Amount");
+return;
+
+}
 
 alert(
-"Prize Payment Save - Firestore Integration Next"
+"Validation Successful.\n\nFirestore Save will be added in the next step."
 );
 
-});
+}
+
+//==================================================
+// Reset
+//==================================================
 
 document
 .getElementById("resetBtn")
-.addEventListener("click",()=>{
+.addEventListener("click",resetForm);
+
+function resetForm(){
 
 location.reload();
 
-});
+}
+
+//==================================================
+// Print
+//==================================================
 
 document
 .getElementById("printBtn")
-.addEventListener("click",()=>{
+.addEventListener("click",printReceipt);
+
+function printReceipt(){
 
 window.print();
 
-});
+}
