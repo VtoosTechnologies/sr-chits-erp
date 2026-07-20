@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Member Ledger</title>
+
+<link rel="stylesheet"
+href="member-ledger.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>📒 Member Ledger</h2>
+
+<!-- Filters -->
+
+<div class="card">
+
+<h3>Search Filters</h3>
+
+<label>Chit Amount</label>
+
+<select id="chitAmount">
+<option value="">Select Chit Amount</option>
+</select>
+
+<label>Group</label>
+
+<select id="group">
+<option value="">Select Group</option>
+</select>
+
+<label>Member</label>
+
+<select id="member">
+<option value="">Select Member</option>
+</select>
+
+<button id="searchBtn">
+Search Ledger
+</button>
+
+</div>
+
+<!-- Summary -->
+
+<div class="summary">
+
+<div class="box">
+<h4>Total Debit</h4>
+<p id="totalDebit">₹ 0</p>
+</div>
+
+<div class="box">
+<h4>Total Credit</h4>
+<p id="totalCredit">₹ 0</p>
+</div>
+
+<div class="box">
+<h4>Balance</h4>
+<p id="closingBalance">₹ 0</p>
+</div>
+
+</div>
+
+<!-- Ledger Table -->
+
+<div class="card">
+
+<h3>Ledger History</h3>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Receipt</th>
+
+<th>Type</th>
+
+<th>Debit</th>
+
+<th>Credit</th>
+
+<th>Balance</th>
+
+</tr>
+
+</thead>
+
+<tbody id="ledgerBody">
+
+<tr>
+
+<td colspan="6"
+style="text-align:center;">
+
+No Ledger Found
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="buttons">
+
+<button id="printBtn">
+🖨 Print
+</button>
+
+<button onclick="history.back()">
+⬅ Back
+</button>
+
+</div>
+
+</div>
+
+<script type="module"
+src="member-ledger.js"></script>
+
+</body>
+
+</html>
