@@ -692,7 +692,56 @@ await addDoc(
 
     }
 );
+        
+//==================================================
+// Auto Entry - Member Ledger
+//==================================================
+        await addDoc(
+    collection(db,"memberLedger"),
+    {
 
+        transactionDate:
+        new Date().toLocaleDateString("en-GB"),
+
+        receiptNo:
+        receiptNo,
+
+        memberId:
+        winner.value,
+
+        memberName:
+        memberName.value,
+
+        groupId:
+        group.value,
+
+        groupCode:
+        group.options[group.selectedIndex].text,
+
+        transactionType:
+        "Prize Payment",
+
+        debit:
+        0,
+
+        credit:
+        Number(paidAmount.value),
+
+        balance:
+        Number(balanceAmount.value),
+
+        paymentMethod:
+        paymentMethod.value,
+
+        remarks:
+        remarks.value,
+
+        createdAt:
+        serverTimestamp()
+
+    }
+);
+        
         alert(
             "✅ Prize Payment Saved Successfully!\n\nReceipt No : " + receiptNo
         );
