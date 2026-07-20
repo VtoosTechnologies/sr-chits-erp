@@ -344,10 +344,14 @@ paymentSnapshot.forEach(paymentDoc=>{
 
 });
 
-// Show previous paid amount
-paidAmount.value = totalPaid;
-calculatePrize();
+// Show Previous Paid Amount
+previousPaid.value = totalPaid;
 
+// Clear current payment
+paidAmount.value = "";
+
+// Recalculate
+calculatePrize();
 }
 
 });
