@@ -276,86 +276,76 @@ winner.addEventListener("change", loadMemberDetails);
 
 async function loadMemberDetails(){
 
-memberName.value = "";
+    memberName.value = "";
+    oldPending.value = "";
+    prizeAmount.value = "";
+    previousPaid.value = 0;
+    paidAmount.value = "";
+    balanceAmount.value = "";
 
-oldPending.value = "";
+    // Load Member Details
+    const memberSnapshot =
+    await getDocs(collection(db,"members"));
 
-prizeAmount.value = "";
+    memberSnapshot.forEach(doc=>{
 
-const memberSnapshot =
-await getDocs(collection(db,"members"));
+        if(doc.id === winner.value){
 
-memberSnapshot.forEach(doc=>{
+            const data = doc.data();
 
-if(doc.id === winner.value){
+            memberName.value =
+            data.memberName || "";
 
-const data = doc.data();
+            oldPending.value =
+            data.pendingAmount || 0;
 
-memberName.value =
-data.memberName || "";
+        }
 
-oldPending.value =
-data.pendingAmount || 0;
+    });
 
-}
+    // Load Auction Prize Amount
+    const auctionQuery = query(
+        collection(db,"auctions"),
+        where("groupId","==",group.value),
+        where("winnerId","==",winner.value),
+        where("month","==",Number(auctionMonth.value))
+    );
 
-});
+    const auctionResult =
+    await getDocs(auctionQuery);
 
-const auctionSnapshot =
-await getDocs(collection(db,"auctions"));
+    auctionResult.forEach(doc=>{
 
-auctionSnapshot.forEach(doc=>{
+        const data = doc.data();
 
-const data = doc.data();
+        prizeAmount.value =
+        Number(data.prizeAmount) || 0;
 
-if(
+    });
 
-data.groupId === group.value &&
+    // Load Previous Payments
+    const paymentQuery = query(
+        collection(db,"prizePayments"),
+        where("groupId","==",group.value),
+        where("memberId","==",winner.value),
+        where("auctionMonth","==",Number(auctionMonth.value))
+    );
 
-Number(data.month) ===
-Number(auctionMonth.value) &&
+    const paymentResult =
+    await getDocs(paymentQuery);
 
-data.winnerId === winner.value
+    let totalPaid = 0;
 
-){
+    paymentResult.forEach(doc=>{
 
-prizeAmount.value =
-data.prizeAmount || 0;
-//==================================================
-// Previous Payments
-//==================================================
+        totalPaid +=
+        Number(doc.data().paidAmount) || 0;
 
-const paymentQuery = query(
-    collection(db,"prizePayments"),
-    where("groupId","==",group.value),
-    where("memberId","==",winner.value),
-    where("auctionMonth","==",Number(auctionMonth.value))
-);
+    });
 
-const paymentSnapshot =
-await getDocs(paymentQuery);
+    previousPaid.value = totalPaid;
 
-let totalPaid = 0;
-
-paymentSnapshot.forEach(paymentDoc=>{
-
-    const payment = paymentDoc.data();
-
-    totalPaid += Number(payment.paidAmount) || 0;
-
-});
-
-// Show Previous Paid Amount
-previousPaid.value = totalPaid;
-
-// Clear current payment
-paidAmount.value = "";
-
-// Recalculate
-calculatePrize();
-}
-
-});
+    calculatePrize();
 
 }
 //==================================================
