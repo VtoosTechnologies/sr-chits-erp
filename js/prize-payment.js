@@ -634,6 +634,52 @@ async function savePrizePayment(){
 
             }
         );
+        //==================================================
+// Auto Entry - Cash Book
+//==================================================
+
+await addDoc(
+    collection(db,"cashBook"),
+    {
+
+        transactionDate:
+        new Date().toLocaleDateString("en-GB"),
+
+        receiptNo:
+        receiptNo,
+
+        transactionType:
+        "Prize Payment",
+
+        paymentType:
+        "Debit",
+
+        groupId:
+        group.value,
+
+        groupCode:
+        group.options[group.selectedIndex].text,
+
+        memberId:
+        winner.value,
+
+        memberName:
+        memberName.value,
+
+        amount:
+        Number(paidAmount.value),
+
+        paymentMethod:
+        paymentMethod.value,
+
+        remarks:
+        remarks.value,
+
+        createdAt:
+        serverTimestamp()
+
+    }
+);
 
         alert(
             "✅ Prize Payment Saved Successfully!\n\nReceipt No : " + receiptNo
