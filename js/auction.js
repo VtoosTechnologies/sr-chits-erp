@@ -337,7 +337,7 @@ async function loadCurrentAuctionMonth() {
 
     const q = query(
         auctionsRef,
-        where("groupId", "==", selectedGroup.groupCode)
+        where("groupId", "==", selectedGroup.id)
     );
 
     const snapshot = await getDocs(q);
@@ -450,7 +450,7 @@ async function loadMembers() {
 
     const q = query(
         membersRef,
-        where("group", "==", selectedGroup.groupCode)
+        where("groupCode", "==", selectedGroup.groupCode)
     );
 
     const snapshot = await getDocs(q);
@@ -607,7 +607,7 @@ async function saveAuctionData() {
 
         const monthQuery = query(
             auctionsRef,
-            where("groupId", "==", selectedGroup.groupCode),
+            where("groupId", "==", selectedGroup.id),
             where("month", "==", currentAuctionMonth)
         );
 
