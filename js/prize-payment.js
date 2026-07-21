@@ -568,8 +568,14 @@ async function savePrizePayment(){
         alert("Enter Paid Amount");
         return;
     }
-        const remaining =
-Number(balanceAmount.value);
+        const payable =
+Number(prizePayable.value);
+
+const previous =
+Number(previousPaid.value);
+
+const remaining =
+payable - previous;
 
 const currentPaid =
 Number(paidAmount.value);
@@ -579,7 +585,7 @@ if(currentPaid > remaining){
     alert("Paid Amount cannot be greater than Remaining Balance.");
 
     return;
-    }
+}
 
     try{
 
