@@ -752,7 +752,7 @@ selectedGroupCode,
         Number(paidAmount.value),
 
         balance:
-        Number(balanceAmount.value),
+previousBalance + Number(paidAmount.value),
 
         paymentMethod:
         paymentMethod.value,
