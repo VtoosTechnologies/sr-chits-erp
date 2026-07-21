@@ -29,218 +29,93 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 View, Print & Download All Reports
 
 </p>
+
 <div class="search-box">
 
 <input
 type="text"
 id="reportSearch"
-placeholder="🔍 Search Report...">
+placeholder="🔍 Search Reports...">
 
 </div>
 
-<div class="report-grid">
+<div class="report-list">
 
-<!-- Collection Report -->
+<div class="report-item">
 
-<div class="report-card">
+<span>📋 Collection Report</span>
 
-<i class="fas fa-money-check-dollar report-icon"></i>
-
-<h3>Collection Report</h3>
-
-<p>Daily / Monthly Collection Report</p>
-
-<div class="buttons">
-
-<button onclick="location.href='collection-report.html'">
+<button
+onclick="openCollectionReport()">
 
 👁 View
 
 </button>
 
-<button disabled>
-
-📄 PDF
-
-</button>
-
-<button disabled>
-
-📊 Excel
-
-</button>
-
 </div>
 
-</div>
+<div class="report-item">
 
-<!-- Member Statement -->
+<span>👤 Member Statement</span>
 
-<div class="report-card">
-
-<i class="fas fa-user report-icon"></i>
-
-<h3>Member Statement</h3>
-
-<p>Complete Member Transaction History</p>
-
-<div class="buttons">
-
-<button onclick="location.href='member-statement.html'">
+<button
+onclick="openMemberStatement()">
 
 👁 View
 
 </button>
 
-<button disabled>
-
-📄 PDF
-
-</button>
-
-<button disabled>
-
-📊 Excel
-
-</button>
-
 </div>
 
-</div>
+<div class="report-item">
 
-<!-- Prize Payment Report -->
+<span>🏆 Prize Payment Report</span>
 
-<div class="report-card">
-
-<i class="fas fa-trophy report-icon"></i>
-
-<h3>Prize Payment Report</h3>
-
-<p>Prize Payment Details</p>
-
-<div class="buttons">
-
-<button onclick="location.href='prize-payment-report.html'">
+<button
+onclick="openPrizePaymentReport()">
 
 👁 View
 
 </button>
 
-<button disabled>
-
-📄 PDF
-
-</button>
-
-<button disabled>
-
-📊 Excel
-
-</button>
-
 </div>
 
-</div>
+<div class="report-item">
 
-<!-- Cash Book -->
+<span>💰 Cash Book</span>
 
-<div class="report-card">
-
-<i class="fas fa-wallet report-icon"></i>
-
-<h3>Cash Book</h3>
-
-<p>Daily Cash In / Cash Out</p>
-
-<div class="buttons">
-
-<button onclick="location.href='cash-book.html'">
+<button
+onclick="openCashBook()">
 
 👁 View
 
 </button>
 
-<button disabled>
-
-📄 PDF
-
-</button>
-
-<button disabled>
-
-📊 Excel
-
-</button>
-
 </div>
 
-</div>
+<div class="report-item">
 
-<!-- Outstanding Report -->
+<span>📈 Outstanding Report</span>
 
-<div class="report-card">
-
-<i class="fas fa-chart-line report-icon"></i>
-
-<h3>Outstanding Report</h3>
-
-<p>Pending Collection Details</p>
-
-<div class="buttons">
-
-<button onclick="location.href='outstanding-report.html'">
+<button
+onclick="openOutstandingReport()">
 
 👁 View
 
 </button>
 
-<button disabled>
-
-📄 PDF
-
-</button>
-
-<button disabled>
-
-📊 Excel
-
-</button>
-
 </div>
 
-</div>
+<div class="report-item">
 
-<!-- Advance Report -->
+<span>💵 Advance Report</span>
 
-<div class="report-card">
-
-<i class="fas fa-hand-holding-dollar report-icon"></i>
-
-<h3>Advance Report</h3>
-
-<p>Advance Register & Collection</p>
-
-<div class="buttons">
-
-<button onclick="location.href='advance-report.html'">
+<button
+onclick="openAdvanceReport()">
 
 👁 View
 
 </button>
-
-<button disabled>
-
-📄 PDF
-
-</button>
-
-<button disabled>
-
-📊 Excel
-
-</button>
-
-</div>
 
 </div>
 
@@ -249,9 +124,7 @@ placeholder="🔍 Search Report...">
 </div>
 
 <script type="module"
-src="js/reports.js">
-
-</script>
+src="js/reports.js"></script>
 
 </body>
 
