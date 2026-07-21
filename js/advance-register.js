@@ -124,6 +124,7 @@ advanceNo.value =
 //==================================================
 
 saveAdvance.addEventListener("click", async ()=>{
+  alert("Button Clicked");
   console.log("Save Button Clicked");
 try{
 
