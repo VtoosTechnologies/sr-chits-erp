@@ -12,6 +12,8 @@ getDocs,
 addDoc,
 query,
 where,
+orderBy
+limit    
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
@@ -394,6 +396,79 @@ member.innerHTML=
 
 }
 //==================================================
+// Save Member Ledger
+//==================================================
+
+async function saveMemberLedger(){
+
+    let previousBalance = 0;
+
+    const q = query(
+        collection(db,"memberLedger"),
+        where("memberId","==",selectedMember.id),
+        orderBy("createdAt","desc"),
+        limit(1)
+    );
+
+    const snapshot = await getDocs(q);
+
+    if(!snapshot.empty){
+
+        previousBalance =
+        Number(snapshot.docs[0].data().balance) || 0;
+
+    }
+
+    const debit =
+    Number(totalAmount.value);
+
+    const credit = 0;
+
+    const balance =
+    previousBalance + debit - credit;
+
+    await addDoc(
+        collection(db,"memberLedger"),
+        {
+
+            transactionDate:
+            collectionDate.value,
+
+            receiptNo:
+            "COL-" + Date.now(),
+
+            memberId:
+            selectedMember.id,
+
+            memberCode:
+            selectedMember.memberCode,
+
+            memberName:
+            selectedMember.memberName,
+
+            groupCode:
+            selectedGroup.groupCode,
+
+            transactionType:
+            "Collection",
+
+            debit:
+            debit,
+
+            credit:
+            credit,
+
+            balance:
+            balance,
+
+            createdAt:
+            new Date()
+
+        }
+    );
+
+}
+//==================================================
 // Save Collection
 //==================================================
 
@@ -475,7 +550,7 @@ createdAt:new Date()
 
 }
 );
-
+await saveMemberLedger();
 alert("Collection Saved Successfully.");
 
 clearDetails();
