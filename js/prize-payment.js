@@ -654,8 +654,8 @@ selectedGroupCode,
                 paidAmount:
                 Number(paidAmount.value),
 
-                balance:
-previousBalance - Number(paidAmount.value),
+                balanceAmount:
+Number(balanceAmount.value),
 
                 paymentMethod:
                 paymentMethod.value,
@@ -716,16 +716,6 @@ selectedGroupCode,
         serverTimestamp()
 
     }
-);
-const ledgerSnapshot = await getDocs(ledgerQuery);
-
-ledgerSnapshot.forEach(doc => {
-
-    const data = doc.data();
-
-    previousBalance = Number(data.balance) || 0;
-
-});
         
 //==================================================
 // Auto Entry - Member Ledger
