@@ -175,6 +175,7 @@ snapshot.forEach(doc=>{
 searchBtn.addEventListener("click", loadLedger);
 
 async function loadLedger(){
+    alert("Selected Member ID : " + member.value);
 
     if(member.value===""){
         alert("Please select Member");
@@ -191,6 +192,7 @@ async function loadLedger(){
 
     const snapshot=
     await getDocs(ledgerQuery);
+    alert("Records Found : " + snapshot.size);
 
     if(snapshot.empty){
 
