@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Member Statement</title>
+
+<link rel="stylesheet"
+href="css/member-statement.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>👤 Member Statement</h2>
+
+<p class="subtitle">
+
+Complete Member Transaction History
+
+</p>
+
+<!--==================================
+Search
+===================================-->
+
+<div class="search-card">
+
+<div class="form-group">
+
+<label>Select Member</label>
+
+<select id="memberSelect">
+
+<option value="">
+Select Member
+</option>
+
+</select>
+
+</div>
+
+<button id="viewStatement">
+
+👁 View Statement
+
+</button>
+
+</div>
+
+<!--==================================
+Member Details
+===================================-->
+
+<div class="member-card">
+
+<h3>Member Details</h3>
+
+<div class="member-grid">
+
+<div>
+
+<b>Member Code</b>
+
+<p id="memberCode">-</p>
+
+</div>
+
+<div>
+
+<b>Member Name</b>
+
+<p id="memberName">-</p>
+
+</div>
+
+<div>
+
+<b>Mobile Number</b>
+
+<p id="mobileNumber">-</p>
+
+</div>
+
+<div>
+
+<b>Group</b>
+
+<p id="groupName">-</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!--==================================
+Summary
+===================================-->
+
+<div class="summary">
+
+<div class="summary-card">
+
+<h4>Total Collection</h4>
+
+<h2 id="totalCollection">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>Prize Received</h4>
+
+<h2 id="totalPrize">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>Prize Paid</h4>
+
+<h2 id="prizePaid">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>Balance</h4>
+
+<h2 id="balanceAmount">
+
+₹0
+
+</h2>
+
+</div>
+
+</div>
+
+<!--==================================
+Statement
+===================================-->
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Type</th>
+
+<th>Debit</th>
+
+<th>Credit</th>
+
+<th>Balance</th>
+
+<th>Remarks</th>
+
+</tr>
+
+</thead>
+
+<tbody id="statementBody">
+
+<tr>
+
+<td colspan="6">
+
+Select a Member to View Statement
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script
+type="module"
+src="js/member-statement.js">
+
+</script>
+
+</body>
+
+</html>
