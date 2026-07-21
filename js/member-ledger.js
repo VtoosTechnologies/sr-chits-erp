@@ -228,14 +228,13 @@ catch(error){
     let balance=0;
 
     snapshot.forEach(doc=>{
+        const data = doc.data();
 
-        const data=doc.data();
+alert(JSON.stringify(data));
 
-        debitTotal += Number(data.debit)||0;
-
-        creditTotal += Number(data.credit)||0;
-
-        balance = Number(data.balance)||0;
+debitTotal += Number(data.debit) || 0;
+creditTotal += Number(data.credit) || 0;
+balance = Number(data.balance) || 0;
 
         ledgerBody.innerHTML += `
         <tr>
