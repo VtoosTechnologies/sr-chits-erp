@@ -187,7 +187,6 @@ async function loadLedger(){
     const ledgerQuery=query(
         collection(db,"memberLedger"),
         where("memberId","==",member.value),
-        orderBy("createdAt","asc")
     );
 let snapshot;
     try{
