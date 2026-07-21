@@ -243,6 +243,7 @@ collectionMonth.value = month;
 
 // Monthly Amount
 monthlyAmount.value = "";
+totalAmount.value = "";
 Math.ceil(
 Number(selectedGroup.chitAmount) /
 Number(selectedGroup.totalMembers)
