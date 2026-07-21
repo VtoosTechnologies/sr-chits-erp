@@ -591,6 +591,22 @@ if(currentPaid > remaining){
 
         const receiptNo =
         await generateReceiptNo();
+        let previousBalance = 0;
+
+const ledgerQuery = query(
+    collection(db,"memberLedger"),
+    where("memberId","==",winner.value)
+);
+
+const ledgerSnapshot = await getDocs(ledgerQuery);
+
+ledgerSnapshot.forEach(doc => {
+
+    const data = doc.data();
+
+    previousBalance = Number(data.balance) || 0;
+
+});
         const selectedGroupCode =
 group.options[group.selectedIndex]
 .text.split("|")[0].trim();
@@ -701,13 +717,6 @@ selectedGroupCode,
 
     }
 );
-        let previousBalance = 0;
-
-const ledgerQuery = query(
-    collection(db,"memberLedger"),
-    where("memberId","==",winner.value)
-);
-
 const ledgerSnapshot = await getDocs(ledgerQuery);
 
 ledgerSnapshot.forEach(doc => {
