@@ -189,7 +189,7 @@ async function loadLedger(){
         where("memberId","==",member.value),
         orderBy("createdAt","asc")
     );
-
+let snapshot;
     try{
 
     const snapshot =
@@ -207,7 +207,6 @@ catch(error){
     return;
 
 }
-    alert("Records Found : " + snapshot.size);
 
     if(snapshot.empty){
 
