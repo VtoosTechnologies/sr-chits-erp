@@ -124,7 +124,7 @@ advanceNo.value =
 //==================================================
 
 saveAdvance.addEventListener("click", async ()=>{
-
+  console.log("Save Button Clicked");
 try{
 
 if(customerName.value.trim()==""){
