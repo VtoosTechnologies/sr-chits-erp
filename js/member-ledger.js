@@ -151,7 +151,7 @@ snapshot.forEach(doc=>{
 
     const data = doc.data();
 
-    if(data.group === group.value){
+    if(data.groupCode === group.value){
 
         const option =
         document.createElement("option");
