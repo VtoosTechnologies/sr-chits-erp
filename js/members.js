@@ -3,7 +3,9 @@ import { db } from "./firebase.js";
 import {
 collection,
 addDoc,
-getDocs
+getDocs,
+query,
+where    
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 const saveMemberBtn = document.getElementById("saveMemberBtn");
@@ -111,16 +113,19 @@ groupSelect.options[groupSelect.selectedIndex]
     }
 
     try {
+// Generate Member Code (Group Wise)
 
-        // Generate Member Code
-        const memberSnapshot = await getDocs(collection(db, "members"));
+const q = query(
+    collection(db, "members"),
+    where("groupCode", "==", groupCode)
+);
 
-        const memberCount = memberSnapshot.size + 1;
-        const memberNo = memberCount;
+const memberSnapshot = await getDocs(q);
 
-        const memberCode =
-            `${groupCode}-M${String(memberCount).padStart(3, "0")}`;
+const memberNo = memberSnapshot.size + 1;
 
+const memberCode =
+`${groupCode}-M${String(memberNo).padStart(3, "0")}`;
         await addDoc(collection(db, "members"), {
             memberNo: memberNo,
 
