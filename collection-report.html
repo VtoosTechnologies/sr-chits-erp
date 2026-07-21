@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Collection Report</title>
+
+<link rel="stylesheet"
+href="css/collection-report.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Collection Report</h2>
+
+<!--=================================
+Filters
+==================================-->
+
+<div class="card">
+
+<div class="row">
+
+<div class="form-group">
+
+<label>Chit Amount</label>
+
+<select id="chitAmountFilter">
+
+<option value="">
+Select Chit Amount
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Auction Day</label>
+
+<select id="auctionDayFilter">
+
+<option value="">
+Select Auction Day
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Member</label>
+
+<select id="memberFilter">
+
+<option value="">
+All Members
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="form-group">
+
+<label>Collection Month</label>
+
+<input
+type="number"
+id="collectionMonth"
+placeholder="Month">
+
+</div>
+
+<div class="form-group">
+
+<label>From Date</label>
+
+<input
+type="date"
+id="fromDate">
+
+</div>
+
+<div class="form-group">
+
+<label>To Date</label>
+
+<input
+type="date"
+id="toDate">
+
+</div>
+
+</div>
+
+<div class="button-area">
+
+<button id="searchReport">
+
+🔍 Search
+
+</button>
+
+<button id="printReport">
+
+🖨 Print
+
+</button>
+
+</div>
+
+</div>
+
+<!--=================================
+Summary
+==================================-->
+
+<div class="summary">
+
+<div class="summary-card">
+
+<h4>Total Collection</h4>
+
+<h2 id="totalCollection">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>Total Fine</h4>
+
+<h2 id="totalFine">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>Grand Total</h4>
+
+<h2 id="grandTotal">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>Total Records</h4>
+
+<h2 id="totalRecords">
+
+0
+
+</h2>
+
+</div>
+
+</div>
+
+<!--=================================
+Report Table
+==================================-->
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Group</th>
+
+<th>Member</th>
+
+<th>Month</th>
+
+<th>Collection</th>
+
+<th>Fine</th>
+
+<th>Total</th>
+
+<th>Payment</th>
+
+</tr>
+
+</thead>
+
+<tbody id="reportBody">
+
+<tr>
+
+<td colspan="8">
+
+No Records Found
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script
+type="module"
+src="js/collection-report.js">
+
+</script>
+
+</body>
+
+</html>
