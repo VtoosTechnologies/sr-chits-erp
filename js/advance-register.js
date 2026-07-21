@@ -1,177 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
+//==================================================
+// SR Chits ERP
+// Advance Register
+// Part - 3A
+//==================================================
 
-<head>
+import { db } from "./firebase.js";
 
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+import {
 
-<title>Advance Register</title>
+collection,
+addDoc,
+getDocs,
+query,
+orderBy,
+limit
 
-<link rel="stylesheet"
-href="advance-register.css">
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-</head>
+//==================================================
+// Elements
+//==================================================
 
-<body>
+const advanceNo =
+document.getElementById("advanceNo");
 
-<div class="container">
+const advanceDate =
+document.getElementById("advanceDate");
 
-<h2>Advance Register</h2>
+const customerCode =
+document.getElementById("customerCode");
 
-<div class="card">
+const customerName =
+document.getElementById("customerName");
 
-<div class="row">
+const mobileNumber =
+document.getElementById("mobileNumber");
 
-<div class="form-group">
+const address =
+document.getElementById("address");
 
-<label>Advance No</label>
+const advanceAmount =
+document.getElementById("advanceAmount");
 
-<input
-type="text"
-id="advanceNo"
-readonly>
+const dueDate =
+document.getElementById("dueDate");
 
-</div>
+const paymentMode =
+document.getElementById("paymentMode");
 
-<div class="form-group">
+const remarks =
+document.getElementById("remarks");
 
-<label>Advance Date</label>
+const saveAdvance =
+document.getElementById("saveAdvance");
 
-<input
-type="date"
-id="advanceDate">
+//==================================================
+// Initial Load
+//==================================================
 
-</div>
+window.addEventListener(
+"DOMContentLoaded",
+async ()=>{
 
-</div>
+const today =
+new Date().toISOString().split("T")[0];
 
-<div class="row">
+advanceDate.value = today;
 
-<div class="form-group">
+await generateAdvanceNumber();
 
-<label>Customer Code</label>
+});
+//==================================================
+// Generate Advance Number
+//==================================================
 
-<input
-type="text"
-id="customerCode"
-placeholder="Customer Code">
+async function generateAdvanceNumber(){
 
-</div>
+try{
 
-<div class="form-group">
+const q = query(
+collection(db,"advances"),
+orderBy("createdAt","desc"),
+limit(1)
+);
 
-<label>Customer Name</label>
+const snapshot =
+await getDocs(q);
 
-<input
-type="text"
-id="customerName"
-placeholder="Customer Name">
+let nextNumber = 1;
 
-</div>
+if(!snapshot.empty){
 
-</div>
+const lastAdvanceNo =
+snapshot.docs[0].data().advanceNo || "ADV000000";
 
-<div class="row">
+const number =
+parseInt(
+lastAdvanceNo.replace("ADV","")
+);
 
-<div class="form-group">
+nextNumber = number + 1;
 
-<label>Mobile Number</label>
+}
 
-<input
-type="text"
-id="mobileNumber"
-maxlength="10"
-placeholder="Mobile Number">
+advanceNo.value =
+"ADV" +
+String(nextNumber)
+.padStart(6,"0");
 
-</div>
+}
+catch(error){
 
-<div class="form-group">
+console.error(error);
 
-<label>Address</label>
+advanceNo.value =
+"ADV000001";
 
-<input
-type="text"
-id="address"
-placeholder="Address">
+}
 
-</div>
-
-</div>
-
-<div class="row">
-
-<div class="form-group">
-
-<label>Advance Amount</label>
-
-<input
-type="number"
-id="advanceAmount"
-placeholder="0">
-
-</div>
-
-<div class="form-group">
-
-<label>Due Date</label>
-
-<input
-type="date"
-id="dueDate">
-
-</div>
-
-</div>
-
-<div class="row">
-
-<div class="form-group">
-
-<label>Payment Mode</label>
-
-<select id="paymentMode">
-
-<option value="Cash">Cash</option>
-
-<option value="UPI">UPI</option>
-
-<option value="Bank">Bank</option>
-
-</select>
-
-</div>
-
-<div class="form-group">
-
-<label>Remarks</label>
-
-<input
-type="text"
-id="remarks"
-placeholder="Remarks">
-
-</div>
-
-</div>
-
-<div class="button-area">
-
-<button id="saveAdvance">
-Save Advance
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<script
-type="module"
-src="advance-register.js">
-</script>
-
-</body>
-</html>
+}
