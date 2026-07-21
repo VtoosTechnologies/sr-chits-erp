@@ -242,13 +242,13 @@ currentMonth.textContent = month;
 collectionMonth.value = month;
 
 // Monthly Amount
-monthlyAmount.value =
+monthlyAmount.value = "";
 Math.ceil(
 Number(selectedGroup.chitAmount) /
 Number(selectedGroup.totalMembers)
 );
 
-calculateTotal();
+totalAmount.value = "";
 
 try {
 
@@ -343,6 +343,7 @@ selectedMember.mobileNumber || "-";
 //==================================================
 
 fineAmount.addEventListener("input",calculateTotal);
+monthlyAmount.addEventListener("input", calculateTotal);
 
 //==================================================
 // Calculate Total Amount
