@@ -368,3 +368,103 @@ totalRecords.textContent =
 totalRecordCount;
 
 }
+//==================================================
+// Default Date
+//==================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+const today = new Date();
+
+const yyyy = today.getFullYear();
+
+const mm = String(today.getMonth() + 1).padStart(2, "0");
+
+const dd = String(today.getDate()).padStart(2, "0");
+
+const currentDate = `${yyyy}-${mm}-${dd}`;
+
+fromDate.value = currentDate;
+
+toDate.value = currentDate;
+
+});
+
+//==================================================
+// Auto Load Report
+//==================================================
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+await loadReport();
+
+});
+
+//==================================================
+// Print Report
+//==================================================
+
+printReport.addEventListener("click", () => {
+
+window.print();
+
+});
+
+//==================================================
+// Print Style
+//==================================================
+
+const style = document.createElement("style");
+
+style.innerHTML = `
+
+@media print{
+
+button{
+display:none;
+}
+
+.card{
+box-shadow:none;
+border:1px solid #000;
+}
+
+.summary{
+margin-top:20px;
+}
+
+.summary-card{
+border:1px solid #000;
+box-shadow:none;
+}
+
+table{
+font-size:12px;
+}
+
+body{
+background:#fff;
+padding:0;
+}
+
+}
+
+`;
+
+document.head.appendChild(style);
+
+//==================================================
+// Refresh Report when Filter Changes
+//==================================================
+
+chitAmountFilter.addEventListener("change", loadReport);
+
+auctionDayFilter.addEventListener("change", loadReport);
+
+memberFilter.addEventListener("change", loadReport);
+
+collectionMonth.addEventListener("keyup", loadReport);
+
+fromDate.addEventListener("change", loadReport);
+
+toDate.addEventListener("change", loadReport);
