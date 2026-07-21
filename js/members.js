@@ -116,6 +116,7 @@ groupSelect.options[groupSelect.selectedIndex]
         const memberSnapshot = await getDocs(collection(db, "members"));
 
         const memberCount = memberSnapshot.size + 1;
+        const memberNo = memberCount;
 
         const memberCode =
             `${groupCode}-M${String(memberCount).padStart(3, "0")}`;
