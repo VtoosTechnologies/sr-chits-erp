@@ -187,14 +187,13 @@ async function loadLedger(){
     const ledgerQuery=query(
         collection(db,"memberLedger"),
         where("memberId","==",member.value),
+        orderBy("createdAt","desc")
     );
 let snapshot;
     try{
 
     snapshot =
     await getDocs(ledgerQuery);
-
-    alert("Records Found : " + snapshot.size);
 
 }
 catch(error){
@@ -229,8 +228,6 @@ catch(error){
 
     snapshot.forEach(doc=>{
         const data = doc.data();
-
-alert(JSON.stringify(data));
 
 debitTotal += Number(data.debit) || 0;
 creditTotal += Number(data.credit) || 0;
