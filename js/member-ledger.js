@@ -190,8 +190,23 @@ async function loadLedger(){
         orderBy("createdAt","asc")
     );
 
-    const snapshot=
+    try{
+
+    const snapshot =
     await getDocs(ledgerQuery);
+
+    alert("Records Found : " + snapshot.size);
+
+}
+catch(error){
+
+    alert(error.message);
+
+    console.error(error);
+
+    return;
+
+}
     alert("Records Found : " + snapshot.size);
 
     if(snapshot.empty){
