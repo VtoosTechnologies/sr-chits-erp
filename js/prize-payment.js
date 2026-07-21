@@ -772,9 +772,7 @@ selectedGroupCode,
 
         console.error(error);
 
-        alert(
-            "Error while saving Prize Payment."
-        );
+        alert(error.message);
 
     }
 
