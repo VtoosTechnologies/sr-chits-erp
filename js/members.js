@@ -122,6 +122,7 @@ groupSelect.options[groupSelect.selectedIndex]
             `${groupCode}-M${String(memberCount).padStart(3, "0")}`;
 
         await addDoc(collection(db, "members"), {
+            memberNo: memberNo,
 
             memberCode,
 
