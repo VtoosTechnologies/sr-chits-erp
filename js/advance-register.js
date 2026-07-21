@@ -119,3 +119,166 @@ advanceNo.value =
 }
 
 }
+//==================================================
+// Save Advance
+//==================================================
+
+saveAdvance.addEventListener("click", async ()=>{
+
+try{
+
+if(customerName.value.trim()==""){
+
+alert("Enter Customer Name");
+return;
+
+}
+
+if(advanceAmount.value=="" ||
+Number(advanceAmount.value)<=0){
+
+alert("Enter Advance Amount");
+return;
+
+}
+
+//--------------------------------------
+// Save Advance Master
+//--------------------------------------
+
+const docRef =
+await addDoc(
+collection(db,"advances"),
+{
+
+advanceNo:
+advanceNo.value,
+
+customerCode:
+customerCode.value.trim(),
+
+customerName:
+customerName.value.trim(),
+
+mobileNumber:
+mobileNumber.value.trim(),
+
+address:
+address.value.trim(),
+
+advanceAmount:
+Number(advanceAmount.value),
+
+interest:0,
+
+advanceDate:
+advanceDate.value,
+
+dueDate:
+dueDate.value,
+
+paidAmount:0,
+
+balanceAmount:
+Number(advanceAmount.value),
+
+status:"Open",
+
+remarks:
+remarks.value.trim(),
+
+createdAt:
+new Date()
+
+}
+);
+
+//--------------------------------------
+// Save Advance Ledger
+//--------------------------------------
+
+await addDoc(
+collection(db,"advanceLedger"),
+{
+
+transactionNo:
+"ADL"+Date.now(),
+
+advanceId:
+docRef.id,
+
+advanceNo:
+advanceNo.value,
+
+customerCode:
+customerCode.value.trim(),
+
+customerName:
+customerName.value.trim(),
+
+mobileNumber:
+mobileNumber.value.trim(),
+
+transactionDate:
+advanceDate.value,
+
+transactionType:
+"Advance Given",
+
+debit:
+Number(advanceAmount.value),
+
+credit:0,
+
+balance:
+Number(advanceAmount.value),
+
+paymentMode:
+paymentMode.value,
+
+remarks:
+remarks.value.trim(),
+
+createdAt:
+new Date()
+
+}
+);
+
+alert("Advance Saved Successfully");
+
+//--------------------------------------
+// Clear Form
+//--------------------------------------
+
+customerCode.value="";
+
+customerName.value="";
+
+mobileNumber.value="";
+
+address.value="";
+
+advanceAmount.value="";
+
+dueDate.value="";
+
+remarks.value="";
+
+paymentMode.value="Cash";
+
+advanceDate.value=
+new Date().toISOString().split("T")[0];
+
+await generateAdvanceNumber();
+
+}
+catch(error){
+
+console.error(error);
+
+alert("Error while saving Advance.");
+
+}
+
+});
