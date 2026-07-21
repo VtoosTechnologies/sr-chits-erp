@@ -585,6 +585,9 @@ if(currentPaid > remaining){
 
         const receiptNo =
         await generateReceiptNo();
+        const selectedGroupCode =
+group.options[group.selectedIndex]
+.text.split("|")[0].trim();
 
         await addDoc(
             collection(db,"prizePayments"),
@@ -598,7 +601,7 @@ if(currentPaid > remaining){
                 groupId: group.value,
 
                 groupCode:
-                group.options[group.selectedIndex].text,
+selectedGroupCode,
 
                 memberId: winner.value,
 
@@ -629,8 +632,8 @@ if(currentPaid > remaining){
                 paidAmount:
                 Number(paidAmount.value),
 
-                balanceAmount:
-                Number(balanceAmount.value),
+                balance:
+previousBalance - Number(paidAmount.value),
 
                 paymentMethod:
                 paymentMethod.value,
@@ -670,7 +673,7 @@ await addDoc(
         group.value,
 
         groupCode:
-        group.options[group.selectedIndex].text,
+selectedGroupCode,
 
         memberId:
         winner.value,
@@ -692,6 +695,22 @@ await addDoc(
 
     }
 );
+        let previousBalance = 0;
+
+const ledgerQuery = query(
+    collection(db,"memberLedger"),
+    where("memberId","==",winner.value)
+);
+
+const ledgerSnapshot = await getDocs(ledgerQuery);
+
+ledgerSnapshot.forEach(doc => {
+
+    const data = doc.data();
+
+    previousBalance = Number(data.balance) || 0;
+
+});
         
 //==================================================
 // Auto Entry - Member Ledger
@@ -716,7 +735,7 @@ await addDoc(
         group.value,
 
         groupCode:
-        group.options[group.selectedIndex].text,
+selectedGroupCode,
 
         transactionType:
         "Prize Payment",
