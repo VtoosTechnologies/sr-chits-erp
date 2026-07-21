@@ -274,7 +274,7 @@ member.innerHTML =
 
 const q = query(
     collection(db,"members"),
-    where("group","==",selectedGroup.groupCode)
+    where("groupCode","==",selectedGroup.groupCode)
 );
 
 const snapshot =
