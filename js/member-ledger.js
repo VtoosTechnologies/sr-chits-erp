@@ -191,7 +191,7 @@ async function loadLedger(){
 let snapshot;
     try{
 
-    const snapshot =
+    snapshot =
     await getDocs(ledgerQuery);
 
     alert("Records Found : " + snapshot.size);
