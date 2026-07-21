@@ -716,7 +716,7 @@ selectedGroupCode,
         serverTimestamp()
 
     }
-        
+    );   
 //==================================================
 // Auto Entry - Member Ledger
 //==================================================
@@ -751,8 +751,8 @@ selectedGroupCode,
         credit:
         Number(paidAmount.value),
 
-        balance:
-previousBalance + Number(paidAmount.value),
+       balance:
+Number(balanceAmount.value), 
 
         paymentMethod:
         paymentMethod.value,
