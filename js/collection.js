@@ -462,42 +462,6 @@ paymentMode.value="Cash";
 remarks.value="";
 
 }
-
-//==================================================
-// Save Button Validation
-//==================================================
-
-saveCollection.addEventListener(
-"click",
-()=>{
-
-if(!selectedMember){
-
-alert(
-"Please select a member."
-);
-
-return;
-
-}
-
-if(
-
-receivedAmount.value==="" ||
-
-Number(receivedAmount.value)<=0
-
-){
-
-alert(
-"Enter received amount."
-);
-
-receivedAmount.focus();
-
-return;
-
-}
 //==================================================
 // Start Collection Process
 //==================================================
