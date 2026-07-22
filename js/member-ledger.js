@@ -1,37 +1,37 @@
 //==================================================
 // SR Chits ERP
 // Member Ledger
-// Part 3A
+// Part 1
 //==================================================
 
 import { db } from "./firebase.js";
 
 import {
 collection,
-getDocs,
-query,
-where,
-orderBy
+getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
 // Elements
 //==================================================
 
-const chitAmount =
-document.getElementById("chitAmount");
+const searchMember =
+document.getElementById("searchMember");
 
-const group =
-document.getElementById("group");
+const memberList =
+document.getElementById("memberList");
 
-const member =
-document.getElementById("member");
+const selectedMemberCard =
+document.getElementById("selectedMemberCard");
 
-const searchBtn =
-document.getElementById("searchBtn");
+const memberCode =
+document.getElementById("memberCode");
 
-const ledgerBody =
-document.getElementById("ledgerBody");
+const memberName =
+document.getElementById("memberName");
+
+const memberMobile =
+document.getElementById("memberMobile");
 
 const totalDebit =
 document.getElementById("totalDebit");
@@ -42,227 +42,186 @@ document.getElementById("totalCredit");
 const closingBalance =
 document.getElementById("closingBalance");
 
+const ledgerBody =
+document.getElementById("ledgerBody");
+
+//==================================================
+// Variables
+//==================================================
+
+let selectedMember = null;
+
 //==================================================
 // Initial Load
 //==================================================
 
-loadChitAmounts();
+window.addEventListener(
+"DOMContentLoaded",
+()=>{
 
+selectedMemberCard.style.display="none";
+
+memberList.style.display="none";
+
+});
 //==================================================
-// Load Chit Amounts
+// Live Member Search
 //==================================================
 
-async function loadChitAmounts(){
-    console.log("Member Ledger Loaded");
+searchMember.addEventListener(
+"input",
+async ()=>{
 
-    chitAmount.innerHTML =
-    '<option value="">Select Chit Amount</option>';
+const keyword =
+searchMember.value.trim().toLowerCase();
 
-    const snapshot =
-    await getDocs(collection(db,"groups"));
-    console.log("Groups Count :", snapshot.size);
+memberList.innerHTML="";
 
-    const amounts = [];
+memberList.style.display="none";
 
-    snapshot.forEach(doc=>{
+if(keyword.length<2){
 
-        const data = doc.data();
-
-        if(!amounts.includes(Number(data.chitAmount))){
-
-            amounts.push(Number(data.chitAmount));
-
-        }
-
-    });
-
-    amounts.sort((a,b)=>a-b);
-
-    amounts.forEach(amount=>{
-
-        const option =
-        document.createElement("option");
-
-        option.value = amount;
-
-        option.textContent =
-        "₹ " + amount.toLocaleString("en-IN");
-
-        chitAmount.appendChild(option);
-
-    });
+return;
 
 }
 
-//==================================================
-// Load Groups
-//==================================================
+const snapshot =
+await getDocs(
+collection(db,"members")
+);
 
-chitAmount.addEventListener("change",loadGroups);
-
-async function loadGroups(){
-
-    group.innerHTML =
-    '<option value="">Select Group</option>';
-
-    member.innerHTML =
-    '<option value="">Select Member</option>';
-
-    const snapshot =
-    await getDocs(collection(db,"groups"));
-
-    snapshot.forEach(doc=>{
-
-        const data = doc.data();
-
-        if(Number(data.chitAmount)===Number(chitAmount.value)){
-
-            const option =
-            document.createElement("option");
-
-            option.value = data.groupCode;
-
-            option.textContent =
-            data.groupCode;
-
-            group.appendChild(option);
-
-        }
-
-    });
-
-}
-
-//==================================================
-// Load Members
-//==================================================
-
-group.addEventListener("change",loadMembers);
-
-async function loadMembers(){
-
-    member.innerHTML =
-    '<option value="">Select Member</option>';
-
-    const snapshot =
-    await getDocs(collection(db,"members"));
+const results=[];
 
 snapshot.forEach(doc=>{
 
-    const data = doc.data();
+const data=doc.data();
 
-    if(data.groupCode === group.value){
+const code =
+(data.memberCode || "")
+.toLowerCase();
 
-        const option =
-        document.createElement("option");
+const name =
+(data.memberName || "")
+.toLowerCase();
 
-        option.value = doc.id;
+const mobile =
+(data.mobileNumber || "")
+.toLowerCase();
 
-        option.textContent =
-        data.memberName;
+if(
 
-        member.appendChild(option);
+code.includes(keyword) ||
 
-    }
+name.includes(keyword) ||
+
+mobile.includes(keyword)
+
+){
+
+results.push({
+
+id:doc.id,
+
+...data
+
+});
+
+}
+
+});
+
+renderMemberList(results);
+
+});
+
+//==================================================
+// Render Member List
+//==================================================
+
+function renderMemberList(list){
+
+memberList.innerHTML="";
+
+if(list.length===0){
+
+memberList.style.display="none";
+
+return;
+
+}
+
+memberList.style.display="block";
+
+const uniqueMembers={};
+
+list.forEach(data=>{
+
+const key =
+data.memberId || data.mobileNumber;
+
+if(!uniqueMembers[key]){
+
+uniqueMembers[key]=data;
+
+}
+
+});
+
+Object.values(uniqueMembers).forEach(data=>{
+
+const item =
+document.createElement("div");
+
+item.className="search-item";
+
+item.innerHTML=`
+<strong>${data.memberName}</strong><br>
+<small>${data.mobileNumber || "-"}</small>
+`;
+
+item.addEventListener(
+"click",
+()=>{
+
+selectMember(data);
+
+});
+
+memberList.appendChild(item);
 
 });
 
 }
 //==================================================
-// Search Ledger
+// Select Member
 //==================================================
 
-searchBtn.addEventListener("click", loadLedger);
+function selectMember(member){
 
-async function loadLedger(){
-    alert("Selected Member ID : " + member.value);
+selectedMember = member;
 
-    if(member.value===""){
-        alert("Please select Member");
-        return;
-    }
+searchMember.value =
+member.memberName;
 
-    ledgerBody.innerHTML="";
+memberList.style.display="none";
 
-    const ledgerQuery=query(
-        collection(db,"memberLedger"),
-        where("memberId","==",member.value),
-    );
-let snapshot;
-    try{
+selectedMemberCard.style.display="block";
 
-    snapshot =
-    await getDocs(ledgerQuery);
+memberCode.textContent =
+member.memberCode;
 
-}
-catch(error){
+memberName.textContent =
+member.memberName;
 
-    alert(error.message);
+memberMobile.textContent =
+member.mobileNumber || "-";
 
-    console.error(error);
-
-    return;
-
-}
-
-    if(snapshot.empty){
-
-        ledgerBody.innerHTML=`
-        <tr>
-            <td colspan="6" style="text-align:center;">
-                No Ledger Found
-            </td>
-        </tr>`;
-
-        totalDebit.textContent="₹ 0";
-        totalCredit.textContent="₹ 0";
-        closingBalance.textContent="₹ 0";
-
-        return;
-    }
-
-    let debitTotal=0;
-    let creditTotal=0;
-    let balance=0;
-
-    snapshot.forEach(doc=>{
-        const data = doc.data();
-
-debitTotal += Number(data.debit) || 0;
-creditTotal += Number(data.credit) || 0;
-balance = Number(data.balance) || 0;
-
-        ledgerBody.innerHTML += `
-        <tr>
-
-            <td>${data.transactionDate}</td>
-
-            <td>${data.receiptNo}</td>
-
-            <td>${data.transactionType}</td>
-
-            <td>
-            ₹ ${Number(data.debit).toLocaleString("en-IN")}
-            </td>
-
-            <td>
-            ₹ ${Number(data.credit).toLocaleString("en-IN")}
-            </td>
-
-            <td>
-            ₹ ${Number(data.balance).toLocaleString("en-IN")}
-            </td>
-
-        </tr>`;
-    });
-
-    totalDebit.textContent =
-    "₹ " + debitTotal.toLocaleString("en-IN");
-
-    totalCredit.textContent =
-    "₹ " + creditTotal.toLocaleString("en-IN");
-
-    closingBalance.textContent =
-    "₹ " + balance.toLocaleString("en-IN");
+ledgerBody.innerHTML=`
+<tr>
+<td colspan="6">
+Loading Ledger...
+</td>
+</tr>
+`;
 
 }
