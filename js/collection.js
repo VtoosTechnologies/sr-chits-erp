@@ -48,6 +48,8 @@ document.getElementById("totalPending");
 
 const pendingList =
 document.getElementById("pendingList");
+const groupList =
+document.getElementById("groupList");
 
 const receivedAmount =
 document.getElementById("receivedAmount");
