@@ -86,7 +86,6 @@ let selectedMember = null;
 let pendingRecords = [];
 
 let memberGroupsData = [];
-let selectedGroup = null;
 //==================================================
 // Initial Load
 //==================================================
@@ -418,7 +417,6 @@ function renderGroupCards(){
             </p>
         `;
       card.addEventListener("click", () => {
-        selectedGroup = group.groupCode;
 
     pendingList.innerHTML = "";
 
@@ -627,13 +625,6 @@ if(pendingRecords.length===0){
 alert("No Pending Available");
 
 return;
-
-}
-if(!selectedGroup){
-
-    alert("Please select a group.");
-
-    return;
 
 }
 //----------------------------------
