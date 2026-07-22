@@ -811,6 +811,11 @@ alert(
 balanceAmount.toLocaleString("en-IN")
 
 );
+  alert("Collection Saved Successfully.");
+
+resetCollectionForm();
+
+await loadPendingDetails();
 
 }
 
@@ -819,12 +824,31 @@ balanceAmount.toLocaleString("en-IN")
 //==================================================
 saveCollection.addEventListener(
 "click",
-()=>{
+async ()=>{
 
-...
+if(!selectedMember){
 
-// Part 3B
-// FIFO Auto Adjustment Engine
-// Starts Here
+alert("Please select a member.");
+return;
+
+}
+
+if(
+
+receivedAmount.value==="" ||
+
+Number(receivedAmount.value)<=0
+
+){
+
+alert("Enter received amount.");
+
+receivedAmount.focus();
+
+return;
+
+}
+
+await processCollection();
 
 });
