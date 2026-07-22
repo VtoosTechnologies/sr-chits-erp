@@ -17,7 +17,7 @@ updateDoc,
 addDoc,
 serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
+alert("Collection JS Loaded");
 //==================================================
 // Elements
 //==================================================
