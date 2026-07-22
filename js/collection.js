@@ -194,29 +194,11 @@ const uniqueMembers = {};
 
 list.forEach(data => {
 
-if (!uniqueMembers[data.memberCode]) {
-    uniqueMembers[data.memberCode] = data;
+const key = data.mobileNumber || data.memberId;
+
+if (!uniqueMembers[key]) {
+    uniqueMembers[key] = data;
 }
-
-});
-
-Object.values(uniqueMembers).forEach(data => {
-
-const item = document.createElement("div");
-
-item.className = "search-item";
-
-item.innerHTML = `
-<strong>${data.memberName}</strong><br>
-<small>${data.mobileNumber || "-"}</small>
-`;
-
-item.addEventListener(
-"click",
-()=>selectMember(data)
-);
-
-memberList.appendChild(item);
 
 });
 
@@ -269,9 +251,9 @@ const q=query(
 collection(db,"pendingRegister"),
 
 where(
-"memberCode",
+"memberId",
 "==",
-selectedMember.memberCode
+selectedMember.memberId
 )
 
 );
