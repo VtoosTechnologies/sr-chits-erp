@@ -14,7 +14,8 @@ import {
     addDoc,
     orderBy,
     limit,
-    serverTimestamp
+    serverTimestamp,
+    writeBatch
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
@@ -24,6 +25,7 @@ import {
 const groupsRef = collection(db, "groups");
 const membersRef = collection(db, "members");
 const auctionsRef = collection(db, "auctions");
+const pendingRef = collection(db, "pendingRegister");
 
 //==================================================
 // Filter Elements
