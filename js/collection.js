@@ -242,7 +242,7 @@ member.memberName;
 
 memberMobile.textContent=
 member.mobileNumber || "-";
-
+alert("Members memberId : " + member.memberId);
 await loadPendingDetails();
 
 }
@@ -275,6 +275,7 @@ selectedMember.memberId
 
 const snapshot=
 await getDocs(q);
+  alert("Pending Documents : " + snapshot.size);
   console.log("Selected Member Code:", selectedMember.memberCode);
 console.log("Documents Found:", snapshot.size);
 
