@@ -371,14 +371,52 @@ totalPending.textContent=
 "₹"+
 
 total.toLocaleString("en-IN");
-
+renderGroupCards();
 renderPendingCards();
 
 }
 //==================================================
 // Render Pending Cards
 //==================================================
+function renderGroupCards(){
 
+    groupList.innerHTML = "";
+
+    const groups = {};
+
+    pendingRecords.forEach(record => {
+
+        if(!groups[record.groupCode]){
+            groups[record.groupCode] = {
+                groupName: record.groupName,
+                groupCode: record.groupCode,
+                pending: 0
+            };
+        }
+
+        groups[record.groupCode].pending += Number(record.pendingAmount || 0);
+
+    });
+
+    Object.values(groups).forEach(group => {
+
+        const card = document.createElement("div");
+
+        card.className = "pending-card";
+
+        card.innerHTML = `
+            <h4>${group.groupName}</h4>
+            <p><b>Group :</b> ${group.groupCode}</p>
+            <p class="pending-amount">
+                ₹${group.pending.toLocaleString("en-IN")}
+            </p>
+        `;
+
+        groupList.appendChild(card);
+
+    });
+
+}
 function renderPendingCards(){
 
 pendingList.innerHTML="";
