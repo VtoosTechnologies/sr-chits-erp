@@ -328,7 +328,42 @@ async function loadLedger() {
         });
 
     });
+//--------------------------------------------------
+// Advances
+//--------------------------------------------------
 
+const advancesQuery = query(
+    collection(db, "advances"),
+    where("customerCode", "==", selectedMember.memberCode)
+);
+
+const advancesSnap = await getDocs(advancesQuery);
+
+advancesSnap.forEach(doc => {
+
+    const data = doc.data();
+
+    const amount = Number(data.advanceAmount || 0);
+
+    debitTotal += amount;
+
+    ledger.push({
+
+        date:
+            data.createdAt?.toDate?.() ||
+            new Date(),
+
+        type: "Advance Given",
+
+        group: "Advance",
+
+        debit: amount,
+
+        credit: 0
+
+    });
+
+});
     //--------------------------------------------------
     // Pending Register
     //--------------------------------------------------
