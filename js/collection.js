@@ -602,7 +602,6 @@ remarks.value="";
 //==================================================
 
 async function processCollection(){
-alert("processCollection Started");
 let received =
 Number(receivedAmount.value);
 
@@ -624,7 +623,7 @@ return;
 //----------------------------------
 // Sort Oldest Pending First
 //----------------------------------
-
+alert("Before Sort");
 pendingRecords.sort((a,b)=>{
 
 const first =
@@ -636,7 +635,7 @@ b.dueDate.toDate().getTime();
 return first-second;
 
 });
-
+alert("After Sort");
 //----------------------------------
 // Variables
 //----------------------------------
