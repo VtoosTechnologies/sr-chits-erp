@@ -261,6 +261,13 @@ orderBy("dueDate")
 
 const snapshot=
 await getDocs(q);
+  console.log("Selected Member Code:", selectedMember.memberCode);
+console.log("Documents Found:", snapshot.size);
+
+alert(
+"Member : " + selectedMember.memberCode +
+"\nDocuments : " + snapshot.size
+);
 
 let total=0;
 
