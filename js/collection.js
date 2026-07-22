@@ -175,32 +175,47 @@ renderMemberList(results);
 //==================================================
 // Render Member Search Result
 //==================================================
-
 function renderMemberList(list){
 
-memberList.innerHTML="";
+    memberList.innerHTML = "";
 
-if(list.length===0){
+    if(list.length === 0){
+        memberList.style.display = "none";
+        return;
+    }
 
-memberList.style.display="none";
+    memberList.style.display = "block";
 
-return;
+    const uniqueMembers = {};
 
-}
+    list.forEach(data => {
 
-memberList.style.display="block";
+        const key = data.memberId || data.mobileNumber;
 
-const uniqueMembers = {};
+        if(!uniqueMembers[key]){
+            uniqueMembers[key] = data;
+        }
 
-list.forEach(data => {
+    });
 
-const key = data.mobileNumber || data.memberId;
+    Object.values(uniqueMembers).forEach(data => {
 
-if (!uniqueMembers[key]) {
-    uniqueMembers[key] = data;
-}
+        const item = document.createElement("div");
 
-});
+        item.className = "search-item";
+
+        item.innerHTML = `
+            <strong>${data.memberName}</strong><br>
+            <small>${data.mobileNumber || "-"}</small>
+        `;
+
+        item.addEventListener("click", () => {
+            selectMember(data);
+        });
+
+        memberList.appendChild(item);
+
+    });
 
 }
 
