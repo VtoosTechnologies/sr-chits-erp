@@ -1,14 +1,16 @@
 //==================================================
 // SR Chits ERP
 // Member Ledger
-// Part 1
+// Part 2AA
 //==================================================
 
 import { db } from "./firebase.js";
 
 import {
 collection,
-getDocs
+getDocs,
+query,
+where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
@@ -45,11 +47,20 @@ document.getElementById("closingBalance");
 const ledgerBody =
 document.getElementById("ledgerBody");
 
+const printBtn =
+document.getElementById("printBtn");
+
 //==================================================
 // Variables
 //==================================================
 
 let selectedMember = null;
+
+let pendingRecords = [];
+
+let collectionRecords = [];
+
+let ledger = [];
 
 //==================================================
 // Initial Load
@@ -64,6 +75,7 @@ selectedMemberCard.style.display="none";
 memberList.style.display="none";
 
 });
+
 //==================================================
 // Live Member Search
 //==================================================
@@ -152,68 +164,68 @@ return;
 
 memberList.style.display="block";
 
-const uniqueMembers={};
+const unique={};
 
-list.forEach(data=>{
+list.forEach(member=>{
 
 const key =
-data.memberId || data.mobileNumber;
+member.memberId ||
+member.mobileNumber;
 
-if(!uniqueMembers[key]){
+if(!unique[key]){
 
-uniqueMembers[key]=data;
+unique[key]=member;
 
 }
 
 });
 
-Object.values(uniqueMembers).forEach(data=>{
+Object.values(unique).forEach(member=>{
 
-const item =
+const div =
 document.createElement("div");
 
-item.className="search-item";
+div.className="search-item";
 
-item.innerHTML=`
-<strong>${data.memberName}</strong><br>
-<small>${data.mobileNumber || "-"}</small>
+div.innerHTML=`
+<strong>${member.memberName}</strong><br>
+<small>${member.mobileNumber || "-"}</small>
 `;
 
-item.addEventListener(
-"click",
-()=>{
+div.onclick=()=>{
 
-selectMember(data);
+selectMember(member);
 
-});
+};
 
-memberList.appendChild(item);
+memberList.appendChild(div);
 
 });
 
 }
+
 //==================================================
 // Select Member
 //==================================================
 
-function selectMember(member){
+async function selectMember(member){
 
-selectedMember = member;
+selectedMember=member;
 
-searchMember.value =
+searchMember.value=
 member.memberName;
 
 memberList.style.display="none";
 
 selectedMemberCard.style.display="block";
 
-memberCode.textContent =
-member.memberCode;
+memberCode.textContent=
+member.memberCode || "-";
 
-memberName.textContent =
-member.memberName;
+memberName.textContent=
+member.memberName || "-";
 
-memberMobile.textContent =
+memberMobile.textContent=
 member.mobileNumber || "-";
 
 ledgerBody.innerHTML=`
@@ -223,5 +235,7 @@ Loading Ledger...
 </td>
 </tr>
 `;
+
+await loadLedger();
 
 }
