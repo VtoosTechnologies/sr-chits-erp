@@ -253,9 +253,7 @@ where(
 "memberCode",
 "==",
 selectedMember.memberCode
-),
-
-orderBy("dueDate")
+)
 
 );
 
