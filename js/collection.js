@@ -250,10 +250,10 @@ const q=query(
 collection(db,"pendingRegister"),
 
 where(
-"memberId",
+"memberCode",
 "==",
 selectedMember.memberCode
-)
+),
 
 orderBy("dueDate")
 
