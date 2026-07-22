@@ -19,99 +19,69 @@ href="css/collection.css">
 
 <div class="container">
 
+<!-- ===================================== -->
+<!-- Header -->
+<!-- ===================================== -->
+
+<div class="page-header">
+
 <h1>Collection Entry</h1>
 
-<!--==============================-->
-<!-- Filters -->
-<!--==============================-->
+<p>
+Receive Member Collection
+</p>
+
+</div>
+
+<!-- ===================================== -->
+<!-- Search Member -->
+<!-- ===================================== -->
 
 <div class="card">
 
-<label>Chit Amount</label>
+<h2>Search Member</h2>
 
-<select id="chitAmountFilter">
+<label>
 
-<option value="">
-Select Chit Amount
-</option>
+Search by Member Code /
+Member Name /
+Mobile Number
 
-</select>
+</label>
 
-<label>Auction Day</label>
+<input
+type="text"
+id="searchMember"
+placeholder="Enter Member Code / Name / Mobile">
 
-<select id="auctionDayFilter">
-
-<option value="">
-Select Auction Day
-</option>
-
-</select>
-
-</div>
-
-<!--==============================-->
-<!-- Group Details -->
-<!--==============================-->
-
-<div class="card">
-
-<h2>Group Details</h2>
-
-<div class="info-row">
-
-<span>Group Code</span>
-
-<strong id="groupCode">-</strong>
-
-</div>
-
-<div class="info-row">
-
-<span>Group Name</span>
-
-<strong id="groupName">-</strong>
-
-</div>
-
-<div class="info-row">
-
-<span>Total Members</span>
-
-<strong id="totalMembers">-</strong>
-
-</div>
-
-<div class="info-row">
-
-<span>Current Collection Month</span>
-
-<strong id="currentMonth">-</strong>
+<div
+id="memberList"
+class="search-result">
 
 </div>
 
 </div>
 
-<!--==============================-->
-<!-- Member -->
-<!--==============================-->
+<!-- ===================================== -->
+<!-- Selected Member -->
+<!-- ===================================== -->
 
-<div class="card">
+<div
+class="card"
+id="selectedMemberCard">
 
-<label>Select Member</label>
-
-<select id="member">
-
-<option value="">
-Select Member
-</option>
-
-</select>
+<h2>Member Details</h2>
 
 <div class="info-row">
 
 <span>Member Code</span>
 
-<strong id="memberCode">-</strong>
+<strong
+id="memberCode">
+
+-
+
+</strong>
 
 </div>
 
@@ -119,7 +89,12 @@ Select Member
 
 <span>Member Name</span>
 
-<strong id="memberName">-</strong>
+<strong
+id="memberName">
+
+-
+
+</strong>
 
 </div>
 
@@ -127,54 +102,101 @@ Select Member
 
 <span>Mobile Number</span>
 
-<strong id="mobileNumber">-</strong>
+<strong
+id="memberMobile">
+
+-
+
+</strong>
+
+</div>
+
+<div class="info-row">
+
+<span>Total Groups</span>
+
+<strong
+id="memberGroups">
+
+0
+
+</strong>
 
 </div>
 
 </div>
-<!--==============================-->
+
+<!-- ===================================== -->
+<!-- Pending Summary -->
+<!-- ===================================== -->
+
+<div
+class="summary-card">
+
+<h3>
+
+Total Pending
+
+</h3>
+
+<h1
+id="totalPending">
+
+₹0
+
+</h1>
+
+<p>
+
+Overall Outstanding Amount
+
+</p>
+
+</div>
+
+<!-- ===================================== -->
+<!-- PART 1A END -->
+<!-- Continue in Part 1B -->
+  <!-- ===================================== -->
+<!-- Group Wise Pending -->
+<!-- ===================================== -->
+
+<div class="card">
+
+<h2>Pending Details</h2>
+
+<div id="pendingList">
+
+<!-- Pending Cards will load here -->
+
+</div>
+
+</div>
+
+<!-- ===================================== -->
 <!-- Collection Entry -->
-<!--==============================-->
+<!-- ===================================== -->
 
 <div class="card">
 
 <h2>Collection Details</h2>
 
-<label>Collection Month</label>
+<label>
 
-<input
-type="text"
-id="collectionMonth"
-readonly>
+Received Amount
 
-<label>Monthly Amount</label>
+</label>
 
 <input
 type="number"
-id="monthlyAmount"
+id="receivedAmount"
+placeholder="Enter Received Amount">
 
-<label>Fine Amount</label>
+<label>
 
-<input
-type="number"
-id="fineAmount"
-value="0"
-min="0">
+Payment Mode
 
-<label>Total Amount</label>
-
-<input
-type="number"
-id="totalAmount"
-readonly>
-
-<label>Collection Date</label>
-
-<input
-type="date"
-id="collectionDate">
-
-<label>Payment Mode</label>
+</label>
 
 <select id="paymentMode">
 
@@ -190,24 +212,33 @@ UPI
 Bank Transfer
 </option>
 
+<option value="Cheque">
+Cheque
+</option>
+
 </select>
 
-<label>Remarks</label>
+<label>
+
+Remarks
+
+</label>
 
 <textarea
 id="remarks"
 rows="4"
-placeholder="Enter Remarks"></textarea>
+placeholder="Enter Remarks (Optional)"></textarea>
 
 </div>
 
-<!--==============================-->
+<!-- ===================================== -->
 <!-- Action Buttons -->
-<!--==============================-->
+<!-- ===================================== -->
 
 <div class="button-group">
 
-<button id="saveCollection">
+<button
+id="saveCollection">
 
 Save Collection
 
@@ -215,9 +246,17 @@ Save Collection
 
 <button
 type="button"
+id="resetForm">
+
+Reset
+
+</button>
+
+<button
+type="button"
 onclick="history.back()">
 
-Back To Dashboard
+Back
 
 </button>
 
