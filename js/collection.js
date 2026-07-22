@@ -89,6 +89,7 @@ selectedMemberCard.style.display="none";
 memberList.style.display="none";
 
 pendingList.innerHTML="";
+  groupList.innerHTML="";
 
 totalPending.textContent="₹0";
 
@@ -451,6 +452,7 @@ memberList.style.display="none";
 selectedMemberCard.style.display="none";
 
 pendingList.innerHTML="";
+  groupList.innerHTML="";
 
 memberCode.textContent="-";
 
