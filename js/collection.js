@@ -372,6 +372,12 @@ totalPending.textContent=
 
 total.toLocaleString("en-IN");
 renderGroupCards();
+
+pendingList.innerHTML = `
+<div class="pending-card">
+Select a group to view pending installments.
+</div>
+`;
 renderPendingCards();
 
 }
@@ -411,6 +417,34 @@ function renderGroupCards(){
                 ₹${group.pending.toLocaleString("en-IN")}
             </p>
         `;
+      card.addEventListener("click", () => {
+
+    pendingList.innerHTML = "";
+
+    const groupPending = pendingRecords.filter(
+        p => p.groupCode === group.groupCode
+    );
+
+    groupPending.forEach(record => {
+
+        const pendingCard = document.createElement("div");
+
+        pendingCard.className = "pending-card";
+
+        pendingCard.innerHTML = `
+            <h4>${record.groupName}</h4>
+            <p><b>Installment :</b> ${record.installmentNo}</p>
+            <p><b>Due Date :</b> ${formatDate(record.dueDate)}</p>
+            <p class="pending-amount">
+                ₹${Number(record.pendingAmount).toLocaleString("en-IN")}
+            </p>
+        `;
+
+        pendingList.appendChild(pendingCard);
+
+    });
+
+});
 
         groupList.appendChild(card);
 
