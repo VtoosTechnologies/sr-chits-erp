@@ -696,7 +696,135 @@ serverTimestamp()
 });
 
 }
+  //==================================================
+// PART 3B-2
+// Update Pending Register
+// Save Collection
+//==================================================
+
+//----------------------------------
+// Update Pending Register
+//----------------------------------
+
+for(const item of updatedPending){
+
+const pendingRef =
+doc(
+db,
+"pendingRegister",
+item.docId
+);
+
+// Read current pending document
+const oldRecord =
+pendingRecords.find(
+p=>p.id===item.docId
+);
+
+const oldPaid =
+Number(
+oldRecord.paidAmount || 0
+);
+
+const newPaid =
+oldPaid + item.paidAmount;
+
+await updateDoc(
+pendingRef,
+{
+
+paidAmount:
+newPaid,
+
+pendingAmount:
+item.remainingPending,
+
+status:
+item.status,
+
+updatedAt:
+serverTimestamp()
+
+}
+);
+
+}
+
+//----------------------------------
+// Save Collection Entries
+//----------------------------------
+
+for(const entry of collectionEntries){
+
+await addDoc(
+collection(db,"collections"),
+{
+
+memberId:
+entry.memberId,
+
+memberCode:
+entry.memberCode,
+
+memberName:
+entry.memberName,
+
+groupId:
+entry.groupId,
+
+groupCode:
+entry.groupCode,
+
+groupName:
+entry.groupName,
+
+installmentNo:
+entry.installmentNo,
+
+receivedAmount:
+entry.receivedAmount,
+
+paymentMode:
+entry.paymentMode,
+
+remarks:
+entry.remarks,
+
+createdAt:
+serverTimestamp()
+
+}
+);
+
+}
+
+//----------------------------------
+// Remaining Amount
+//----------------------------------
+
+if(balanceAmount>0){
+
+alert(
+
+"Excess Amount : ₹"+
+
+balanceAmount.toLocaleString("en-IN")
+
+);
+
+}
 
 //==================================================
-// Continue in Part 3B-2
+// Continue Part 3B-3
 //==================================================
+saveCollection.addEventListener(
+"click",
+()=>{
+
+...
+
+// Part 3B
+// FIFO Auto Adjustment Engine
+// Starts Here
+
+});
