@@ -11,7 +11,11 @@ collection,
 getDocs,
 query,
 where,
-orderBy
+orderBy,
+doc,
+updateDoc,
+addDoc,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
@@ -494,24 +498,6 @@ receivedAmount.focus();
 return;
 
 }
-
-// Part 3B
-// FIFO Auto Adjustment Engine
-// Starts Here
-
-});
-//==================================================
-// PART 3B-1
-// FIFO Auto Adjustment Engine
-//==================================================
-
-import {
-doc,
-updateDoc,
-addDoc,
-serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
 //==================================================
 // Start Collection Process
 //==================================================
