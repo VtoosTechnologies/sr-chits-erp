@@ -5,13 +5,11 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Member Ledger</title>
 
-<link rel="stylesheet"
-href="css/member-ledger.css">
+<link rel="stylesheet" href="css/member-ledger.css">
 
 </head>
 
@@ -19,121 +17,145 @@ href="css/member-ledger.css">
 
 <div class="container">
 
-<h2>📒 Member Ledger</h2>
+    <h2>📒 Member Ledger</h2>
 
-<!-- Filters -->
+    <!-- Search Member -->
 
-<div class="card">
+    <div class="card">
 
-<h3>Search Filters</h3>
+        <h3>Search Member</h3>
 
-<label>Chit Amount</label>
+        <input
+            type="text"
+            id="searchMember"
+            placeholder="Search Member Name / Member Code / Mobile">
 
-<select id="chitAmount">
-<option value="">Select Chit Amount</option>
-</select>
+        <div id="memberList"></div>
 
-<label>Group</label>
+    </div>
 
-<select id="group">
-<option value="">Select Group</option>
-</select>
+    <!-- Selected Member -->
 
-<label>Member</label>
+    <div
+        class="card"
+        id="selectedMemberCard"
+        style="display:none;">
 
-<select id="member">
-<option value="">Select Member</option>
-</select>
+        <h3>Member Details</h3>
 
-<button id="searchBtn">
-Search Ledger
-</button>
+        <p>
+            <b>Member Code :</b>
+            <span id="memberCode">-</span>
+        </p>
+
+        <p>
+            <b>Member Name :</b>
+            <span id="memberName">-</span>
+        </p>
+
+        <p>
+            <b>Mobile :</b>
+            <span id="memberMobile">-</span>
+        </p>
+
+    </div>
+
+    <!-- Summary -->
+
+    <div class="summary">
+
+        <div class="box">
+
+            <h4>Total Debit</h4>
+
+            <p id="totalDebit">₹0</p>
+
+        </div>
+
+        <div class="box">
+
+            <h4>Total Credit</h4>
+
+            <p id="totalCredit">₹0</p>
+
+        </div>
+
+        <div class="box">
+
+            <h4>Outstanding</h4>
+
+            <p id="closingBalance">₹0</p>
+
+        </div>
+
+    </div>
+
+    <!-- Ledger -->
+
+    <div class="card">
+
+        <h3>Ledger History</h3>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Type</th>
+
+                    <th>Group</th>
+
+                    <th>Debit</th>
+
+                    <th>Credit</th>
+
+                    <th>Balance</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="ledgerBody">
+
+                <tr>
+
+                    <td colspan="6">
+
+                        Search a Member
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="buttons">
+
+        <button id="printBtn">
+
+            🖨 Print
+
+        </button>
+
+        <button onclick="history.back()">
+
+            ⬅ Back
+
+        </button>
+
+    </div>
 
 </div>
 
-<!-- Summary -->
-
-<div class="summary">
-
-<div class="box">
-<h4>Total Debit</h4>
-<p id="totalDebit">₹ 0</p>
-</div>
-
-<div class="box">
-<h4>Total Credit</h4>
-<p id="totalCredit">₹ 0</p>
-</div>
-
-<div class="box">
-<h4>Balance</h4>
-<p id="closingBalance">₹ 0</p>
-</div>
-
-</div>
-
-<!-- Ledger Table -->
-
-<div class="card">
-
-<h3>Ledger History</h3>
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Date</th>
-
-<th>Receipt</th>
-
-<th>Type</th>
-
-<th>Debit</th>
-
-<th>Credit</th>
-
-<th>Balance</th>
-
-</tr>
-
-</thead>
-
-<tbody id="ledgerBody">
-
-<tr>
-
-<td colspan="6"
-style="text-align:center;">
-
-No Ledger Found
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
-<div class="buttons">
-
-<button id="printBtn">
-🖨 Print
-</button>
-
-<button onclick="history.back()">
-⬅ Back
-</button>
-
-</div>
-
-</div>
-
-<script type="module"
+<script
+type="module"
 src="js/member-ledger.js"></script>
 
 </body>
