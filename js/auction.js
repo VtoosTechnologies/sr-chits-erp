@@ -768,7 +768,54 @@ async function generatePendingRegister(auctionId){
 
     if(!selectedGroup) return;
 
-    alert("Pending Register Generation Started");
+    const memberQuery = query(
+        membersRef,
+        where(
+            "groupCode",
+            "==",
+            selectedGroup.groupCode
+        )
+    );
+
+    const memberSnapshot =
+    await getDocs(memberQuery);
+
+for (const memberDoc of memberSnapshot.docs) {
+
+    const member = memberDoc.data();
+
+    await addDoc(pendingRef, {
+
+        auctionId: auctionId,
+
+        groupId: selectedGroup.id,
+        groupCode: selectedGroup.groupCode,
+        groupName: selectedGroup.groupName,
+
+        memberId: memberDoc.id,
+        memberCode: member.memberCode,
+        memberName: member.memberName,
+
+        auctionMonth: currentAuctionMonth,
+        installmentNo: currentAuctionMonth,
+
+        monthlyAmount: Number(monthlyAmount.value),
+
+        paidAmount: 0,
+        pendingAmount: Number(monthlyAmount.value),
+
+        status: "PENDING",
+
+        auctionDate: auctionDate.value,
+        dueDate: dueDate.value,
+
+        createdAt: serverTimestamp()
+
+    });
+
+}
+
+alert("Pending Register Created Successfully");
 
 }
 
