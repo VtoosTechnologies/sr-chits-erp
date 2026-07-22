@@ -759,16 +759,14 @@ alert(
 "Excess Amount : ₹"+
 
 balanceAmount.toLocaleString("en-IN")
-
 );
+  }else{
+
   alert("Collection Saved Successfully.");
 
-resetCollectionForm();
-
-await loadPendingDetails();
-
 }
-
+// Close processCollection function
+}
 //==================================================
 // Continue Part 3B-3
 //==================================================
