@@ -190,20 +190,25 @@ return;
 
 memberList.style.display="block";
 
-list.forEach(data=>{
+const uniqueMembers = {};
 
-const item=document.createElement("div");
+list.forEach(data => {
 
-item.className="search-item";
+if (!uniqueMembers[data.memberCode]) {
+    uniqueMembers[data.memberCode] = data;
+}
 
-item.innerHTML=`
+});
 
-<strong>${data.memberCode}</strong><br>
+Object.values(uniqueMembers).forEach(data => {
 
-${data.memberName}<br>
+const item = document.createElement("div");
 
+item.className = "search-item";
+
+item.innerHTML = `
+<strong>${data.memberName}</strong><br>
 <small>${data.mobileNumber || "-"}</small>
-
 `;
 
 item.addEventListener(
