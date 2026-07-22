@@ -4,7 +4,7 @@
 // Part - 3A
 //==================================================
 
-import { db } from "../firebase.js";
+import { db } from "./firebase.js";
 
 import {
 collection,
