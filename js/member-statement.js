@@ -262,14 +262,14 @@ statementBody.innerHTML = `
 <td colspan="6">Loading...</td>
 </tr>`;
 
-const ledgerSnapshot =
+const ledgerSnapshot2 =
 await getDocs(memberLedgerRef);
 
 statementBody.innerHTML = "";
 
 let records = [];
 
-ledgerSnapshot.forEach(doc => {
+ledgerSnapshot2.forEach(doc => {
 
 const data = doc.data();
 
