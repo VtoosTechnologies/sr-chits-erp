@@ -623,7 +623,6 @@ return;
 //----------------------------------
 // Sort Oldest Pending First
 //----------------------------------
-alert("Before Sort");
   pendingRecords.sort((a, b) => {
 
     const first = a.dueDate?.toDate
@@ -637,7 +636,6 @@ alert("Before Sort");
     return first - second;
 
 });
-  alert("After Sort");
 //----------------------------------
 // Variables
 //----------------------------------
