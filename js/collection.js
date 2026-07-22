@@ -371,12 +371,6 @@ totalPending.textContent=
 
 total.toLocaleString("en-IN");
 renderGroupCards();
-
-pendingList.innerHTML = `
-<div class="pending-card">
-Select a group to view pending installments.
-</div>
-`;
 renderPendingCards();
 
 }
@@ -608,7 +602,7 @@ remarks.value="";
 //==================================================
 
 async function processCollection(){
-
+alert("processCollection Started");
 let received =
 Number(receivedAmount.value);
 
