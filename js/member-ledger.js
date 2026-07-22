@@ -239,3 +239,224 @@ Loading Ledger...
 await loadLedger();
 
 }
+//==================================================
+// Load Member Ledger
+// Part 2AB
+//==================================================
+
+async function loadLedger() {
+
+    ledger = [];
+    pendingRecords = [];
+    collectionRecords = [];
+
+    let debitTotal = 0;
+    let creditTotal = 0;
+
+    //--------------------------------------------------
+    // Collections
+    //--------------------------------------------------
+
+    const collectionQuery = query(
+        collection(db, "collections"),
+        where("memberId", "==", selectedMember.memberId)
+    );
+
+    const collectionSnap = await getDocs(collectionQuery);
+
+    collectionSnap.forEach(doc => {
+
+        const data = doc.data();
+
+        const amount =
+            Number(data.receivedAmount || 0);
+
+        debitTotal += amount;
+
+        collectionRecords.push(data);
+
+        ledger.push({
+            date: data.createdAt?.toDate?.() || new Date(),
+            type: "Collection",
+            group: data.groupCode || "-",
+            debit: amount,
+            credit: 0
+        });
+
+    });
+
+    //--------------------------------------------------
+    // Advance Ledger
+    //--------------------------------------------------
+
+    const advanceQuery = query(
+        collection(db, "advanceLedger"),
+        where("customerCode", "==", selectedMember.memberCode)
+    );
+
+    const advanceSnap = await getDocs(advanceQuery);
+
+    advanceSnap.forEach(doc => {
+
+        const data = doc.data();
+
+        const debit =
+            Number(data.debit || 0);
+
+        const credit =
+            Number(data.credit || 0);
+
+        debitTotal += debit;
+        creditTotal += credit;
+
+        ledger.push({
+
+            date:
+                data.createdAt?.toDate?.() ||
+                new Date(),
+
+            type:
+                data.transactionType ||
+                "Advance",
+
+            group: "Advance",
+
+            debit,
+
+            credit
+
+        });
+
+    });
+
+    //--------------------------------------------------
+    // Pending Register
+    //--------------------------------------------------
+
+    const pendingQuery = query(
+        collection(db, "pendingRegister"),
+        where("memberId", "==", selectedMember.memberId)
+    );
+
+    const pendingSnap = await getDocs(pendingQuery);
+
+    pendingSnap.forEach(doc => {
+
+        const data = doc.data();
+
+        pendingRecords.push(data);
+
+        ledger.push({
+
+            date:
+                data.createdAt?.toDate?.() ||
+                new Date(),
+
+            type: "Pending",
+
+            group:
+                data.groupCode || "-",
+
+            debit: 0,
+
+            credit:
+                Number(data.pendingAmount || 0)
+
+        });
+
+    });
+
+    //--------------------------------------------------
+    // Sort by Date
+    //--------------------------------------------------
+
+    ledger.sort((a, b) => a.date - b.date);
+
+    renderLedger(
+        debitTotal,
+        creditTotal
+    );
+
+}
+//==================================================
+// Render Ledger
+// Part 2B
+//==================================================
+
+function renderLedger(totalDebitValue, totalCreditValue) {
+
+    ledgerBody.innerHTML = "";
+
+    if (ledger.length === 0) {
+
+        ledgerBody.innerHTML = `
+        <tr>
+            <td colspan="6">
+                No Ledger Records Found
+            </td>
+        </tr>
+        `;
+
+        totalDebit.textContent = "₹0";
+        totalCredit.textContent = "₹0";
+        closingBalance.textContent = "₹0";
+
+        return;
+    }
+
+    let runningBalance = 0;
+
+    ledger.forEach(item => {
+
+        runningBalance += Number(item.debit || 0);
+        runningBalance -= Number(item.credit || 0);
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>${formatDate(item.date)}</td>
+            <td>${item.type}</td>
+            <td>${item.group}</td>
+            <td>₹${Number(item.debit || 0).toLocaleString()}</td>
+            <td>₹${Number(item.credit || 0).toLocaleString()}</td>
+            <td>₹${runningBalance.toLocaleString()}</td>
+        `;
+
+        ledgerBody.appendChild(tr);
+
+    });
+
+    totalDebit.textContent =
+        "₹" + totalDebitValue.toLocaleString();
+
+    totalCredit.textContent =
+        "₹" + totalCreditValue.toLocaleString();
+
+    closingBalance.textContent =
+        "₹" + runningBalance.toLocaleString();
+
+}
+
+//==================================================
+// Format Date
+//==================================================
+
+function formatDate(date) {
+
+    if (!date) return "-";
+
+    const d = new Date(date);
+
+    return d.toLocaleDateString("en-GB");
+
+}
+
+//==================================================
+// Print
+//==================================================
+
+printBtn.addEventListener("click", () => {
+
+    window.print();
+
+});
