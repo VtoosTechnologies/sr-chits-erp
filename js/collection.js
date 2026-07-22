@@ -252,8 +252,8 @@ collection(db,"pendingRegister"),
 where(
 "memberId",
 "==",
-selectedMember.id
-),
+selectedMember.memberCode
+)
 
 orderBy("dueDate")
 
