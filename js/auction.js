@@ -660,9 +660,9 @@ async function saveAuctionData() {
         // Save Firestore
         //==========================================
 
-        await addDoc(
-            auctionsRef,
-            {
+        const auctionDoc = await addDoc(
+    auctionsRef,
+    {
                 groupId:
                 selectedGroup.id,
 
@@ -710,7 +710,7 @@ async function saveAuctionData() {
                 //==========================================
         // Success
         //==========================================
-
+await generatePendingRegister(auctionDoc.id);
         alert("Auction saved successfully.");
 
         resetAuctionForm();
@@ -758,6 +758,17 @@ function resetAuctionForm() {
     monthlyAmount.value = "";
 
     remarks.value = "";
+
+}
+//==================================================
+// Generate Pending Register
+//==================================================
+
+async function generatePendingRegister(auctionId){
+
+    if(!selectedGroup) return;
+
+    alert("Pending Register Generation Started");
 
 }
 
