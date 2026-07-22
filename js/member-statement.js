@@ -171,7 +171,7 @@ mobileNumber.textContent =
 selectedMember.mobileNumber || "-";
 
 groupName.textContent =
-selectedMember.groupName || "-";
+selectedMember.groupCode || "-";
 
 //------------------------------------------
 // Summary Variables
