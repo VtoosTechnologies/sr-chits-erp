@@ -45,6 +45,17 @@ document.getElementById("memberGroups");
 
 const totalPending =
 document.getElementById("totalPending");
+const totalChitValue =
+document.getElementById("totalChitValue");
+
+const totalDemand =
+document.getElementById("totalDemand");
+
+const totalPaid =
+document.getElementById("totalPaid");
+
+const dashboardPending =
+document.getElementById("dashboardPending");
 
 const pendingList =
 document.getElementById("pendingList");
@@ -308,7 +319,50 @@ new Set(
 pendingRecords.map(r=>r.groupCode)
 
 ).size;
+//----------------------------------
+// Dashboard Calculation
+//----------------------------------
 
+let chitValue = 0;
+let demand = 0;
+let paid = 0;
+let pending = 0;
+
+const uniqueGroups = {};
+
+snapshot.forEach(doc => {
+
+const data = doc.data();
+
+const amount = Number(data.monthlyAmount || 0);
+
+demand += amount;
+
+paid += Number(data.paidAmount || 0);
+
+pending += Number(data.pendingAmount || 0);
+
+if(!uniqueGroups[data.groupCode]){
+    uniqueGroups[data.groupCode] = amount;
+}
+
+});
+
+Object.values(uniqueGroups).forEach(value=>{
+    chitValue += value;
+});
+
+totalChitValue.textContent =
+"₹" + chitValue.toLocaleString("en-IN");
+
+totalDemand.textContent =
+"₹" + demand.toLocaleString("en-IN");
+
+totalPaid.textContent =
+"₹" + paid.toLocaleString("en-IN");
+
+dashboardPending.textContent =
+"₹" + pending.toLocaleString("en-IN");
 totalPending.textContent=
 
 "₹"+
@@ -463,6 +517,10 @@ memberMobile.textContent="-";
 memberGroups.textContent="0";
 
 totalPending.textContent="₹0";
+  totalChitValue.textContent="₹0";
+totalDemand.textContent="₹0";
+totalPaid.textContent="₹0";
+dashboardPending.textContent="₹0";
 
 receivedAmount.value="";
 
