@@ -1,7 +1,7 @@
 //==================================================
 // SR Chits ERP
-// Collection Module
-// Part - 3A
+// Collection Module V2
+// Part 3A-1
 //==================================================
 
 import { db } from "./firebase.js";
@@ -9,37 +9,23 @@ import { db } from "./firebase.js";
 import {
 collection,
 getDocs,
-addDoc,
 query,
 where,
-orderBy,
-limit    
+orderBy
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
 // Elements
 //==================================================
 
-const chitAmountFilter =
-document.getElementById("chitAmountFilter");
+const searchMember =
+document.getElementById("searchMember");
 
-const auctionDayFilter =
-document.getElementById("auctionDayFilter");
+const memberList =
+document.getElementById("memberList");
 
-const member =
-document.getElementById("member");
-
-const groupCode =
-document.getElementById("groupCode");
-
-const groupName =
-document.getElementById("groupName");
-
-const totalMembers =
-document.getElementById("totalMembers");
-
-const currentMonth =
-document.getElementById("currentMonth");
+const selectedMemberCard =
+document.getElementById("selectedMemberCard");
 
 const memberCode =
 document.getElementById("memberCode");
@@ -47,23 +33,20 @@ document.getElementById("memberCode");
 const memberName =
 document.getElementById("memberName");
 
-const mobileNumber =
-document.getElementById("mobileNumber");
+const memberMobile =
+document.getElementById("memberMobile");
 
-const collectionMonth =
-document.getElementById("collectionMonth");
+const memberGroups =
+document.getElementById("memberGroups");
 
-const monthlyAmount =
-document.getElementById("monthlyAmount");
+const totalPending =
+document.getElementById("totalPending");
 
-const fineAmount =
-document.getElementById("fineAmount");
+const pendingList =
+document.getElementById("pendingList");
 
-const totalAmount =
-document.getElementById("totalAmount");
-
-const collectionDate =
-document.getElementById("collectionDate");
+const receivedAmount =
+document.getElementById("receivedAmount");
 
 const paymentMode =
 document.getElementById("paymentMode");
@@ -74,504 +57,646 @@ document.getElementById("remarks");
 const saveCollection =
 document.getElementById("saveCollection");
 
+const resetForm =
+document.getElementById("resetForm");
+
 //==================================================
 // Variables
 //==================================================
 
-let groups = [];
-
-let selectedGroup = null;
-
-let members = [];
-
 let selectedMember = null;
+
+let pendingRecords = [];
+
+let memberGroupsData = [];
 
 //==================================================
 // Initial Load
 //==================================================
 
-window.addEventListener("DOMContentLoaded", async () => {
+window.addEventListener(
+"DOMContentLoaded",
+async ()=>{
 
-collectionDate.value =
-new Date().toISOString().split("T")[0];
+selectedMemberCard.style.display="none";
 
-await loadChitAmounts();
+memberList.style.display="none";
 
-});
+pendingList.innerHTML="";
 
-//==================================================
-// Load Chit Amount Filter
-//==================================================
-alert("Collection JS Latest Version");
-async function loadChitAmounts(){
-const snapshot =
-await getDocs(collection(db,"groups"));
-
-const amounts = [];
-
-snapshot.forEach(doc=>{
-
-const data = doc.data();
-
-if(!amounts.includes(data.chitAmount)){
-
-amounts.push(data.chitAmount);
+totalPending.textContent="₹0";
 
 }
-
-});
-
-amounts.sort((a,b)=>a-b);
-
-chitAmountFilter.innerHTML =
-`<option value="">Select Chit Amount</option>`;
-
-amounts.forEach(amount=>{
-
-chitAmountFilter.innerHTML +=
-`
-<option value="${amount}">
-₹${Number(amount).toLocaleString("en-IN")}
-</option>
-`;
-
-});
-
-}
-//==================================================
-// Chit Amount Change
-//==================================================
-
-chitAmountFilter.addEventListener("change", async () => {
-
-auctionDayFilter.innerHTML =
-`<option value="">Select Auction Day</option>`;
-
-member.innerHTML =
-`<option value="">Select Member</option>`;
-
-clearDetails();
-
-selectedGroup = null;
-selectedMember = null;
-
-if(!chitAmountFilter.value) return;
-
-const q = query(
-collection(db,"groups"),
-where("chitAmount","==",Number(chitAmountFilter.value))
 );
 
-const snapshot = await getDocs(q);
-groups = [];
-
-snapshot.forEach(doc=>{
-
-groups.push({
-id:doc.id,
-...doc.data()
-});
-
-});
-
-groups.sort((a,b)=>a.auctionDay-b.auctionDay);
-
-groups.forEach(group=>{
-
-auctionDayFilter.innerHTML +=
-`
-<option value="${group.id}">
-${group.auctionDay}
-</option>
-`;
-
-});
-
-});
-
 //==================================================
-// Auction Day Change
+// Live Member Search
 //==================================================
 
-auctionDayFilter.addEventListener("change", async ()=>{
+searchMember.addEventListener(
+"input",
+async ()=>{
 
-clearDetails();
+const keyword =
+searchMember.value.trim().toLowerCase();
 
-member.innerHTML =
-`<option value="">Select Member</option>`;
+memberList.innerHTML="";
 
-selectedMember = null;
+memberList.style.display="none";
 
-selectedGroup =
-groups.find(g=>g.id===auctionDayFilter.value);
-if(!selectedGroup) return;
-
-groupCode.textContent =
-selectedGroup.groupCode;
-
-groupName.textContent =
-selectedGroup.groupName;
-
-totalMembers.textContent =
-selectedGroup.totalMembers;
-
-// Current Collection Month
-const auctionSnapshot = await getDocs(
-    query(
-        collection(db, "auctions"),
-        where("groupId", "==", selectedGroup.groupCode),
-    )
-);
-
-let month = 1;
-
-auctionSnapshot.forEach(doc => {
-
-    const data = doc.data();
-
-    if ((data.month || 0) >= month) {
-
-        month = data.month + 1;
-
-    }
-
-});
-
-currentMonth.textContent = month;
-
-collectionMonth.value = month;
-
-// Monthly Amount
-monthlyAmount.value = "";
-totalAmount.value = "";
-    
-totalAmount.value = "";
-
-try {
-
-    await loadMembers();
-
-} catch (e) {
-
-    alert(e.message);
-    console.error(e);
-
-}
-
-});
-
-//==================================================
-// Load Members
-//==================================================
-
-async function loadMembers(){
-
-member.innerHTML =
-`<option value="">Select Member</option>`;
-
-const q = query(
-    collection(db,"members"),
-    where("groupCode","==",selectedGroup.groupCode)
-);
-
-const snapshot =
-await getDocs(q);
-
-members = [];
-
-snapshot.forEach(doc => {
-
-    members.push({
-        id: doc.id,
-        ...doc.data()
-    });
-
-});
-
-members.sort((a,b)=>
-Number(a.memberNo || 0) -
-Number(b.memberNo || 0)
-);
-
-members.forEach(data => {
-
-    const option = document.createElement("option");
-
-    option.value = data.id;
-    option.textContent = data.memberName;
-
-    member.appendChild(option);
-
-});
-
-}
-//==================================================
-// Member Change
-//==================================================
-
-member.addEventListener("change",()=>{
-
-selectedMember =
-members.find(m=>m.id===member.value);
-
-if(!selectedMember){
-
-memberCode.textContent="-";
-memberName.textContent="-";
-mobileNumber.textContent="-";
+if(keyword.length<2){
 
 return;
 
 }
 
-memberCode.textContent =
-selectedMember.memberCode;
+const snapshot =
+await getDocs(
+collection(db,"members")
+);
 
-memberName.textContent =
-selectedMember.memberName;
+const results=[];
 
-mobileNumber.textContent =
-selectedMember.mobileNumber || "-";
+snapshot.forEach(doc=>{
+
+const data=doc.data();
+
+const code =
+(data.memberCode || "")
+.toLowerCase();
+
+const name =
+(data.memberName || "")
+.toLowerCase();
+
+const mobile =
+(data.mobileNumber || "")
+.toLowerCase();
+
+if(
+code.includes(keyword) ||
+name.includes(keyword) ||
+mobile.includes(keyword)
+){
+
+results.push({
+
+id:doc.id,
+
+...data
 
 });
 
+}
+
+});
+
+renderMemberList(results);
+
+});
 //==================================================
-// Fine Amount Change
+// Render Member Search Result
 //==================================================
 
-fineAmount.addEventListener("input",calculateTotal);
-monthlyAmount.addEventListener("input", calculateTotal);
+function renderMemberList(list){
 
-//==================================================
-// Calculate Total Amount
-//==================================================
+memberList.innerHTML="";
 
-function calculateTotal(){
+if(list.length===0){
 
-const monthly =
-Number(monthlyAmount.value)||0;
+memberList.style.display="none";
 
-const fine =
-Number(fineAmount.value)||0;
+return;
 
-totalAmount.value =
-monthly + fine;
+}
+
+memberList.style.display="block";
+
+list.forEach(data=>{
+
+const item=document.createElement("div");
+
+item.className="search-item";
+
+item.innerHTML=`
+
+<strong>${data.memberCode}</strong><br>
+
+${data.memberName}<br>
+
+<small>${data.mobileNumber || "-"}</small>
+
+`;
+
+item.addEventListener(
+"click",
+()=>selectMember(data)
+);
+
+memberList.appendChild(item);
+
+});
 
 }
 
 //==================================================
-// Clear Screen
+// Select Member
 //==================================================
 
-function clearDetails(){
+async function selectMember(member){
 
-groupCode.textContent="-";
+selectedMember=member;
 
-groupName.textContent="-";
+searchMember.value=
+member.memberName;
 
-totalMembers.textContent="-";
+memberList.style.display="none";
 
-currentMonth.textContent="-";
+selectedMemberCard.style.display="block";
 
-memberCode.textContent="-";
+memberCode.textContent=
+member.memberCode;
 
-memberName.textContent="-";
+memberName.textContent=
+member.memberName;
 
-mobileNumber.textContent="-";
+memberMobile.textContent=
+member.mobileNumber || "-";
 
-collectionMonth.value="";
+await loadPendingDetails();
 
-monthlyAmount.value="";
+}
 
-fineAmount.value=0;
+//==================================================
+// Load Pending Register
+//==================================================
 
-totalAmount.value="";
+async function loadPendingDetails(){
 
-remarks.value="";
+pendingList.innerHTML="";
 
-member.innerHTML=
-`<option value="">Select Member</option>`;
+totalPending.textContent="₹0";
+
+pendingRecords=[];
+
+memberGroupsData=[];
+
+const q=query(
+
+collection(db,"pendingRegister"),
+
+where(
+"memberId",
+"==",
+selectedMember.id
+),
+
+orderBy("dueDate")
+
+);
+
+const snapshot=
+await getDocs(q);
+
+let total=0;
+
+snapshot.forEach(doc=>{
+
+const data={
+
+id:doc.id,
+
+...doc.data()
+
+};
+
+if(
+
+data.status==="PENDING" ||
+
+data.status==="PARTIAL"
+
+){
+
+pendingRecords.push(data);
+
+total +=
+Number(
+data.pendingAmount || 0
+);
+
+}
+
+});
+
+memberGroups.textContent=
+
+new Set(
+
+pendingRecords.map(r=>r.groupCode)
+
+).size;
+
+totalPending.textContent=
+
+"₹"+
+
+total.toLocaleString("en-IN");
+
+renderPendingCards();
 
 }
 //==================================================
-// Save Member Ledger
+// Render Pending Cards
 //==================================================
 
-async function saveMemberLedger(){
+function renderPendingCards(){
 
-    let previousBalance = 0;
+pendingList.innerHTML="";
 
-    const q = query(
-        collection(db,"memberLedger"),
-        where("memberId","==",selectedMember.id),
-        orderBy("createdAt","desc"),
-        limit(1)
-    );
+if(pendingRecords.length===0){
 
-    const snapshot = await getDocs(q);
+pendingList.innerHTML=`
 
-    if(!snapshot.empty){
+<div class="pending-card">
 
-        previousBalance =
-        Number(snapshot.docs[0].data().balance) || 0;
+<h4>No Pending Found</h4>
 
-    }
+<p>
+This member has no pending collections.
+</p>
 
-    const debit =
-    Number(totalAmount.value);
+</div>
 
-    const credit = 0;
+`;
 
-    const balance =
-    previousBalance + debit - credit;
-
-    await addDoc(
-        collection(db,"memberLedger"),
-        {
-
-            transactionDate:
-            collectionDate.value,
-
-            receiptNo:
-            "COL-" + Date.now(),
-
-            memberId:
-            selectedMember.id,
-
-            memberCode:
-            selectedMember.memberCode,
-
-            memberName:
-            selectedMember.memberName,
-
-            groupCode:
-            selectedGroup.groupCode,
-
-            transactionType:
-            "Collection",
-
-            debit:
-            debit,
-
-            credit:
-            credit,
-
-            balance:
-            balance,
-
-            createdAt:
-            new Date()
-
-        }
-    );
+return;
 
 }
+
+pendingRecords.forEach(record=>{
+
+const card=document.createElement("div");
+
+card.className="pending-card";
+
+card.innerHTML=`
+
+<h4>${record.groupName}</h4>
+
+<p>
+
+<b>Group Code :</b>
+
+${record.groupCode}
+
+</p>
+
+<p>
+
+<b>Installment :</b>
+
+${record.installmentNo}
+
+</p>
+
+<p>
+
+<b>Due Date :</b>
+
+${formatDate(record.dueDate)}
+
+</p>
+
+<p class="pending-amount">
+
+₹${Number(
+record.pendingAmount
+).toLocaleString("en-IN")}
+
+</p>
+
+`;
+
+pendingList.appendChild(card);
+
+});
+
+}
+
 //==================================================
-// Save Collection
+// Format Date
 //==================================================
 
-saveCollection.addEventListener("click", async () => {
+function formatDate(dateValue){
+
+if(!dateValue) return "-";
 
 try{
 
-if(!selectedGroup){
+if(dateValue.toDate){
 
-alert("Please Select Group");
-
-return;
-
-}
-
-if(!selectedMember){
-
-alert("Please Select Member");
-
-return;
+return dateValue
+.toDate()
+.toLocaleDateString("en-IN");
 
 }
 
-const month =
-Number(collectionMonth.value);
+return new Date(dateValue)
+.toLocaleDateString("en-IN");
 
-const duplicateQuery =
-query(
-collection(db,"collections"),
-where("groupId","==",selectedGroup.id),
-where("memberId","==",selectedMember.id),
-where("collectionMonth","==",month)
+}
+catch{
+
+return "-";
+
+}
+
+}
+
+//==================================================
+// Reset Screen
+//==================================================
+
+resetForm.addEventListener(
+"click",
+resetCollectionForm
 );
 
-const duplicateSnapshot =
-await getDocs(duplicateQuery);
-
-if(!duplicateSnapshot.empty){
-
-alert("Collection already completed for this month.");
-
-return;
-
-}
-
-await addDoc(
-collection(db,"collections"),
-{
-
-groupId:selectedGroup.id,
-
-groupCode:selectedGroup.groupCode,
-
-groupName:selectedGroup.groupName,
-
-memberId:selectedMember.id,
-
-memberCode:selectedMember.memberCode,
-
-memberName:selectedMember.memberName,
-
-mobileNumber:selectedMember.mobileNumber || "",
-
-collectionMonth:month,
-
-monthlyAmount:Number(monthlyAmount.value),
-
-fineAmount:Number(fineAmount.value),
-
-totalAmount:Number(totalAmount.value),
-
-collectionDate:collectionDate.value,
-
-paymentMode:paymentMode.value,
-
-remarks:remarks.value.trim(),
-
-createdAt:new Date()
-
-}
-);
-await saveMemberLedger();
-alert("Collection Saved Successfully.");
-
-clearDetails();
-
-member.innerHTML =
-`<option value="">Select Member</option>`;
+function resetCollectionForm(){
 
 selectedMember=null;
 
-selectedGroup=null;
+pendingRecords=[];
 
-chitAmountFilter.value="";
+memberGroupsData=[];
 
-auctionDayFilter.innerHTML=
-`<option value="">Select Auction Day</option>`;
+searchMember.value="";
+
+memberList.innerHTML="";
+
+memberList.style.display="none";
+
+selectedMemberCard.style.display="none";
+
+pendingList.innerHTML="";
+
+memberCode.textContent="-";
+
+memberName.textContent="-";
+
+memberMobile.textContent="-";
+
+memberGroups.textContent="0";
+
+totalPending.textContent="₹0";
+
+receivedAmount.value="";
+
+paymentMode.value="Cash";
+
+remarks.value="";
 
 }
-catch(error){
 
-console.error(error);
+//==================================================
+// Save Button Validation
+//==================================================
 
-alert("Error while saving collection.");
+saveCollection.addEventListener(
+"click",
+()=>{
+
+if(!selectedMember){
+
+alert(
+"Please select a member."
+);
+
+return;
 
 }
+
+if(
+
+receivedAmount.value==="" ||
+
+Number(receivedAmount.value)<=0
+
+){
+
+alert(
+"Enter received amount."
+);
+
+receivedAmount.focus();
+
+return;
+
+}
+
+// Part 3B
+// FIFO Auto Adjustment Engine
+// Starts Here
 
 });
+//==================================================
+// PART 3B-1
+// FIFO Auto Adjustment Engine
+//==================================================
+
+import {
+doc,
+updateDoc,
+addDoc,
+serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+//==================================================
+// Start Collection Process
+//==================================================
+
+async function processCollection(){
+
+let received =
+Number(receivedAmount.value);
+
+if(received<=0){
+
+alert("Invalid Collection Amount");
+
+return;
+
+}
+
+if(pendingRecords.length===0){
+
+alert("No Pending Available");
+
+return;
+
+}
+
+//----------------------------------
+// Sort Oldest Pending First
+//----------------------------------
+
+pendingRecords.sort((a,b)=>{
+
+const first =
+a.dueDate.toDate().getTime();
+
+const second =
+b.dueDate.toDate().getTime();
+
+return first-second;
+
+});
+
+//----------------------------------
+// Variables
+//----------------------------------
+
+let balanceAmount = received;
+
+const collectionEntries = [];
+
+const updatedPending = [];
+
+//----------------------------------
+// FIFO Loop
+//----------------------------------
+
+for(const pending of pendingRecords){
+
+if(balanceAmount<=0){
+
+break;
+
+}
+
+const pendingAmount =
+Number(pending.pendingAmount);
+
+let paidAmount = 0;
+
+let remainingPending = 0;
+
+let status = "PENDING";
+
+//----------------------------------
+// Full Payment
+//----------------------------------
+
+if(balanceAmount>=pendingAmount){
+
+paidAmount =
+pendingAmount;
+
+remainingPending = 0;
+
+status = "PAID";
+
+balanceAmount -= pendingAmount;
+
+}
+
+//----------------------------------
+// Partial Payment
+//----------------------------------
+
+else{
+
+paidAmount =
+balanceAmount;
+
+remainingPending =
+pendingAmount-paidAmount;
+
+status = "PARTIAL";
+
+balanceAmount = 0;
+
+}
+
+//----------------------------------
+// Prepare Update
+//----------------------------------
+
+updatedPending.push({
+
+docId:
+pending.id,
+
+paidAmount,
+
+remainingPending,
+
+status,
+
+groupCode:
+pending.groupCode,
+
+groupName:
+pending.groupName,
+
+installmentNo:
+pending.installmentNo,
+
+memberId:
+pending.memberId,
+
+memberCode:
+pending.memberCode,
+
+memberName:
+pending.memberName
+
+});
+
+//----------------------------------
+// Collection Entry
+//----------------------------------
+
+collectionEntries.push({
+
+memberId:
+pending.memberId,
+
+memberCode:
+pending.memberCode,
+
+memberName:
+pending.memberName,
+
+groupId:
+pending.groupId,
+
+groupCode:
+pending.groupCode,
+
+groupName:
+pending.groupName,
+
+installmentNo:
+pending.installmentNo,
+
+receivedAmount:
+paidAmount,
+
+paymentMode:
+paymentMode.value,
+
+remarks:
+remarks.value.trim(),
+
+createdAt:
+serverTimestamp()
+
+});
+
+}
+
+//==================================================
+// Continue in Part 3B-2
+//==================================================
