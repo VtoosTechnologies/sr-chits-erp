@@ -624,18 +624,20 @@ return;
 // Sort Oldest Pending First
 //----------------------------------
 alert("Before Sort");
-pendingRecords.sort((a,b)=>{
+  pendingRecords.sort((a, b) => {
 
-const first =
-a.dueDate.toDate().getTime();
+    const first = a.dueDate?.toDate
+        ? a.dueDate.toDate().getTime()
+        : new Date(a.dueDate).getTime();
 
-const second =
-b.dueDate.toDate().getTime();
+    const second = b.dueDate?.toDate
+        ? b.dueDate.toDate().getTime()
+        : new Date(b.dueDate).getTime();
 
-return first-second;
+    return first - second;
 
 });
-alert("After Sort");
+  alert("After Sort");
 //----------------------------------
 // Variables
 //----------------------------------
