@@ -93,42 +93,38 @@ const snap =
 await getDocs(
 collection(db,"members")
 );
-
-const unique={};
+const results=[];
 
 snap.forEach(doc=>{
 
 const data=doc.data();
 
-const searchText=
-`
-${data.memberCode||""}
-${data.memberName||""}
-${data.mobileNumber||""}
-`.toLowerCase();
+const name=
+(data.memberName||"").toLowerCase();
 
-if(searchText.includes(keyword)){
+const mobile=
+(data.mobileNumber||"").toLowerCase();
 
-const key=
-data.memberId ||
-doc.id;
+if(
 
-if(!unique[key]){
+name.includes(keyword) ||
 
-unique[key]={
+mobile.includes(keyword)
+
+){
+
+results.push({
+
 id:doc.id,
 ...data
-};
 
-}
+});
 
 }
 
 });
 
-renderMemberList(
-Object.values(unique)
-);
+renderMemberList(results);
 
 });
 //==================================================
@@ -156,7 +152,7 @@ function renderMemberList(list){
 
         div.innerHTML=`
             <strong>${member.memberName}</strong><br>
-            <small>${member.mobileNumber || "-"}</small>
+            <small>${member.memberCode}</small>
         `;
 
         div.onclick=()=>{
@@ -183,6 +179,7 @@ async function selectMember(member){
     member.memberName;
 
     memberList.style.display="none";
+    memberList.innerHTML="";
 
     selectedMemberCard.style.display="block";
 
