@@ -5,7 +5,7 @@
 //==================================================
 
 import { db } from "./firebase.js";
-alert("JS Loaded");
+
 import {
     collection,
     getDocs,
@@ -75,7 +75,6 @@ memberList.style.display="none";
 //==================================================
 
 searchMember.addEventListener("input", async () => {
-alert("Input Event Working");
     try {
 
         const keyword = searchMember.value.trim().toLowerCase();
@@ -129,7 +128,6 @@ if (
 //==================================================
 
 function renderMemberList(list){
-alert("Members Found : " + list.length);
     memberList.innerHTML="";
 
     if(list.length===0){
