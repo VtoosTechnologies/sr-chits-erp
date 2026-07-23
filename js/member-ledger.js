@@ -252,6 +252,7 @@ async function loadLedger() {
 
     let debitTotal = 0;
     let creditTotal = 0;
+    let pendingTotal = 0;
 
     //--------------------------------------------------
     // Collections
@@ -380,6 +381,7 @@ advancesSnap.forEach(doc => {
         const data = doc.data();
 
         pendingRecords.push(data);
+        pendingTotal += Number(data.pendingAmount || 0);
 
         ledger.push({
 
