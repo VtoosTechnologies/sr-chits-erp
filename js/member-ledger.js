@@ -76,7 +76,7 @@ memberList.style.display="none";
 //==================================================
 
 searchMember.addEventListener("input", async () => {
-
+alert("Input Event Working");
     try {
 
         const keyword = searchMember.value.trim().toLowerCase();
