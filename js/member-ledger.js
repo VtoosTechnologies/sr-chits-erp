@@ -211,7 +211,7 @@ memberList.appendChild(div);
 async function selectMember(member){
 
 selectedMember=member;
-
+selectedMember.memberId = member.id;
 searchMember.value=
 member.memberName;
 
