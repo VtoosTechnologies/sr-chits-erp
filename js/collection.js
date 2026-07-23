@@ -663,22 +663,6 @@ return;
 
 }
 //----------------------------------
-// Sort Oldest Pending First
-//----------------------------------
-  pendingRecords.sort((a, b) => {
-
-    const first = a.dueDate?.toDate
-        ? a.dueDate.toDate().getTime()
-        : new Date(a.dueDate).getTime();
-
-    const second = b.dueDate?.toDate
-        ? b.dueDate.toDate().getTime()
-        : new Date(b.dueDate).getTime();
-
-    return first - second;
-
-});
-//----------------------------------
 // Variables
 //----------------------------------
 
@@ -743,6 +727,35 @@ for (const advance of openAdvances) {
     );
 
 }
+  //----------------------------------
+// Only After Advance Adjustment
+// Start Pending FIFO
+//----------------------------------
+
+if(balanceAmount > 0){
+
+    pendingRecords.sort((a, b) => {
+
+        const first =
+            a.dueDate?.toDate
+            ? a.dueDate.toDate().getTime()
+            : new Date(a.dueDate).getTime();
+
+        const second =
+            b.dueDate?.toDate
+            ? b.dueDate.toDate().getTime()
+            : new Date(b.dueDate).getTime();
+
+        if(first !== second){
+            return first - second;
+        }
+
+        return Number(a.installmentNo || 0) -
+               Number(b.installmentNo || 0);
+
+    });
+
+}
 const collectionEntries = [];
 
 const updatedPending = [];
@@ -750,14 +763,24 @@ const updatedPending = [];
 //----------------------------------
 // FIFO Loop
 //----------------------------------
+  //----------------------------------
+// If Advance Still Pending
+// Skip Pending FIFO
+//----------------------------------
+
+if (balanceAmount === 0) {
+
+    alert(
+        "Collection fully adjusted against Advance."
+    );
+
+}
 
 for(const pending of pendingRecords){
 
-if(balanceAmount<=0){
-
-break;
-
-}
+    if(balanceAmount <= 0){
+        break;
+    }
 
 const pendingAmount =
 Number(pending.pendingAmount);
