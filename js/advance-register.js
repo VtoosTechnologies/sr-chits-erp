@@ -153,12 +153,15 @@ collection(db,"advances"),
 
 advanceNo:
 advanceNo.value,
+memberId: customerCode.value.trim(),
 
-customerCode:
-customerCode.value.trim(),
+memberCode: customerCode.value.trim(),
 
-customerName:
-customerName.value.trim(),
+customerCode: customerCode.value.trim(),
+
+memberName: customerName.value.trim(),
+
+customerName: customerName.value.trim(),
 
 mobileNumber:
 mobileNumber.value.trim(),
@@ -210,11 +213,15 @@ docRef.id,
 advanceNo:
 advanceNo.value,
 
-customerCode:
-customerCode.value.trim(),
+memberId: customerCode.value.trim(),
 
-customerName:
-customerName.value.trim(),
+memberCode: customerCode.value.trim(),
+
+customerCode: customerCode.value.trim(),
+
+memberName: customerName.value.trim(),
+
+customerName: customerName.value.trim(),
 
 mobileNumber:
 mobileNumber.value.trim(),
