@@ -716,7 +716,36 @@ for (const advance of openAdvances) {
             updatedAt: serverTimestamp()
         }
     );
+//----------------------------------
+// Save Advance Ledger
+//----------------------------------
 
+await addDoc(
+    collection(db, "advanceLedger"),
+    {
+
+        advanceId: advance.id,
+
+        advanceNo: advance.advanceNo || "",
+
+        memberId: selectedMember.memberId,
+
+        memberCode: selectedMember.memberCode,
+
+        memberName: selectedMember.memberName,
+
+        adjustedAmount: adjustAmount,
+
+        balanceAmount: newBalance,
+
+        paymentMode: paymentMode.value,
+
+        remarks: remarks.value.trim(),
+
+        createdAt: serverTimestamp()
+
+    }
+);
     balanceAmount -= adjustAmount;
 
     alert(
@@ -1002,9 +1031,42 @@ serverTimestamp()
 
 }
 );
+//----------------------------------
+// Save Member Ledger
+//----------------------------------
 
+await addDoc(
+    collection(db, "memberLedger"),
+    {
+
+        memberId: entry.memberId,
+
+        memberCode: entry.memberCode,
+
+        memberName: entry.memberName,
+
+        groupCode: entry.groupCode,
+
+        groupName: entry.groupName,
+
+        transactionType: "COLLECTION",
+
+        amount: entry.receivedAmount,
+
+        paymentMode: entry.paymentMode,
+
+        remarks: entry.remarks,
+
+        createdAt: serverTimestamp()
+
+    }
+);
 }
+//----------------------------------
+// Reload Screen
+//----------------------------------
 
+await loadPendingDetails();
 //----------------------------------
 // Remaining Amount
 //----------------------------------
