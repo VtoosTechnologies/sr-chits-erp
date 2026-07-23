@@ -277,11 +277,19 @@ async function loadLedger() {
         collectionRecords.push(data);
 
         ledger.push({
-    date: ...,
+
+    date:
+        data.createdAt?.toDate?.() ||
+        new Date(),
+
     type: "Collection",
+
     group: data.groupCode || "-",
+
     debit: 0,
+
     credit: amount
+
 });
 
     });
@@ -371,7 +379,7 @@ advancesSnap.forEach(doc => {
 
     const pendingQuery = query(
         collection(db, "pendingRegister"),
-        where("memberId", "==", selectedMember.memberId)
+        where("memberCode", "==", selectedMember.memberCode)
     );
 
     const pendingSnap = await getDocs(pendingQuery);
