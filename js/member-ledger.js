@@ -291,7 +291,7 @@ async function loadLedger() {
 
     const advanceQuery = query(
         collection(db, "advanceLedger"),
-        where("customerCode", "==", selectedMember.memberCode)
+        where("memberCode", "==", selectedMember.memberCode)
     );
 
     const advanceSnap = await getDocs(advanceQuery);
@@ -334,7 +334,7 @@ async function loadLedger() {
 
 const advancesQuery = query(
     collection(db, "advances"),
-    where("customerCode", "==", selectedMember.memberCode)
+    where("memberCode", "==", selectedMember.memberCode)
 );
 
 const advancesSnap = await getDocs(advancesQuery);
