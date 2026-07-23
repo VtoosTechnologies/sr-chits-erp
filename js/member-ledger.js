@@ -378,7 +378,7 @@ pendingSnap.forEach(doc=>{
 
     ledger.sort((a,b)=>a.date-b.date);
 
-   const outstandingTotal =
+   outstandingTotal =
     debitTotal - creditTotal;
 
 renderLedger(
