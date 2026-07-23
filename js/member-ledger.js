@@ -1,16 +1,16 @@
 //==================================================
 // SR Chits ERP
-// Member Ledger
-// Part 2AA
+// Member Ledger V3
+// Part 1
 //==================================================
 
 import { db } from "./firebase.js";
 
 import {
-collection,
-getDocs,
-query,
-where
+    collection,
+    getDocs,
+    query,
+    where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
@@ -56,10 +56,6 @@ document.getElementById("printBtn");
 
 let selectedMember = null;
 
-let pendingRecords = [];
-
-let collectionRecords = [];
-
 let ledger = [];
 
 //==================================================
@@ -71,13 +67,12 @@ window.addEventListener(
 ()=>{
 
 selectedMemberCard.style.display="none";
-
 memberList.style.display="none";
 
 });
 
 //==================================================
-// Live Member Search
+// Live Search
 //==================================================
 
 searchMember.addEventListener(
@@ -88,119 +83,91 @@ const keyword =
 searchMember.value.trim().toLowerCase();
 
 memberList.innerHTML="";
-
 memberList.style.display="none";
 
 if(keyword.length<2){
-
 return;
-
 }
 
-const snapshot =
+const snap =
 await getDocs(
 collection(db,"members")
 );
 
-const results=[];
+const unique={};
 
-snapshot.forEach(doc=>{
+snap.forEach(doc=>{
 
 const data=doc.data();
 
-const code =
-(data.memberCode || "")
-.toLowerCase();
+const searchText=
+`
+${data.memberCode||""}
+${data.memberName||""}
+${data.mobileNumber||""}
+`.toLowerCase();
 
-const name =
-(data.memberName || "")
-.toLowerCase();
+if(searchText.includes(keyword)){
 
-const mobile =
-(data.mobileNumber || "")
-.toLowerCase();
+const key=
+data.memberId ||
+doc.id;
 
-if(
+if(!unique[key]){
 
-code.includes(keyword) ||
-
-name.includes(keyword) ||
-
-mobile.includes(keyword)
-
-){
-
-results.push({
-
+unique[key]={
 id:doc.id,
-
 ...data
+};
 
-});
+}
 
 }
 
 });
 
-renderMemberList(results);
+renderMemberList(
+Object.values(unique)
+);
 
 });
-
 //==================================================
 // Render Member List
 //==================================================
 
 function renderMemberList(list){
 
-memberList.innerHTML="";
+    memberList.innerHTML="";
 
-if(list.length===0){
+    if(list.length===0){
 
-memberList.style.display="none";
+        memberList.style.display="none";
+        return;
 
-return;
+    }
 
-}
+    memberList.style.display="block";
 
-memberList.style.display="block";
+    list.forEach(member=>{
 
-const unique={};
+        const div=document.createElement("div");
 
-list.forEach(member=>{
+        div.className="search-item";
 
-const key =
-member.memberId ||
-member.mobileNumber;
+        div.innerHTML=`
+            <strong>${member.memberName}</strong><br>
+            <small>${member.mobileNumber || "-"}</small>
+        `;
 
-if(!unique[key]){
+        div.onclick=()=>{
 
-unique[key]=member;
+            selectMember(member);
 
-}
+        };
 
-});
+        memberList.appendChild(div);
 
-Object.values(unique).forEach(member=>{
-
-const div =
-document.createElement("div");
-
-div.className="search-item";
-
-div.innerHTML=`
-<strong>${member.memberName}</strong><br>
-<small>${member.mobileNumber || "-"}</small>
-`;
-
-div.onclick=()=>{
-
-selectMember(member);
-
-};
-
-memberList.appendChild(div);
-
-});
+    });
 
 }
 
@@ -210,113 +177,149 @@ memberList.appendChild(div);
 
 async function selectMember(member){
 
-selectedMember=member;
-selectedMember.memberId = member.id;
-searchMember.value=
-member.memberName;
+    selectedMember = member;
 
-memberList.style.display="none";
+    searchMember.value =
+    member.memberName;
 
-selectedMemberCard.style.display="block";
+    memberList.style.display="none";
 
-memberCode.textContent=
-member.memberCode || "-";
+    selectedMemberCard.style.display="block";
 
-memberName.textContent=
-member.memberName || "-";
+    memberCode.textContent =
+    member.memberCode || "-";
 
-memberMobile.textContent=
-member.mobileNumber || "-";
+    memberName.textContent =
+    member.memberName || "-";
 
-ledgerBody.innerHTML=`
-<tr>
-<td colspan="6">
-Loading Ledger...
-</td>
-</tr>
-`;
+    memberMobile.textContent =
+    member.mobileNumber || "-";
 
-await loadLedger();
+    ledgerBody.innerHTML = `
+        <tr>
+            <td colspan="6">
+                Loading Ledger...
+            </td>
+        </tr>
+    `;
+
+    await loadLedger();
 
 }
 //==================================================
-// Load Member Ledger
-// Part 2AB
+// Load Ledger
+// Part 3
 //==================================================
 
-async function loadLedger() {
+async function loadLedger(){
 
     ledger = [];
-    pendingRecords = [];
-    collectionRecords = [];
 
     let debitTotal = 0;
     let creditTotal = 0;
-    let pendingTotal = 0;
+    let outstandingTotal = 0;
 
     //--------------------------------------------------
-    // Collections
+    // 1. Advance Given (Debit)
     //--------------------------------------------------
 
-    const collectionQuery = query(
-        collection(db, "collections"),
-        where("memberCode", "==", selectedMember.memberCode)
+    const advanceSnap = await getDocs(
+        query(
+            collection(db,"advances"),
+            where("memberId","==",selectedMember.memberId)
+        )
     );
 
-    const collectionSnap = await getDocs(collectionQuery);
+    advanceSnap.forEach(doc=>{
 
-    collectionSnap.forEach(doc => {
+        const data = doc.data();
+
+        const amount =
+            Number(data.advanceAmount || 0);
+
+        debitTotal += amount;
+
+        ledger.push({
+
+            date:
+                data.createdAt?.toDate?.() ||
+                new Date(),
+
+            type:"Advance Given",
+
+            group:
+                data.advanceNo || "Advance",
+
+            debit:amount,
+
+            credit:0
+
+        });
+
+    });
+
+    //--------------------------------------------------
+    // 2. Advance Adjustment (Credit)
+    //--------------------------------------------------
+
+    const advanceLedgerSnap = await getDocs(
+        query(
+            collection(db,"advanceLedger"),
+            where("memberId","==",selectedMember.memberId)
+        )
+    );
+
+    advanceLedgerSnap.forEach(doc=>{
+
+        const data = doc.data();
+
+        const amount =
+            Number(data.adjustedAmount || 0);
+
+        creditTotal += amount;
+
+        ledger.push({
+
+            date:
+                data.createdAt?.toDate?.() ||
+                new Date(),
+
+            type:"Advance Adjustment",
+
+            group:
+                data.advanceNo || "Advance",
+
+            debit:0,
+
+            credit:amount
+
+        });
+
+    });
+        //--------------------------------------------------
+    // 3. Collections (Credit)
+    //--------------------------------------------------
+
+    const collectionSnap = await getDocs(
+        query(
+            collection(db,"collections"),
+            where("memberId","==",selectedMember.memberId)
+        )
+    );
+
+    collectionSnap.forEach(doc=>{
 
         const data = doc.data();
 
         const amount =
             Number(data.receivedAmount || 0);
 
-        debitTotal += amount;
+        // Advance Adjustment collection-ஐ skip
+        if(data.groupCode === "ADVANCE"){
+            return;
+        }
 
-        collectionRecords.push(data);
-
-        ledger.push({
-
-    date:
-        data.createdAt?.toDate?.() ||
-        new Date(),
-
-    type: "Collection",
-
-    group: data.groupCode || "-",
-
-    debit: 0,
-
-    credit: amount
-
-});
-
-    });
-
-    //--------------------------------------------------
-    // Advance Ledger
-    //--------------------------------------------------
-
-    const advanceQuery = query(
-        collection(db, "advanceLedger"),
-        where("memberCode", "==", selectedMember.memberCode)
-    );
-
-    const advanceSnap = await getDocs(advanceQuery);
-
-    advanceSnap.forEach(doc => {
-
-        const data = doc.data();
-
-        const debit =
-            Number(data.debit || 0);
-
-        const credit =
-            Number(data.credit || 0);
-
-        debitTotal += debit;
-        creditTotal += credit;
+        creditTotal += amount;
 
         ledger.push({
 
@@ -324,124 +327,65 @@ async function loadLedger() {
                 data.createdAt?.toDate?.() ||
                 new Date(),
 
-            type:
-                data.transactionType ||
-                "Advance",
-
-            group: "Advance",
-
-            debit,
-
-            credit
-
-        });
-
-    });
-//--------------------------------------------------
-// Advances
-//--------------------------------------------------
-
-const advancesQuery = query(
-    collection(db, "advances"),
-    where("memberCode", "==", selectedMember.memberCode)
-);
-
-const advancesSnap = await getDocs(advancesQuery);
-
-advancesSnap.forEach(doc => {
-
-    const data = doc.data();
-
-    const amount = Number(data.advanceAmount || 0);
-
-    debitTotal += amount;
-
-    ledger.push({
-
-        date:
-            data.createdAt?.toDate?.() ||
-            new Date(),
-
-        type: "Advance Given",
-
-        group: "Advance",
-
-        debit: amount,
-
-        credit: 0
-
-    });
-
-});
-    //--------------------------------------------------
-    // Pending Register
-    //--------------------------------------------------
-
-    const pendingQuery = query(
-        collection(db, "pendingRegister"),
-        where("memberCode", "==", selectedMember.memberCode)
-    );
-
-    const pendingSnap = await getDocs(pendingQuery);
-
-    pendingSnap.forEach(doc => {
-
-        const data = doc.data();
-
-        pendingRecords.push(data);
-        pendingTotal += Number(data.pendingAmount || 0);
-
-        ledger.push({
-
-            date:
-                data.createdAt?.toDate?.() ||
-                new Date(),
-
-            type: "Pending",
+            type:"Collection",
 
             group:
                 data.groupCode || "-",
 
-            debit: 0,
+            debit:0,
 
-            credit:
-                Number(data.pendingAmount || 0)
+            credit:amount
 
         });
 
     });
 
     //--------------------------------------------------
-    // Sort by Date
+    // 4. Outstanding Pending
     //--------------------------------------------------
 
-    ledger.sort((a, b) => a.date - b.date);
+    const pendingSnap = await getDocs(
+        query(
+            collection(db,"pendingRegister"),
+            where("memberId","==",selectedMember.memberId)
+        )
+    );
 
-renderLedger(
-    debitTotal,
-    creditTotal
-);
+    pendingSnap.forEach(doc=>{
 
-totalDebit.textContent =
-"₹" + debitTotal.toLocaleString();
+        const data = doc.data();
 
-totalCredit.textContent =
-"₹" + creditTotal.toLocaleString();
+        outstandingTotal +=
+            Number(data.pendingAmount || 0);
 
-closingBalance.textContent =
-"₹" + pendingTotal.toLocaleString();
+    });
+
+    //--------------------------------------------------
+    // Sort Ledger
+    //--------------------------------------------------
+
+    ledger.sort((a,b)=>a.date-b.date);
+
+    renderLedger(
+        debitTotal,
+        creditTotal,
+        outstandingTotal
+    );
 
 }
 //==================================================
 // Render Ledger
-// Part 2B
 //==================================================
 
-function renderLedger(totalDebitValue, totalCreditValue) {
+function renderLedger(
+    totalDebitValue,
+    totalCreditValue,
+    outstandingTotal
+){
 
     ledgerBody.innerHTML = "";
 
-    if (ledger.length === 0) {
+    if(ledger.length === 0){
 
         ledgerBody.innerHTML = `
         <tr>
@@ -456,11 +400,12 @@ function renderLedger(totalDebitValue, totalCreditValue) {
         closingBalance.textContent = "₹0";
 
         return;
+
     }
 
     let runningBalance = 0;
 
-    ledger.forEach(item => {
+    ledger.forEach(item=>{
 
         runningBalance += Number(item.debit || 0);
         runningBalance -= Number(item.credit || 0);
@@ -471,9 +416,9 @@ function renderLedger(totalDebitValue, totalCreditValue) {
             <td>${formatDate(item.date)}</td>
             <td>${item.type}</td>
             <td>${item.group}</td>
-            <td>₹${Number(item.debit || 0).toLocaleString()}</td>
-            <td>₹${Number(item.credit || 0).toLocaleString()}</td>
-            <td>₹${runningBalance.toLocaleString()}</td>
+            <td>₹${Number(item.debit || 0).toLocaleString("en-IN")}</td>
+            <td>₹${Number(item.credit || 0).toLocaleString("en-IN")}</td>
+            <td>₹${runningBalance.toLocaleString("en-IN")}</td>
         `;
 
         ledgerBody.appendChild(tr);
@@ -481,12 +426,13 @@ function renderLedger(totalDebitValue, totalCreditValue) {
     });
 
     totalDebit.textContent =
-"₹" + totalDebitValue.toLocaleString();
+        "₹" + totalDebitValue.toLocaleString("en-IN");
 
-totalCredit.textContent =
-"₹" + totalCreditValue.toLocaleString();
+    totalCredit.textContent =
+        "₹" + totalCreditValue.toLocaleString("en-IN");
 
-// Closing Balance loadLedger() ல் set ஆகும்
+    closingBalance.textContent =
+        "₹" + outstandingTotal.toLocaleString("en-IN");
 
 }
 
@@ -494,13 +440,21 @@ totalCredit.textContent =
 // Format Date
 //==================================================
 
-function formatDate(date) {
+function formatDate(date){
 
-    if (!date) return "-";
+    if(!date) return "-";
 
-    const d = new Date(date);
+    try{
 
-    return d.toLocaleDateString("en-GB");
+        const d = new Date(date);
+
+        return d.toLocaleDateString("en-GB");
+
+    }catch{
+
+        return "-";
+
+    }
 
 }
 
@@ -508,7 +462,7 @@ function formatDate(date) {
 // Print
 //==================================================
 
-printBtn.addEventListener("click", () => {
+printBtn.addEventListener("click",()=>{
 
     window.print();
 
