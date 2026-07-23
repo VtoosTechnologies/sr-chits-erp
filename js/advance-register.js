@@ -251,7 +251,9 @@ searchMember.value=
 member.memberName;
 
 memberList.style.display="none";
+memberList.innerHTML = "";
 
+searchMember.blur();
 memberCard.style.display="block";
 
 memberCode.value=
