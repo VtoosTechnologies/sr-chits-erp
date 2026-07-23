@@ -809,7 +809,7 @@ if (balanceAmount === 0) {
 
     collectionEntries.push({
 
-        memberId: selectedMember.memberId,
+        aadhaarNumber: selectedMember.aadhaarNumber,
 
         memberCode: selectedMember.memberCode,
 
@@ -911,8 +911,8 @@ pending.groupName,
 installmentNo:
 pending.installmentNo,
 
-memberId:
-pending.memberId,
+aadhaarNumber:
+pending.aadhaarNumber,
 
 memberCode:
 pending.memberCode,
@@ -928,8 +928,8 @@ pending.memberName
 
 collectionEntries.push({
 
-memberId:
-pending.memberId,
+aashaarNumber:
+pending.aadhaarNumber,
 
 memberCode:
 pending.memberCode,
@@ -1028,8 +1028,8 @@ await addDoc(
 collection(db,"collections"),
 {
 
-memberId:
-entry.memberId,
+aadhaarNumber:
+entry.aadhaarNumber,
 
 memberCode:
 entry.memberCode,
@@ -1072,7 +1072,7 @@ await addDoc(
     collection(db, "memberLedger"),
     {
 
-        memberId: entry.memberId,
+        aadhaarNumber: entry.aadhaarNumber,
 
         memberCode: entry.memberCode,
 
