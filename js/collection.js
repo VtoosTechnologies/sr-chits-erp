@@ -601,14 +601,12 @@ remarks.value="";
 // PART 4A
 // Load Open Advances (FIFO)
 //==================================================
-
 async function loadOpenAdvances(memberId){
 
     const q = query(
         collection(db, "advances"),
         where("memberId", "==", memberId),
-        where("status", "==", "Open"),
-        orderBy("createdAt", "asc")
+        where("status", "==", "Open")
     );
 
     const snapshot = await getDocs(q);
@@ -616,19 +614,31 @@ async function loadOpenAdvances(memberId){
     const advances = [];
 
     snapshot.forEach(doc => {
-
         advances.push({
             id: doc.id,
             ...doc.data()
         });
-
     });
 
-    console.log("Open Advances :", advances);
+    // Oldest First (JavaScript-ல் sort)
+    advances.sort((a, b) => {
+
+        const first = a.createdAt?.toDate
+            ? a.createdAt.toDate().getTime()
+            : 0;
+
+        const second = b.createdAt?.toDate
+            ? b.createdAt.toDate().getTime()
+            : 0;
+
+        return first - second;
+
+    });
 
     return advances;
 
 }
+
 //==================================================
 // Start Collection Process
 //==================================================
@@ -976,6 +986,12 @@ return;
 
 }
 
-await processCollection();
+try{
+    await processCollection();
+}
+catch(error){
+    console.error(error);
+    alert(error.message);
+}
 
 });
