@@ -1,14 +1,16 @@
 //==================================================
 // SR Chits ERP
-// Member Statement
-// Part - 3A
+// Member Statement V4
+// Part 1
 //==================================================
 
 import { db } from "./firebase.js";
 
 import {
 collection,
-getDocs
+getDocs,
+query,
+where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
@@ -16,13 +18,13 @@ getDocs
 //==================================================
 
 const membersRef =
-collection(db, "members");
+collection(db,"members");
 
 const memberLedgerRef =
-collection(db, "memberLedger");
+collection(db,"memberLedger");
 
 const prizePaymentRef =
-collection(db, "prizePayments");
+collection(db,"prizePayments");
 
 //==================================================
 // Elements
@@ -62,10 +64,16 @@ const statementBody =
 document.getElementById("statementBody");
 
 //==================================================
+// Variables
+//==================================================
+
+let selectedMember = null;
+
+//==================================================
 // Initial Load
 //==================================================
 
-document.addEventListener(
+window.addEventListener(
 "DOMContentLoaded",
 async()=>{
 
@@ -75,6 +83,7 @@ await loadMembers();
 
 //==================================================
 // Load Members
+// Aadhaar Based
 //==================================================
 
 async function loadMembers(){
@@ -84,18 +93,44 @@ memberSelect.innerHTML=`
 Select Member
 </option>`;
 
-const snapshot=
+const snapshot =
 await getDocs(membersRef);
+
+const uniqueMembers = {};
 
 snapshot.forEach(doc=>{
 
-const data=doc.data();
+const data = doc.data();
 
-memberSelect.innerHTML+=`
+const key =
+data.aadhaarNumber;
 
-<option value="${doc.id}">
+if(!uniqueMembers[key]){
 
-${data.memberCode} - ${data.memberName}
+uniqueMembers[key]={
+
+id:doc.id,
+
+...data
+
+};
+
+}
+
+});
+
+Object.values(uniqueMembers)
+.sort((a,b)=>
+a.memberName.localeCompare(b.memberName)
+)
+.forEach(member=>{
+
+memberSelect.innerHTML += `
+
+<option value="${member.aadhaarNumber}">
+
+${member.memberName}
+(${member.memberCode})
 
 </option>
 
@@ -115,14 +150,15 @@ loadMemberStatement
 );
 //==================================================
 // Load Member Statement
-// Part - 3B
+// Part 2
 //==================================================
 
 async function loadMemberStatement(){
 
-const memberId = memberSelect.value;
+const aadhaarNumber =
+memberSelect.value;
 
-if(!memberId){
+if(!aadhaarNumber){
 
 alert("Please select a member.");
 
@@ -134,28 +170,28 @@ return;
 // Get Member Details
 //------------------------------------------
 
-const membersSnapshot =
-await getDocs(membersRef);
+const memberQuery = query(
+membersRef,
+where(
+"aadhaarNumber",
+"==",
+aadhaarNumber
+)
+);
 
-let selectedMember = null;
+const memberSnapshot =
+await getDocs(memberQuery);
 
-membersSnapshot.forEach(doc=>{
-
-if(doc.id===memberId){
-
-selectedMember = doc.data();
-
-}
-
-});
-
-if(!selectedMember){
+if(memberSnapshot.empty){
 
 alert("Member not found.");
 
 return;
 
 }
+
+selectedMember =
+memberSnapshot.docs[0].data();
 
 //------------------------------------------
 // Member Details
@@ -174,7 +210,7 @@ groupName.textContent =
 selectedMember.groupCode || "-";
 
 //------------------------------------------
-// Summary Variables
+// Reset Summary
 //------------------------------------------
 
 let collectionTotal = 0;
@@ -183,38 +219,60 @@ let prizeTotal = 0;
 
 let prizePaidTotal = 0;
 
+let outstanding = 0;
+
 //------------------------------------------
-// Collection Total
+// Load Member Ledger
 //------------------------------------------
 
+const ledgerQuery = query(
+memberLedgerRef,
+where(
+"aadhaarNumber",
+"==",
+aadhaarNumber
+)
+);
+
 const ledgerSnapshot =
-await getDocs(memberLedgerRef);
+await getDocs(ledgerQuery);
+
+const ledgerRecords = [];
 
 ledgerSnapshot.forEach(doc=>{
 
 const data = doc.data();
 
-if(data.memberId===memberId){
+ledgerRecords.push(data);
+
+if(data.transactionType==="COLLECTION"){
 
 collectionTotal +=
-Number(data.debit || 0);
+Number(data.amount || 0);
 
 }
 
 });
 
 //------------------------------------------
-// Prize Details
+// Prize Payment
 //------------------------------------------
 
+const prizeQuery = query(
+prizePaymentRef,
+where(
+"aadhaarNumber",
+"==",
+aadhaarNumber
+)
+);
+
 const prizeSnapshot =
-await getDocs(prizePaymentRef);
+await getDocs(prizeQuery);
 
 prizeSnapshot.forEach(doc=>{
 
 const data = doc.data();
-
-if(data.memberId===memberId){
 
 prizeTotal +=
 Number(data.prizeAmount || 0);
@@ -222,16 +280,15 @@ Number(data.prizeAmount || 0);
 prizePaidTotal +=
 Number(data.paidAmount || 0);
 
-}
-
 });
 
 //------------------------------------------
-// Balance
+// Outstanding
 //------------------------------------------
 
-const balance =
-prizeTotal - prizePaidTotal;
+outstanding =
+prizeTotal -
+prizePaidTotal;
 
 //------------------------------------------
 // Summary Cards
@@ -239,47 +296,51 @@ prizeTotal - prizePaidTotal;
 
 totalCollection.textContent =
 "₹" +
-collectionTotal.toLocaleString();
+collectionTotal.toLocaleString("en-IN");
 
 totalPrize.textContent =
 "₹" +
-prizeTotal.toLocaleString();
+prizeTotal.toLocaleString("en-IN");
 
 prizePaid.textContent =
 "₹" +
-prizePaidTotal.toLocaleString();
+prizePaidTotal.toLocaleString("en-IN");
 
 balanceAmount.textContent =
 "₹" +
-balance.toLocaleString();
-//==================================================
-// Part - 3C
-// Load Statement Table
-//==================================================
+outstanding.toLocaleString("en-IN");
 
-statementBody.innerHTML = `
-<tr>
-<td colspan="6">Loading...</td>
-</tr>`;
+//------------------------------------------
+// Continue Part 3
+//------------------------------------------
 
-const ledgerSnapshot2 =
-await getDocs(memberLedgerRef);
-
-statementBody.innerHTML = "";
-
-let records = [];
-
-ledgerSnapshot2.forEach(doc => {
-
-const data = doc.data();
-
-if(data.memberId === memberId){
-
-records.push(data);
+renderStatement(
+ledgerRecords
+);
 
 }
+//==================================================
+// Render Statement
+// Part 3
+//==================================================
 
-});
+function renderStatement(records){
+
+statementBody.innerHTML="";
+
+if(records.length===0){
+
+statementBody.innerHTML=`
+<tr>
+<td colspan="6">
+No Statement Available
+</td>
+</tr>
+`;
+
+return;
+
+}
 
 //------------------------------------------
 // Sort by Date
@@ -287,67 +348,86 @@ records.push(data);
 
 records.sort((a,b)=>{
 
-return new Date(a.transactionDate) -
-new Date(b.transactionDate);
+const first =
+a.createdAt?.toDate
+? a.createdAt.toDate().getTime()
+: new Date(a.createdAt).getTime();
+
+const second =
+b.createdAt?.toDate
+? b.createdAt.toDate().getTime()
+: new Date(b.createdAt).getTime();
+
+return first-second;
 
 });
 
 //------------------------------------------
-// Table
+// Running Balance
 //------------------------------------------
 
-if(records.length===0){
+let runningBalance = 0;
 
-statementBody.innerHTML=`
+records.forEach(item=>{
 
-<tr>
+const amount =
+Number(item.amount || 0);
 
-<td colspan="6">
+let debit = 0;
+let credit = 0;
 
-No Statement Available
+//------------------------------------------
+// Debit
+//------------------------------------------
 
-</td>
+if(
+item.transactionType==="Advance Given" ||
+item.transactionType==="Installment Due"
+){
 
-</tr>
-
-`;
-
-return;
+debit = amount;
+runningBalance += amount;
 
 }
 
-records.forEach(item=>{
+//------------------------------------------
+// Credit
+//------------------------------------------
+
+if(
+item.transactionType==="COLLECTION"
+){
+
+credit = amount;
+runningBalance -= amount;
+
+}
+
+const date =
+item.createdAt?.toDate
+? item.createdAt.toDate().toLocaleDateString("en-GB")
+: "-";
 
 statementBody.innerHTML += `
 
 <tr>
 
-<td>${item.transactionDate || "-"}</td>
+<td>${date}</td>
 
 <td>${item.transactionType || "-"}</td>
 
+<td>${item.groupCode || "-"}</td>
+
 <td>
-
-₹${Number(item.debit || 0).toLocaleString()}
-
+₹${debit.toLocaleString("en-IN")}
 </td>
 
 <td>
-
-₹${Number(item.credit || 0).toLocaleString()}
-
+₹${credit.toLocaleString("en-IN")}
 </td>
 
 <td>
-
-₹${Number(item.balance || 0).toLocaleString()}
-
-</td>
-
-<td>
-
-${item.remarks || "-"}
-
+₹${runningBalance.toLocaleString("en-IN")}
 </td>
 
 </tr>
@@ -355,4 +435,15 @@ ${item.remarks || "-"}
 `;
 
 });
+
 }
+
+//==================================================
+// Print
+//==================================================
+
+window.printStatement=function(){
+
+window.print();
+
+};
