@@ -409,10 +409,19 @@ advancesSnap.forEach(doc => {
 
     ledger.sort((a, b) => a.date - b.date);
 
-    renderLedger(
-        debitTotal,
-        creditTotal
-    );
+renderLedger(
+    debitTotal,
+    creditTotal
+);
+
+totalDebit.textContent =
+"₹" + debitTotal.toLocaleString();
+
+totalCredit.textContent =
+"₹" + creditTotal.toLocaleString();
+
+closingBalance.textContent =
+"₹" + pendingTotal.toLocaleString();
 
 }
 //==================================================
@@ -464,13 +473,12 @@ function renderLedger(totalDebitValue, totalCreditValue) {
     });
 
     totalDebit.textContent =
-        "₹" + totalDebitValue.toLocaleString();
+"₹" + totalDebitValue.toLocaleString();
 
-    totalCredit.textContent =
-        "₹" + totalCreditValue.toLocaleString();
+totalCredit.textContent =
+"₹" + totalCreditValue.toLocaleString();
 
-    closingBalance.textContent =
-        "₹" + runningBalance.toLocaleString();
+// Closing Balance loadLedger() ல் set ஆகும்
 
 }
 
