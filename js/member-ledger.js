@@ -105,9 +105,8 @@ if (
 
                results.push({
     id: doc.id,
-    memberId: data.memberId || doc.id,
     ...data
-}); 
+});
 
             }
 
