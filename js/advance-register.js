@@ -9,6 +9,7 @@ import { db } from "./firebase.js";
 import {
 collection,
 getDocs,
+addDoc,
 query,
 orderBy,
 limit
@@ -266,3 +267,167 @@ address.value=
 member.address || "";
 
 }
+//==================================================
+// Save Advance
+// Part 3B
+//==================================================
+
+saveAdvance.addEventListener("click", async () => {
+
+    try {
+
+        if (!selectedMember) {
+            alert("Please select a member.");
+            return;
+        }
+
+        if (advanceAmount.value.trim() == "") {
+            alert("Enter Advance Amount");
+            return;
+        }
+
+        const amount = Number(advanceAmount.value);
+
+        //------------------------------------------------
+        // Save Advances
+        //------------------------------------------------
+
+        const docRef = await addDoc(
+            collection(db, "advances"),
+            {
+
+                advanceNo: advanceNo.value,
+
+                memberId: selectedMember.memberId || selectedMember.id,
+
+                memberCode: selectedMember.memberCode,
+
+                customerCode: selectedMember.memberCode,
+
+                memberName: selectedMember.memberName,
+
+                customerName: selectedMember.memberName,
+
+                mobileNumber: selectedMember.mobileNumber,
+
+                address: selectedMember.address || "",
+
+                advanceAmount: amount,
+
+                interest: 0,
+
+                advanceDate: advanceDate.value,
+
+                dueDate: dueDate.value,
+
+                paidAmount: 0,
+
+                balanceAmount: amount,
+
+                status: "Open",
+
+                remarks: remarks.value,
+
+                createdAt: new Date()
+
+            }
+        );
+
+        //------------------------------------------------
+        // Save Advance Ledger
+        //------------------------------------------------
+
+        await addDoc(
+            collection(db, "advanceLedger"),
+            {
+
+                transactionNo:
+                    "ADL" + Date.now(),
+
+                advanceId:
+                    docRef.id,
+
+                advanceNo:
+                    advanceNo.value,
+
+                memberId:
+                    selectedMember.memberId || selectedMember.id,
+
+                memberCode:
+                    selectedMember.memberCode,
+
+                customerCode:
+                    selectedMember.memberCode,
+
+                memberName:
+                    selectedMember.memberName,
+
+                customerName:
+                    selectedMember.memberName,
+
+                mobileNumber:
+                    selectedMember.mobileNumber,
+
+                transactionDate:
+                    advanceDate.value,
+
+                transactionType:
+                    "Advance Given",
+
+                debit:
+                    amount,
+
+                credit:
+                    0,
+
+                balance:
+                    amount,
+
+                paymentMode:
+                    paymentMode.value,
+
+                remarks:
+                    remarks.value,
+
+                createdAt:
+                    new Date()
+
+            }
+        );
+
+        alert("Advance Saved Successfully");
+
+        //------------------------------------------------
+        // Reset
+        //------------------------------------------------
+
+        searchMember.value = "";
+
+        memberCard.style.display = "none";
+
+        selectedMember = null;
+
+        advanceAmount.value = "";
+
+        dueDate.value = "";
+
+        remarks.value = "";
+
+        paymentMode.value = "Cash";
+
+        advanceDate.value =
+            new Date().toISOString().split("T")[0];
+
+        await generateAdvanceNumber();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(error.message);
+
+    }
+
+});
