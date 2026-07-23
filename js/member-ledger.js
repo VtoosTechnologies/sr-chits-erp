@@ -260,7 +260,7 @@ async function loadLedger() {
 
     const collectionQuery = query(
         collection(db, "collections"),
-        where("memberId", "==", selectedMember.memberId)
+        where("memberCode", "==", selectedMember.memberCode)
     );
 
     const collectionSnap = await getDocs(collectionQuery);
