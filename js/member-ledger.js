@@ -276,24 +276,24 @@ async function loadLedger(){
         const amount =
             Number(data.adjustedAmount || 0);
 
-        creditTotal += amount;
+       ledger.push({
 
-        ledger.push({
+    date:
+        data.createdAt?.toDate?.() ||
+        new Date(),
 
-            date:
-                data.createdAt?.toDate?.() ||
-                new Date(),
+    type:"Advance Adjustment",
 
-            type:"Advance Adjustment",
+    group:
+        data.advanceNo || "Advance",
 
-            group:
-                data.advanceNo || "Advance",
+    debit:0,
 
-            debit:0,
+    credit:0,
 
-            credit:amount
+    adjustedAmount:amount
 
-        });
+}); 
 
     });
         //--------------------------------------------------
@@ -417,7 +417,15 @@ function renderLedger(
             <td>${item.type}</td>
             <td>${item.group}</td>
             <td>₹${Number(item.debit || 0).toLocaleString("en-IN")}</td>
-            <td>₹${Number(item.credit || 0).toLocaleString("en-IN")}</td>
+            <td>
+${
+item.type==="Advance Adjustment"
+?
+`Adjusted ₹${Number(item.adjustedAmount||0).toLocaleString("en-IN")}`
+:
+`₹${Number(item.credit||0).toLocaleString("en-IN")}`
+}
+</td>
             <td>₹${runningBalance.toLocaleString("en-IN")}</td>
         `;
 
