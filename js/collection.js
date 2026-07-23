@@ -808,9 +808,33 @@ const updatedPending = [];
 
 if (balanceAmount === 0) {
 
-    alert(
-        "Collection fully adjusted against Advance."
-    );
+    collectionEntries.push({
+
+        memberId: selectedMember.memberId,
+
+        memberCode: selectedMember.memberCode,
+
+        memberName: selectedMember.memberName,
+
+        groupId: "",
+
+        groupCode: "ADVANCE",
+
+        groupName: "Advance Adjustment",
+
+        installmentNo: 0,
+
+        receivedAmount: received,
+
+        paymentMode: paymentMode.value,
+
+        remarks: remarks.value.trim(),
+
+        transactionNo: transactionNo,
+
+        createdAt: serverTimestamp()
+
+    });
 
 }
 
