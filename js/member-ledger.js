@@ -12,7 +12,7 @@ import {
     query,
     where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
+alert("JS Loaded");
 //==================================================
 // Elements
 //==================================================
@@ -94,18 +94,22 @@ alert("Input Event Working");
 
             const data = doc.data();
 
-            const name = (data.memberName || "").toLowerCase();
-            const mobile = (data.mobileNumber || "").toLowerCase();
+            const code = (data.memberCode || "").toLowerCase();
+const name = (data.memberName || "").toLowerCase();
+const mobile = (data.mobileNumber || "").toLowerCase();
 
-            if (
-                name.includes(keyword) ||
-                mobile.includes(keyword)
-            ) {
+if (
+    code.includes(keyword) ||
+    name.includes(keyword) ||
+    mobile.includes(keyword)
+)
+             {
 
-                results.push({
-                    id: doc.id,
-                    ...data
-                });
+               results.push({
+    id: doc.id,
+    memberId: data.memberId || doc.id,
+    ...data
+}); 
 
             }
 
