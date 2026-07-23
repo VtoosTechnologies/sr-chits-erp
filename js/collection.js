@@ -673,6 +673,20 @@ return;
 //----------------------------------
 
 let balanceAmount = received;
+  //----------------------------------
+// Load Open Advances
+//----------------------------------
+
+const openAdvances = await loadOpenAdvances(
+    selectedMember.memberId
+);
+
+console.log(openAdvances);
+
+alert(
+    "Open Advances Found : " +
+    openAdvances.length
+);
 
 const collectionEntries = [];
 
