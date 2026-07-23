@@ -247,35 +247,26 @@ memberList.appendChild(div);
 //==================================================
 async function selectMember(member){
 
-selectedMember = member;
+    selectedMember = member;
 
-searchMember.value = member.memberName;
+    searchMember.value = member.memberName;
 
-memberList.style.display = "none";
-memberList.innerHTML = "";
+    memberList.style.display = "none";
+    memberList.innerHTML = "";
 
-searchMember.blur();
+    memberCard.style.display = "block";
 
-selectedMemberCard.style.display = "block";
+    memberCode.textContent =
+    member.memberCode || "-";
 
-memberCode.textContent =
-member.memberCode || "-";
+    memberName.textContent =
+    member.memberName || "-";
 
-memberName.textContent =
-member.memberName || "-";
+    mobileNumber.textContent =
+    member.mobileNumber || "-";
 
-memberMobile.textContent =
-member.mobileNumber || "-";
-
-ledgerBody.innerHTML = `
-<tr>
-<td colspan="6">
-Loading Ledger...
-</td>
-</tr>
-`;
-
-await loadLedger();
+    address.textContent =
+    member.address || "-";
 
 }
 //==================================================
@@ -309,7 +300,7 @@ saveAdvance.addEventListener("click", async () => {
 
                 advanceNo: advanceNo.value,
 
-                memberId: selectedMember.memberId || selectedMember.id,
+                aadhaarNumber: selectedMember.aadhaarNumber,
 
                 memberCode: selectedMember.memberCode,
 
@@ -361,8 +352,8 @@ saveAdvance.addEventListener("click", async () => {
                 advanceNo:
                     advanceNo.value,
 
-                memberId:
-                    selectedMember.memberId || selectedMember.id,
+                aadhaarNumber:
+                    selectedMember.aadhaarNumber,
 
                 memberCode:
                     selectedMember.memberCode,
