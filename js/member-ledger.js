@@ -218,7 +218,7 @@ async function loadLedger(){
     const advanceSnap = await getDocs(
         query(
             collection(db,"advances"),
-            where("memberId","==",selectedMember.memberId)
+            where("aadhaarNumber","==",selectedMember.aadhaarNumber)
         )
     );
 
@@ -257,7 +257,7 @@ async function loadLedger(){
     const advanceLedgerSnap = await getDocs(
         query(
             collection(db,"advanceLedger"),
-            where("memberId","==",selectedMember.memberId)
+            wheregeaadhaarNumber","==",selectedMember.aadhaarNumber)
         )
     );
 
@@ -295,7 +295,7 @@ async function loadLedger(){
     const collectionSnap = await getDocs(
         query(
             collection(db,"collections"),
-            where("memberId","==",selectedMember.memberId)
+            where("aadhaarNumber","==",selectedMember.aadhaarNumber)
         )
     );
 
@@ -338,7 +338,7 @@ async function loadLedger(){
 const pendingSnap = await getDocs(
     query(
         collection(db,"pendingRegister"),
-        where("memberId","==",selectedMember.memberId)
+        where("aadhaarNumber","==",selectedMember.aadhaarNumber)
     )
 );
 
