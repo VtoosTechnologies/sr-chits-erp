@@ -668,6 +668,13 @@ return;
 
 let balanceAmount = received;
   //----------------------------------
+// Transaction Number
+//----------------------------------
+
+const transactionNo =
+"COL-" +
+Date.now();
+  //----------------------------------
 // Load Open Advances
 //----------------------------------
 
@@ -741,6 +748,8 @@ await addDoc(
         paymentMode: paymentMode.value,
 
         remarks: remarks.value.trim(),
+      transactionNo:
+transactionNo,
 
         createdAt: serverTimestamp()
 
@@ -925,7 +934,7 @@ paymentMode.value,
 
 remarks:
 remarks.value.trim(),
-
+transactionNo: transactionNo,
 createdAt:
 serverTimestamp()
 
@@ -1025,7 +1034,8 @@ entry.paymentMode,
 
 remarks:
 entry.remarks,
-
+transactionNo:
+entry.transactionNo,
 createdAt:
 serverTimestamp()
 
@@ -1056,6 +1066,8 @@ await addDoc(
         paymentMode: entry.paymentMode,
 
         remarks: entry.remarks,
+      transactionNo:
+entry.transactionNo,
 
         createdAt: serverTimestamp()
 
