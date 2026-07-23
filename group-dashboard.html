@@ -1,1 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Group Collection Dashboard</title>
+
+<link rel="stylesheet" href="css/group-dashboard.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2><i class="fas fa-users"></i> Group Collection Dashboard</h2>
+
+<p class="subtitle">
+View Group Collection Status & Pending Details
+</p>
+
+<!-- ==========================
+Group Selection
+=========================== -->
+
+<div class="search-card">
+
+<div class="form-group">
+
+<label>Select Group</label>
+
+<select id="groupSelect">
+
+<option value="">
+Select Group
+</option>
+
+</select>
+
+</div>
+
+<button id="loadDashboard">
+
+<i class="fas fa-search"></i>
+
+Load Dashboard
+
+</button>
+
+</div>
+
+<!-- ==========================
+Group Summary
+=========================== -->
+
+<div class="summary">
+
+<div class="summary-card">
+<h4>Total Members</h4>
+<h2 id="totalMembers">0</h2>
+</div>
+
+<div class="summary-card">
+<h4>Monthly Target</h4>
+<h2 id="monthlyTarget">₹0</h2>
+</div>
+
+<div class="summary-card">
+<h4>Amount Received</h4>
+<h2 id="totalReceived">₹0</h2>
+</div>
+
+<div class="summary-card">
+<h4>Pending Amount</h4>
+<h2 id="totalPending">₹0</h2>
+</div>
+
+<div class="summary-card">
+<h4>Paid Members</h4>
+<h2 id="paidMembers">0</h2>
+</div>
+
+<div class="summary-card">
+<h4>Partial Members</h4>
+<h2 id="partialMembers">0</h2>
+</div>
+
+<div class="summary-card">
+<h4>Pending Members</h4>
+<h2 id="pendingMembers">0</h2>
+</div>
+
+<div class="summary-card">
+<h4>Auction Day</h4>
+<h2 id="auctionDay">-</h2>
+</div>
+
+</div>
+
+<!-- ==========================
+Member Collection Status
+=========================== -->
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>S.No</th>
+
+<th>Member Code</th>
+
+<th>Member Name</th>
+
+<th>Monthly Due</th>
+
+<th>Received</th>
+
+<th>Pending</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="dashboardBody">
+
+<tr>
+
+<td colspan="7">
+
+Select a Group to View Dashboard
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script type="module" src="js/group-dashboard.js"></script>
+
+</body>
+
+</html>
