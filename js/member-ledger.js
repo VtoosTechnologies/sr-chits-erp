@@ -254,11 +254,11 @@ async function loadLedger(){
     //--------------------------------------------------
 
     const advanceLedgerSnap = await getDocs(
-        query(
-            collection(db,"advanceLedger"),
-            wheregeaadhaarNumber","==",selectedMember.aadhaarNumber)
-        )
-    );
+    query(
+        collection(db, "advanceLedger"),
+        where("aadhaarNumber", "==", selectedMember.aadhaarNumber)
+    )
+);
 
     advanceLedgerSnap.forEach(doc=>{
 
