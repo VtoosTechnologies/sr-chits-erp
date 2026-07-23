@@ -150,3 +150,235 @@ monthlyTarget.textContent =
 calculateDashboard(group, members, monthlyDue);
 
 }
+//==================================================
+// Part 3A
+// Dashboard Calculation
+//==================================================
+
+async function calculateDashboard(
+group,
+members,
+monthlyDue
+){
+
+let totalReceivedAmount = 0;
+let totalPendingAmount = 0;
+
+let paidCount = 0;
+let partialCount = 0;
+let pendingCount = 0;
+
+dashboardBody.innerHTML = "";
+
+const collectionSnapshot =
+await getDocs(
+query(
+collection(db,"collections"),
+where("groupCode","==",group.groupCode)
+)
+);
+
+const pendingSnapshot =
+await getDocs(
+query(
+collection(db,"pendingRegister"),
+where("groupCode","==",group.groupCode)
+)
+);
+
+//----------------------------------
+// Total Collection
+//----------------------------------
+
+collectionSnapshot.forEach(doc=>{
+
+const data = doc.data();
+
+totalReceivedAmount +=
+Number(
+data.receivedAmount || 0
+);
+
+});
+
+//----------------------------------
+// Member Status
+//----------------------------------
+
+const memberStatus = {};
+
+pendingSnapshot.forEach(doc=>{
+
+const data = doc.data();
+
+const key =
+data.aadhaarNumber;
+
+if(!memberStatus[key]){
+
+memberStatus[key]={
+
+pending:0,
+
+status:"PAID"
+
+};
+
+}
+
+memberStatus[key].pending +=
+Number(
+data.pendingAmount || 0
+);
+
+if(data.status==="PENDING"){
+
+memberStatus[key].status="PENDING";
+
+}
+
+if(data.status==="PARTIAL"){
+
+memberStatus[key].status="PARTIAL";
+
+}
+
+});
+
+members.forEach(member=>{
+
+const status =
+memberStatus[
+member.aadhaarNumber
+];
+
+if(!status){
+
+paidCount++;
+
+return;
+
+}
+
+totalPendingAmount +=
+status.pending;
+
+if(status.status==="PAID"){
+
+paidCount++;
+
+}
+
+else if(
+status.status==="PARTIAL"
+){
+
+partialCount++;
+
+}
+
+else{
+
+pendingCount++;
+
+}
+
+});
+
+//----------------------------------
+// Summary Cards
+//----------------------------------
+
+totalReceived.textContent =
+"₹"+
+totalReceivedAmount.toLocaleString("en-IN");
+
+totalPending.textContent =
+"₹"+
+totalPendingAmount.toLocaleString("en-IN");
+
+paidMembers.textContent =
+paidCount;
+
+partialMembers.textContent =
+partialCount;
+
+pendingMembers.textContent =
+pendingCount;
+
+// Continue Part 3B
+
+renderMembersTable(
+members,
+memberStatus,
+monthlyDue
+);
+
+}
+//==================================================
+// Part 3B
+// Render Members Table
+//==================================================
+
+function renderMembersTable(
+members,
+memberStatus,
+monthlyDue
+){
+
+dashboardBody.innerHTML = "";
+
+members.forEach((member,index)=>{
+
+const statusData =
+memberStatus[member.aadhaarNumber] || {
+pending:0,
+status:"PAID"
+};
+
+const pending =
+Number(statusData.pending || 0);
+
+const received =
+monthlyDue - pending;
+
+let statusText = "🟢 Paid";
+let statusClass = "paid";
+
+if(statusData.status==="PARTIAL"){
+statusText = "🟡 Partial";
+statusClass = "partial";
+}
+
+if(statusData.status==="PENDING"){
+statusText = "🔴 Pending";
+statusClass = "pending";
+}
+
+dashboardBody.innerHTML += `
+
+<tr>
+
+<td>${index+1}</td>
+
+<td>${member.memberCode}</td>
+
+<td>${member.memberName}</td>
+
+<td>₹${monthlyDue.toLocaleString("en-IN")}</td>
+
+<td>₹${received.toLocaleString("en-IN")}</td>
+
+<td>₹${pending.toLocaleString("en-IN")}</td>
+
+<td class="${statusClass}">
+${statusText}
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
