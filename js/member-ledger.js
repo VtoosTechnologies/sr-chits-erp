@@ -137,7 +137,7 @@ alert("Members Found : " + list.length);
     }
 
     memberList.style.display="block";
-
+memberList.style.border = "2px solid red";
     list.forEach(member=>{
 
         const div=document.createElement("div");
