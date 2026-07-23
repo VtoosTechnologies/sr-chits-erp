@@ -75,56 +75,50 @@ memberList.style.display="none";
 // Live Search
 //==================================================
 
-searchMember.addEventListener(
-"input",
-async ()=>{
+searchMember.addEventListener("input", async () => {
 
-const keyword =
-searchMember.value.trim().toLowerCase();
+    try {
 
-memberList.innerHTML="";
-memberList.style.display="none";
+        const keyword = searchMember.value.trim().toLowerCase();
 
-if(keyword.length<2){
-return;
-}
+        memberList.innerHTML = "";
+        memberList.style.display = "none";
 
-const snap =
-await getDocs(
-collection(db,"members")
-);
-const results=[];
+        if (keyword.length < 2) return;
 
-snap.forEach(doc=>{
+        const snapshot = await getDocs(collection(db, "members"));
 
-const data=doc.data();
+        const results = [];
 
-const name=
-(data.memberName||"").toLowerCase();
+        snapshot.forEach(doc => {
 
-const mobile=
-(data.mobileNumber||"").toLowerCase();
+            const data = doc.data();
 
-if(
+            const name = (data.memberName || "").toLowerCase();
+            const mobile = (data.mobileNumber || "").toLowerCase();
 
-name.includes(keyword) ||
+            if (
+                name.includes(keyword) ||
+                mobile.includes(keyword)
+            ) {
 
-mobile.includes(keyword)
+                results.push({
+                    id: doc.id,
+                    ...data
+                });
 
-){
+            }
 
-results.push({
+        });
 
-id:doc.id,
-...data
+        renderMemberList(results);
 
-});
+    } catch (error) {
 
-}
+        console.error(error);
+        alert(error.message);
 
-});
-
-renderMemberList(results);
+    }
 
 });
 //==================================================
