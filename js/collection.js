@@ -697,7 +697,52 @@ alert(
     "Open Advances Found : " +
     openAdvances.length
 );
+//----------------------------------
+// Advance FIFO Adjustment
+//----------------------------------
 
+for (const advance of openAdvances) {
+
+    if (balanceAmount <= 0) {
+        break;
+    }
+
+    const currentBalance =
+        Number(advance.balanceAmount || 0);
+
+    if (currentBalance <= 0) {
+        continue;
+    }
+
+    const adjustAmount =
+        Math.min(balanceAmount, currentBalance);
+
+    const newBalance =
+        currentBalance - adjustAmount;
+
+    const newPaid =
+        Number(advance.paidAmount || 0) + adjustAmount;
+
+    await updateDoc(
+        doc(db, "advances", advance.id),
+        {
+            balanceAmount: newBalance,
+            paidAmount: newPaid,
+            status: newBalance === 0 ? "Closed" : "Open",
+            updatedAt: serverTimestamp()
+        }
+    );
+
+    balanceAmount -= adjustAmount;
+
+    alert(
+        "Advance Adjusted : ₹" +
+        adjustAmount +
+        "\nBalance : ₹" +
+        newBalance
+    );
+
+}
 const collectionEntries = [];
 
 const updatedPending = [];
