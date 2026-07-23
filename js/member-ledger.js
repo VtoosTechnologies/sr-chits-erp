@@ -339,26 +339,44 @@ async function loadLedger(){
         });
 
     });
+//--------------------------------------------------
+// 4. Installment Due (Debit)
+//--------------------------------------------------
 
-    //--------------------------------------------------
-    // 4. Outstanding Pending
-    //--------------------------------------------------
+const pendingSnap = await getDocs(
+    query(
+        collection(db,"pendingRegister"),
+        where("memberId","==",selectedMember.memberId)
+    )
+);
 
-    const pendingSnap = await getDocs(
-        query(
-            collection(db,"pendingRegister"),
-            where("memberId","==",selectedMember.memberId)
-        )
-    );
+pendingSnap.forEach(doc=>{
 
-    pendingSnap.forEach(doc=>{
+    const data = doc.data();
 
-        const data = doc.data();
+    const amount =
+        Number(data.pendingAmount || 0);
 
-        outstandingTotal +=
-            Number(data.pendingAmount || 0);
+    debitTotal += amount;
+
+    ledger.push({
+
+        date:
+            data.createdAt?.toDate?.() ||
+            new Date(),
+
+        type:"Installment Due",
+
+        group:
+            data.groupCode || "-",
+
+        debit:amount,
+
+        credit:0
 
     });
+
+});
 
     //--------------------------------------------------
     // Sort Ledger
@@ -366,11 +384,14 @@ async function loadLedger(){
 
     ledger.sort((a,b)=>a.date-b.date);
 
-    renderLedger(
-        debitTotal,
-        creditTotal,
-        outstandingTotal
-    );
+   const outstandingTotal =
+    debitTotal - creditTotal;
+
+renderLedger(
+    debitTotal,
+    creditTotal,
+    outstandingTotal
+); 
 
 }
 //==================================================
