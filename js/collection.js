@@ -265,9 +265,9 @@ const q=query(
 collection(db,"pendingRegister"),
 
 where(
-"memberId",
+"aadhaarNumber",
 "==",
-selectedMember.memberId
+selectedMember.aadharNumber
 )
 
 );
@@ -601,11 +601,11 @@ remarks.value="";
 // PART 4A
 // Load Open Advances (FIFO)
 //==================================================
-async function loadOpenAdvances(memberId){
+async function loadOpenAdvances(aadhaarNumber){
 
     const q = query(
         collection(db, "advances"),
-        where("memberId", "==", memberId),
+        where("aadhaarNumber", "==", aadhaarNumber),
         where("status", "==", "Open")
     );
 
@@ -679,7 +679,7 @@ Date.now();
 //----------------------------------
 
 const openAdvances = await loadOpenAdvances(
-    selectedMember.memberId
+    selectedMember.aadhaarNumber
 );
 
 console.log(openAdvances);
@@ -735,7 +735,7 @@ await addDoc(
 
         advanceNo: advance.advanceNo || "",
 
-        memberId: selectedMember.memberId,
+        aadhaarNumber: selectedMember.aadhaarNumber,
 
         memberCode: selectedMember.memberCode,
 
