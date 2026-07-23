@@ -142,7 +142,6 @@ const keyword=
 searchMember.value.trim().toLowerCase();
 
 memberList.innerHTML="";
-
 memberList.style.display="none";
 
 if(keyword.length<2){
@@ -150,6 +149,8 @@ if(keyword.length<2){
 return;
 
 }
+
+try{
 
 const snapshot=
 await getDocs(
@@ -162,9 +163,6 @@ snapshot.forEach(doc=>{
 
 const data=doc.data();
 
-const code=
-(data.memberCode||"").toLowerCase();
-
 const name=
 (data.memberName||"").toLowerCase();
 
@@ -172,8 +170,6 @@ const mobile=
 (data.mobileNumber||"").toLowerCase();
 
 if(
-
-code.includes(keyword) ||
 
 name.includes(keyword) ||
 
@@ -194,6 +190,13 @@ id:doc.id,
 });
 
 renderMemberList(results);
+
+}
+catch(error){
+
+console.error(error);
+
+}
 
 });
 
@@ -224,7 +227,7 @@ div.className="search-item";
 
 div.innerHTML=`
 <strong>${member.memberName}</strong><br>
-<small>${member.mobileNumber || "-"}</small>
+<small>${member.memberCode}</small>
 `;
 
 div.onclick=()=>{
@@ -244,38 +247,37 @@ memberList.appendChild(div);
 //==================================================
 async function selectMember(member){
 
-    selectedMember = member;
+selectedMember = member;
 
-    searchMember.value = member.memberName;
+searchMember.value = member.memberName;
 
-    memberList.style.display = "none";
-    memberList.innerHTML = "";
+memberList.style.display = "none";
+memberList.innerHTML = "";
 
-    searchMember.blur();
+searchMember.blur();
 
-    selectedMemberCard.style.display = "block";
+selectedMemberCard.style.display = "block";
 
-    memberCode.textContent =
-        member.memberCode || "-";
+memberCode.textContent =
+member.memberCode || "-";
 
-    memberName.textContent =
-        member.memberName || "-";
+memberName.textContent =
+member.memberName || "-";
 
-    memberMobile.textContent =
-        member.mobileNumber || "-";
+memberMobile.textContent =
+member.mobileNumber || "-";
 
-    ledgerBody.innerHTML = `
-        <tr>
-            <td colspan="6">
-                Loading Ledger...
-            </td>
-        </tr>
-    `;
+ledgerBody.innerHTML = `
+<tr>
+<td colspan="6">
+Loading Ledger...
+</td>
+</tr>
+`;
 
-    await loadLedger();
+await loadLedger();
 
 }
-
 //==================================================
 // Save Advance
 // Part 3B
