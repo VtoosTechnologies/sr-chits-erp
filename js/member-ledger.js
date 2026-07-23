@@ -111,8 +111,19 @@ if (
             }
 
         });
+        const uniqueMembers = {};
 
-        renderMemberList(results);
+results.forEach(member => {
+
+    const key = member.aadhaarNumber;
+
+    if (!uniqueMembers[key]) {
+        uniqueMembers[key] = member;
+    }
+
+});
+
+renderMemberList(Object.values(uniqueMembers));
 
     } catch (error) {
 
