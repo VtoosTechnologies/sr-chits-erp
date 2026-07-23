@@ -277,12 +277,12 @@ async function loadLedger() {
         collectionRecords.push(data);
 
         ledger.push({
-            date: data.createdAt?.toDate?.() || new Date(),
-            type: "Collection",
-            group: data.groupCode || "-",
-            debit: amount,
-            credit: 0
-        });
+    date: ...,
+    type: "Collection",
+    group: data.groupCode || "-",
+    debit: 0,
+    credit: amount
+});
 
     });
 
