@@ -241,7 +241,6 @@ member.memberName;
 
 memberMobile.textContent=
 member.mobileNumber || "-";
-alert("Members memberId : " + member.memberId);
 await loadPendingDetails();
 
 }
@@ -267,7 +266,7 @@ collection(db,"pendingRegister"),
 where(
 "aadhaarNumber",
 "==",
-selectedMember.aadharNumber
+selectedMember.aadhaarNumber
 )
 
 );
