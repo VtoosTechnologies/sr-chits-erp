@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
@@ -18,13 +19,91 @@ href="css/advance-register.css">
 
 <div class="container">
 
-<h2>Advance Register</h2>
+<h2>💰 Advance Register</h2>
+
+<!-- Search Member -->
 
 <div class="card">
 
-<div class="row">
+<h3>Search Member</h3>
 
-<div class="form-group">
+<input
+type="text"
+id="searchMember"
+placeholder="Search Member Code / Name / Mobile">
+
+<div id="memberList"></div>
+
+</div>
+
+<!-- Selected Member -->
+
+<div
+class="card"
+id="memberCard"
+style="display:none;">
+
+<h3>Member Details</h3>
+
+<div class="grid">
+
+<div>
+
+<label>Member Code</label>
+
+<input
+type="text"
+id="memberCode"
+readonly>
+
+</div>
+
+<div>
+
+<label>Member Name</label>
+
+<input
+type="text"
+id="memberName"
+readonly>
+
+</div>
+
+<div>
+
+<label>Mobile Number</label>
+
+<input
+type="text"
+id="mobileNumber"
+readonly>
+
+</div>
+
+<div>
+
+<label>Address</label>
+
+<input
+type="text"
+id="address"
+readonly>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Advance Details -->
+
+<div class="card">
+
+<h3>Advance Details</h3>
+
+<div class="grid">
+
+<div>
 
 <label>Advance No</label>
 
@@ -35,7 +114,7 @@ readonly>
 
 </div>
 
-<div class="form-group">
+<div>
 
 <label>Advance Date</label>
 
@@ -45,75 +124,18 @@ id="advanceDate">
 
 </div>
 
-</div>
-
-<div class="row">
-
-<div class="form-group">
-
-<label>Customer Code</label>
-
-<input
-type="text"
-id="customerCode"
-placeholder="Customer Code">
-
-</div>
-
-<div class="form-group">
-
-<label>Customer Name</label>
-
-<input
-type="text"
-id="customerName"
-placeholder="Customer Name">
-
-</div>
-
-</div>
-
-<div class="row">
-
-<div class="form-group">
-
-<label>Mobile Number</label>
-
-<input
-type="text"
-id="mobileNumber"
-maxlength="10"
-placeholder="Mobile Number">
-
-</div>
-
-<div class="form-group">
-
-<label>Address</label>
-
-<input
-type="text"
-id="address"
-placeholder="Address">
-
-</div>
-
-</div>
-
-<div class="row">
-
-<div class="form-group">
+<div>
 
 <label>Advance Amount</label>
 
 <input
 type="number"
 id="advanceAmount"
-placeholder="0">
+placeholder="Enter Amount">
 
 </div>
 
-<div class="form-group">
+<div>
 
 <label>Due Date</label>
 
@@ -123,27 +145,25 @@ id="dueDate">
 
 </div>
 
-</div>
-
-<div class="row">
-
-<div class="form-group">
+<div>
 
 <label>Payment Mode</label>
 
 <select id="paymentMode">
 
-<option value="Cash">Cash</option>
+<option>Cash</option>
 
-<option value="UPI">UPI</option>
+<option>UPI</option>
 
-<option value="Bank">Bank</option>
+<option>Bank</option>
+
+<option>Cheque</option>
 
 </select>
 
 </div>
 
-<div class="form-group">
+<div>
 
 <label>Remarks</label>
 
@@ -156,13 +176,25 @@ placeholder="Remarks">
 
 </div>
 
-<div class="button-area">
+</div>
 
-<button id="saveAdvance">
-Save Advance
+<!-- Buttons -->
+
+<div class="buttons">
+
+<button
+id="saveAdvance">
+
+💾 Save Advance
+
 </button>
 
-</div>
+<button
+onclick="history.back()">
+
+⬅ Back
+
+</button>
 
 </div>
 
@@ -170,8 +202,8 @@ Save Advance
 
 <script
 type="module"
-src="js/advance-register.js">
-</script>
+src="js/advance-register.js"></script>
 
 </body>
+
 </html>
