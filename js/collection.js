@@ -598,6 +598,38 @@ remarks.value="";
 
 }
 //==================================================
+// PART 4A
+// Load Open Advances (FIFO)
+//==================================================
+
+async function loadOpenAdvances(memberId){
+
+    const q = query(
+        collection(db, "advances"),
+        where("memberId", "==", memberId),
+        where("status", "==", "Open"),
+        orderBy("createdAt", "asc")
+    );
+
+    const snapshot = await getDocs(q);
+
+    const advances = [];
+
+    snapshot.forEach(doc => {
+
+        advances.push({
+            id: doc.id,
+            ...doc.data()
+        });
+
+    });
+
+    console.log("Open Advances :", advances);
+
+    return advances;
+
+}
+//==================================================
 // Start Collection Process
 //==================================================
 
