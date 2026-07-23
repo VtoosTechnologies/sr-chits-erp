@@ -224,7 +224,7 @@ div.className="search-item";
 
 div.innerHTML=`
 <strong>${member.memberName}</strong><br>
-<small>${member.memberCode}</small>
+<small>${member.mobileNumber || "-"}</small>
 `;
 
 div.onclick=()=>{
@@ -242,33 +242,40 @@ memberList.appendChild(div);
 //==================================================
 // Select Member
 //==================================================
+async function selectMember(member){
 
-function selectMember(member){
+    selectedMember = member;
 
-selectedMember=member;
+    searchMember.value = member.memberName;
 
-searchMember.value=
-member.memberName;
+    memberList.style.display = "none";
+    memberList.innerHTML = "";
 
-memberList.style.display="none";
-memberList.innerHTML = "";
+    searchMember.blur();
 
-searchMember.blur();
-memberCard.style.display="block";
+    selectedMemberCard.style.display = "block";
 
-memberCode.value=
-member.memberCode || "";
+    memberCode.textContent =
+        member.memberCode || "-";
 
-memberName.value=
-member.memberName || "";
+    memberName.textContent =
+        member.memberName || "-";
 
-mobileNumber.value=
-member.mobileNumber || "";
+    memberMobile.textContent =
+        member.mobileNumber || "-";
 
-address.value=
-member.address || "";
+    ledgerBody.innerHTML = `
+        <tr>
+            <td colspan="6">
+                Loading Ledger...
+            </td>
+        </tr>
+    `;
+
+    await loadLedger();
 
 }
+
 //==================================================
 // Save Advance
 // Part 3B
