@@ -1,43 +1,49 @@
 //==================================================
 // SR Chits ERP
 // Advance Register
-// Part - 3A
+// Part 3A
 //==================================================
 
 import { db } from "./firebase.js";
 
 import {
-
 collection,
-addDoc,
 getDocs,
 query,
 orderBy,
 limit
-
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
 // Elements
 //==================================================
 
-const advanceNo =
-document.getElementById("advanceNo");
+const searchMember =
+document.getElementById("searchMember");
 
-const advanceDate =
-document.getElementById("advanceDate");
+const memberList =
+document.getElementById("memberList");
 
-const customerCode =
-document.getElementById("customerCode");
+const memberCard =
+document.getElementById("memberCard");
 
-const customerName =
-document.getElementById("customerName");
+const memberCode =
+document.getElementById("memberCode");
+
+const memberName =
+document.getElementById("memberName");
 
 const mobileNumber =
 document.getElementById("mobileNumber");
 
 const address =
 document.getElementById("address");
+
+const advanceNo =
+document.getElementById("advanceNo");
+
+const advanceDate =
+document.getElementById("advanceDate");
 
 const advanceAmount =
 document.getElementById("advanceAmount");
@@ -55,21 +61,30 @@ const saveAdvance =
 document.getElementById("saveAdvance");
 
 //==================================================
+// Variables
+//==================================================
+
+let selectedMember = null;
+
+//==================================================
 // Initial Load
 //==================================================
 
 window.addEventListener(
 "DOMContentLoaded",
-async ()=>{
+async()=>{
 
-const today =
+memberCard.style.display="none";
+
+memberList.style.display="none";
+
+advanceDate.value =
 new Date().toISOString().split("T")[0];
-
-advanceDate.value = today;
 
 await generateAdvanceNumber();
 
 });
+
 //==================================================
 // Generate Advance Number
 //==================================================
@@ -78,214 +93,176 @@ async function generateAdvanceNumber(){
 
 try{
 
-const q = query(
+const q=query(
 collection(db,"advances"),
 orderBy("createdAt","desc"),
 limit(1)
 );
 
-const snapshot =
+const snapshot=
 await getDocs(q);
 
-let nextNumber = 1;
+let nextNumber=1;
 
 if(!snapshot.empty){
 
-const lastAdvanceNo =
+const lastNo=
 snapshot.docs[0].data().advanceNo || "ADV000000";
 
-const number =
-parseInt(
-lastAdvanceNo.replace("ADV","")
-);
-
-nextNumber = number + 1;
+nextNumber=
+parseInt(lastNo.replace("ADV",""))+1;
 
 }
 
-advanceNo.value =
-"ADV" +
-String(nextNumber)
-.padStart(6,"0");
+advanceNo.value=
+"ADV"+
+String(nextNumber).padStart(6,"0");
 
 }
 catch(error){
 
 console.error(error);
 
-advanceNo.value =
-"ADV000001";
+advanceNo.value="ADV000001";
 
 }
 
 }
+
 //==================================================
-// Save Advance
+// Live Member Search
 //==================================================
 
-saveAdvance.addEventListener("click", async ()=>{
-  console.log("Save Button Clicked");
-try{
+searchMember.addEventListener(
+"input",
+async()=>{
 
-if(customerName.value.trim()==""){
+const keyword=
+searchMember.value.trim().toLowerCase();
 
-alert("Enter Customer Name");
+memberList.innerHTML="";
+
+memberList.style.display="none";
+
+if(keyword.length<2){
+
 return;
 
 }
 
-if(advanceAmount.value=="" ||
-Number(advanceAmount.value)<=0){
-
-alert("Enter Advance Amount");
-return;
-
-}
-
-//--------------------------------------
-// Save Advance Master
-//--------------------------------------
-
-const docRef =
-await addDoc(
-collection(db,"advances"),
-{
-
-advanceNo:
-advanceNo.value,
-memberId: customerCode.value.trim(),
-
-memberCode: customerCode.value.trim(),
-
-customerCode: customerCode.value.trim(),
-
-memberName: customerName.value.trim(),
-
-customerName: customerName.value.trim(),
-
-mobileNumber:
-mobileNumber.value.trim(),
-
-address:
-address.value.trim(),
-
-advanceAmount:
-Number(advanceAmount.value),
-
-interest:0,
-
-advanceDate:
-advanceDate.value,
-
-dueDate:
-dueDate.value,
-
-paidAmount:0,
-
-balanceAmount:
-Number(advanceAmount.value),
-
-status:"Open",
-
-remarks:
-remarks.value.trim(),
-
-createdAt:
-new Date()
-
-}
+const snapshot=
+await getDocs(
+collection(db,"members")
 );
 
-//--------------------------------------
-// Save Advance Ledger
-//--------------------------------------
+const results=[];
 
-await addDoc(
-collection(db,"advanceLedger"),
-{
+snapshot.forEach(doc=>{
 
-transactionNo:
-"ADL"+Date.now(),
+const data=doc.data();
 
-advanceId:
-docRef.id,
+const code=
+(data.memberCode||"").toLowerCase();
 
-advanceNo:
-advanceNo.value,
+const name=
+(data.memberName||"").toLowerCase();
 
-memberId: customerCode.value.trim(),
+const mobile=
+(data.mobileNumber||"").toLowerCase();
 
-memberCode: customerCode.value.trim(),
+if(
 
-customerCode: customerCode.value.trim(),
+code.includes(keyword) ||
 
-memberName: customerName.value.trim(),
+name.includes(keyword) ||
 
-customerName: customerName.value.trim(),
+mobile.includes(keyword)
 
-mobileNumber:
-mobileNumber.value.trim(),
+){
 
-transactionDate:
-advanceDate.value,
+results.push({
 
-transactionType:
-"Advance Given",
+id:doc.id,
 
-debit:
-Number(advanceAmount.value),
+...data
 
-credit:0,
-
-balance:
-Number(advanceAmount.value),
-
-paymentMode:
-paymentMode.value,
-
-remarks:
-remarks.value.trim(),
-
-createdAt:
-new Date()
-
-}
-);
-
-alert("Advance Saved Successfully");
-
-//--------------------------------------
-// Clear Form
-//--------------------------------------
-
-customerCode.value="";
-
-customerName.value="";
-
-mobileNumber.value="";
-
-address.value="";
-
-advanceAmount.value="";
-
-dueDate.value="";
-
-remarks.value="";
-
-paymentMode.value="Cash";
-
-advanceDate.value=
-new Date().toISOString().split("T")[0];
-
-await generateAdvanceNumber();
-
-}
-catch(error){
-
-console.error(error);
-
-alert("Error while saving Advance.");
+});
 
 }
 
 });
+
+renderMemberList(results);
+
+});
+
+//==================================================
+// Render Member List
+//==================================================
+
+function renderMemberList(list){
+
+memberList.innerHTML="";
+
+if(list.length===0){
+
+memberList.style.display="none";
+
+return;
+
+}
+
+memberList.style.display="block";
+
+list.forEach(member=>{
+
+const div=
+document.createElement("div");
+
+div.className="search-item";
+
+div.innerHTML=`
+<strong>${member.memberName}</strong><br>
+<small>${member.memberCode}</small>
+`;
+
+div.onclick=()=>{
+
+selectMember(member);
+
+};
+
+memberList.appendChild(div);
+
+});
+
+}
+
+//==================================================
+// Select Member
+//==================================================
+
+function selectMember(member){
+
+selectedMember=member;
+
+searchMember.value=
+member.memberName;
+
+memberList.style.display="none";
+
+memberCard.style.display="block";
+
+memberCode.value=
+member.memberCode || "";
+
+memberName.value=
+member.memberName || "";
+
+mobileNumber.value=
+member.mobileNumber || "";
+
+address.value=
+member.address || "";
+
+}
