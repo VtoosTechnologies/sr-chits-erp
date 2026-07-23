@@ -189,7 +189,8 @@ function renderMemberList(list){
 
     list.forEach(data => {
 
-        const key = data.memberId || data.mobileNumber;
+        const key =
+data.aadhaarNumber || data.mobileNumber;
 
         if(!uniqueMembers[key]){
             uniqueMembers[key] = data;
@@ -928,7 +929,7 @@ pending.memberName
 
 collectionEntries.push({
 
-aashaarNumber:
+aadhaarNumber:
 pending.aadhaarNumber,
 
 memberCode:
