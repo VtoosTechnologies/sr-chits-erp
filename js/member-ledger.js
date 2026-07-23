@@ -126,7 +126,7 @@ searchMember.addEventListener("input", async () => {
 //==================================================
 
 function renderMemberList(list){
-
+alert("Members Found : " + list.length);
     memberList.innerHTML="";
 
     if(list.length===0){
