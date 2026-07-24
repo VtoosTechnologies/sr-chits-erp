@@ -3,7 +3,7 @@
 // Part 1 - Imports & Load Groups
 //==================================================
 
-import { db } from "../firebase.js";
+import { db } from "./firebase.js";
 
 import {
 collection,
