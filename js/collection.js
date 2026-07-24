@@ -383,7 +383,9 @@ function renderGroupCards(){
 
     const groups = {};
 
-    pendingRecords.forEach(record => {
+    pendingRecords
+.filter(record => Number(record.pendingAmount || 0) > 0)
+.forEach(record => {
 
         if(!groups[record.groupCode]){
             groups[record.groupCode] = {
@@ -467,8 +469,10 @@ This member has no pending collections.
 return;
 
 }
-
-pendingRecords.forEach(record=>{
+const filteredRecords = pendingRecords.filter(
+record => Number(record.pendingAmount || 0) > 0
+);
+filteredRecords.forEach(record=>{
 
 const card=document.createElement("div");
 
