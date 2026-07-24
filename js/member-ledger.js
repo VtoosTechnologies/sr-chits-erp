@@ -356,8 +356,8 @@ pendingSnap.forEach(doc=>{
 
     const data = doc.data();
 
-    const amount =
-        Number(data.pendingAmount || 0);
+   const amount =
+Number(data.monthlyAmount || data.pendingAmount || 0);
 
     debitTotal += amount;
 
