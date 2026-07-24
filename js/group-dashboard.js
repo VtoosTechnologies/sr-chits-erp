@@ -229,26 +229,17 @@ where("auctionMonth","==",currentAuctionMonth)
 
 const memberPending = {};
 
-pendingSnapshot.forEach(doc=>{
+pendingSnapshot.forEach(doc => {
 
 const data = doc.data();
 
 const key = data.aadhaarNumber;
 
-if(!memberPending[key]){
-
-memberPending[key]={
-paid:0,
-pending:0
+// Oru member-ku oru installment dhaan irukkanum
+memberPending[key] = {
+    paid: Number(data.paidAmount || 0),
+    pending: Number(data.pendingAmount || 0)
 };
-
-}
-
-memberPending[key].paid +=
-Number(data.paidAmount || 0);
-
-memberPending[key].pending +=
-Number(data.pendingAmount || 0);
 
 });
 //----------------------------------
@@ -268,8 +259,7 @@ pending:monthlyDue
 const received =
 Number(memberData.paid);
 
-const pending =
-Number(memberData.pending);
+const pending = Math.max(monthlyDue - received, 0);
 console.log("Member :", member.memberName);
 console.log("Member Data :", memberData);
 totalReceivedAmount += received;
