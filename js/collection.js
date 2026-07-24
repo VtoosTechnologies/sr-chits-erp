@@ -440,7 +440,6 @@ console.count("renderGroupCards Called");
 
 }
 function renderPendingCards(){
-function renderPendingCards(){
 
 console.count("renderPendingCards Called");
 
