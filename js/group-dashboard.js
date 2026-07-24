@@ -270,7 +270,8 @@ Number(memberData.paid);
 
 const pending =
 Number(memberData.pending);
-
+console.log("Member :", member.memberName);
+console.log("Member Data :", memberData);
 totalReceivedAmount += received;
 totalPendingAmount += pending;
 
