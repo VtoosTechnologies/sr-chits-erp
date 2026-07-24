@@ -140,10 +140,48 @@ totalMembers.textContent = members.length;
 
 // Monthly Target
 
-const monthlyDue = Number(group.monthlyAmount || group.installmentAmount || 0);
+//----------------------------
+// Get Latest Auction Monthly Amount
+//----------------------------
+
+let monthlyDue = 0;
+
+const auctionSnapshot = await getDocs(
+query(
+collection(db, "auctions"),
+where("groupId", "==", groupId)
+)
+);
+
+if (!auctionSnapshot.empty) {
+
+let latestMonth = 0;
+let latestAuction = null;
+
+auctionSnapshot.forEach(doc => {
+
+const auction = doc.data();
+
+if ((auction.month || 0) > latestMonth) {
+
+latestMonth = auction.month;
+latestAuction = auction;
+
+}
+
+});
+
+if (latestAuction) {
+
+monthlyDue =
+Number(latestAuction.monthlyAmount || 0);
+
+}
+
+}
 
 monthlyTarget.textContent =
-"₹" + (monthlyDue * members.length).toLocaleString();
+"₹" + (monthlyDue * members.length).toLocaleString("en-IN");
 
 // Continue to Summary Calculation
 
