@@ -274,15 +274,8 @@ selectedMember.aadhaarNumber
 
 const snapshot=
 await getDocs(q);
-  alert("Pending Documents : " + snapshot.size);
   console.log("Selected Member Code:", selectedMember.memberCode);
 console.log("Documents Found:", snapshot.size);
-
-alert(
-"Member : " + selectedMember.memberCode +
-"\nDocuments : " + snapshot.size
-);
-
 let total=0;
 
 snapshot.forEach(doc=>{
