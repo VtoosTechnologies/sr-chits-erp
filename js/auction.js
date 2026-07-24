@@ -80,6 +80,11 @@ document.getElementById("chitValue");
 
 const thallu =
 document.getElementById("thallu");
+const commissionPercent =
+document.getElementById("commissionPercent");
+
+const commissionAmount =
+document.getElementById("commissionAmount");
 
 const kasar =
 document.getElementById("kasar");
@@ -524,7 +529,10 @@ thallu.addEventListener(
     "input",
     calculateAmounts
 );
-
+commissionPercent.addEventListener(
+    "input",
+    calculateAmounts
+);
 kasar.addEventListener(
     "input",
     calculateAmounts
@@ -542,6 +550,14 @@ function calculateAmounts() {
 
     const expense =
     Number(kasar.value) || 0;
+    const commission =
+Number(commissionPercent.value) || 0;
+
+const commissionValue =
+(chit * commission) / 100;
+
+commissionAmount.value =
+Math.round(commissionValue);
 
     const members =
     Number(selectedGroup.totalMembers) || 1;
@@ -549,7 +565,12 @@ function calculateAmounts() {
     // Prize Amount
 
     prizeAmount.value =
-    chit - discount - expense;
+Math.round(
+chit -
+discount -
+expense -
+commissionValue
+);
 
     // Dividend
 
