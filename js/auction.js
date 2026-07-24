@@ -834,7 +834,47 @@ for (const memberDoc of memberSnapshot.docs) {
         createdAt: serverTimestamp()
 
     });
+await addDoc(memberLedgerRef, {
 
+    ledgerId: "LED-" + Date.now() + "-" + member.memberCode,
+
+    memberId: memberDoc.id,
+
+    aadhaarNumber: member.aadhaarNumber,
+
+    memberCode: member.memberCode,
+
+    memberName: member.memberName,
+
+    groupCode: selectedGroup.groupCode,
+
+    groupName: selectedGroup.groupName,
+
+    transactionType: "INSTALLMENT_DUE",
+
+    transactionDate: serverTimestamp(),
+
+    installmentNo: currentAuctionMonth,
+
+    debit: Number(monthlyAmount.value),
+
+    credit: 0,
+
+    adjustedAmount: 0,
+
+    paymentMode: "",
+
+    receiptNo: "",
+
+    referenceNo: auctionId,
+
+    remarks: "Installment Due",
+
+    createdBy: "Admin",
+
+    createdAt: serverTimestamp()
+
+});
 }
 
 alert("Pending Register Created Successfully");
