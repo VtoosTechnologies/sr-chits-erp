@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Ledger Migration</title>
+
+<link rel="stylesheet"
+href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>
+🔄 Member Ledger Migration
+</h2>
+
+<div class="card">
+
+<p>
+This utility will migrate all existing Pending Register
+records into Member Ledger.
+</p>
+
+<p>
+Run this only once.
+</p>
+
+<button
+id="startMigration"
+class="btn btn-primary">
+
+Start Migration
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Migration Status</h3>
+
+<p>
+Total Records :
+<span id="totalRecords">0</span>
+</p>
+
+<p>
+Migrated :
+<span id="migratedRecords">0</span>
+</p>
+
+<p>
+Skipped :
+<span id="skippedRecords">0</span>
+</p>
+
+<p>
+Status :
+<span id="migrationStatus">
+
+Waiting...
+
+</span>
+</p>
+
+</div>
+
+<div
+style="margin-top:20px;">
+
+<a
+href="dashboard.html"
+class="btn">
+
+⬅ Back
+
+</a>
+
+</div>
+
+</div>
+
+<script
+type="module"
+src="ledger-migration.js">
+
+</script>
+
+</body>
+
+</html>
