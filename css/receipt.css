@@ -1,0 +1,190 @@
+/*==================================================
+SR Chits Receipt
+receipt.css
+==================================================*/
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+
+background:#f2f5fa;
+padding:30px;
+
+}
+
+.receipt-container{
+
+width:800px;
+margin:auto;
+background:#fff;
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,.15);
+
+}
+
+.receipt-header{
+
+text-align:center;
+margin-bottom:20px;
+
+}
+
+.logo{
+
+width:90px;
+height:90px;
+margin-bottom:10px;
+
+}
+
+.receipt-header h1{
+
+font-size:32px;
+color:#0d47a1;
+letter-spacing:2px;
+
+}
+
+.receipt-header h3{
+
+margin-top:5px;
+color:#444;
+font-size:16px;
+font-weight:normal;
+
+}
+
+.receipt-header p{
+
+margin-top:8px;
+font-size:14px;
+color:#777;
+
+}
+
+hr{
+
+margin:20px 0;
+border:none;
+border-top:2px solid #ddd;
+
+}
+
+.title{
+
+text-align:center;
+margin-bottom:20px;
+color:#0d47a1;
+letter-spacing:1px;
+
+}
+
+.info-table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+.info-table td{
+
+padding:12px;
+border-bottom:1px solid #ddd;
+font-size:15px;
+
+}
+
+.info-table td:first-child{
+
+width:40%;
+font-weight:bold;
+color:#444;
+
+}
+
+.info-table td:last-child{
+
+color:#0d47a1;
+font-weight:bold;
+
+}
+
+.footer{
+
+text-align:center;
+margin-top:25px;
+
+}
+
+.footer p{
+
+margin:5px 0;
+
+}
+
+.footer small{
+
+color:#777;
+
+}
+
+.button-area{
+
+margin-top:30px;
+text-align:center;
+
+}
+
+.button-area button{
+
+padding:12px 25px;
+margin:10px;
+border:none;
+border-radius:6px;
+background:#1565c0;
+color:#fff;
+cursor:pointer;
+font-size:15px;
+transition:.3s;
+
+}
+
+.button-area button:hover{
+
+background:#0d47a1;
+
+}
+
+/* Print */
+
+@media print{
+
+body{
+
+background:#fff;
+padding:0;
+
+}
+
+.receipt-container{
+
+width:100%;
+box-shadow:none;
+border:none;
+padding:0;
+
+}
+
+.button-area{
+
+display:none;
+
+}
+
+}
