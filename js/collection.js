@@ -287,7 +287,7 @@ id:doc.id,
 ...doc.data()
 
 };
-
+console.log(doc.id, data.groupCode, data.pendingAmount, data.status);
 if(
 
 data.status==="PENDING" ||
