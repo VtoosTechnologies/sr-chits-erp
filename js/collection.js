@@ -1103,21 +1103,23 @@ entry.transactionNo,
 //----------------------------------
 
 await loadPendingDetails();
-//----------------------------------
-// Remaining Amount
-//----------------------------------
 
 if(balanceAmount>0){
 
 alert(
-
 "Excess Amount : ₹"+
-
 balanceAmount.toLocaleString("en-IN")
 );
-  }else{
 
-  alert("Collection Saved Successfully.");
+}else{
+
+alert("Collection Saved Successfully.");
+
+// Open Receipt
+window.open(
+`receipt.html?transactionNo=${transactionNo}`,
+"_blank"
+);
 
 }
 // Close processCollection function
