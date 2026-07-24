@@ -26,7 +26,7 @@ const groupsRef = collection(db, "groups");
 const membersRef = collection(db, "members");
 const auctionsRef = collection(db, "auctions");
 const pendingRef = collection(db, "pendingRegister");
-
+const memberLedgerRef = collection(db, "memberLedger");
 //==================================================
 // Filter Elements
 //==================================================
@@ -813,7 +813,7 @@ for (const memberDoc of memberSnapshot.docs) {
         groupCode: selectedGroup.groupCode,
         groupName: selectedGroup.groupName,
 
-        aadhaarNumber: memberDoc.aadhaarNumber,
+        aadhaarNumber: member.aadhaarNumber,
         memberCode: member.memberCode,
         memberName: member.memberName,
         mobileNumber: member.mobileNumber,
