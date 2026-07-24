@@ -367,7 +367,7 @@ const pending =
 Number(statusData.pending || 0);
 
 const received =
-monthlyDue - pending;
+Math.max(monthlyDue - pending, 0);
 
 let statusText = "🟢 Paid";
 let statusClass = "paid";
