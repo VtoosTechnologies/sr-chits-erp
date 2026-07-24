@@ -185,7 +185,12 @@ monthlyTarget.textContent =
 
 // Continue to Summary Calculation
 
-calculateDashboard(group, members, monthlyDue);
+calculateDashboard(
+group,
+members,
+monthlyDue,
+latestMonth
+);
 
 }
 //==================================================
@@ -195,7 +200,8 @@ calculateDashboard(group, members, monthlyDue);
 async function calculateDashboard(
 group,
 members,
-monthlyDue
+monthlyDue,
+currentAuctionMonth
 ){
 
 let totalReceivedAmount = 0;
@@ -214,7 +220,8 @@ dashboardBody.innerHTML = "";
 const pendingSnapshot = await getDocs(
 query(
 collection(db,"pendingRegister"),
-where("groupCode","==",group.groupCode)
+where("groupCode","==",group.groupCode),
+where("auctionMonth","==",currentAuctionMonth)
 )
 );
 
