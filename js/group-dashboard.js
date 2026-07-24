@@ -145,7 +145,7 @@ totalMembers.textContent = members.length;
 //----------------------------
 
 let monthlyDue = 0;
-
+let latestMonth = 0;
 const auctionSnapshot = await getDocs(
 query(
 collection(db, "auctions"),
@@ -154,8 +154,6 @@ where("groupId", "==", groupId)
 );
 
 if (!auctionSnapshot.empty) {
-
-let latestMonth = 0;
 let latestAuction = null;
 
 auctionSnapshot.forEach(doc => {
