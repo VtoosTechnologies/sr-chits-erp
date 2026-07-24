@@ -213,188 +213,74 @@ async function selectMember(member){
 // Load Ledger
 // Part 3
 //==================================================
-
-async function loadLedger(){
+async function loadLedger() {
 
     ledger = [];
 
     let debitTotal = 0;
     let creditTotal = 0;
-    let outstandingTotal = 0;
 
-    //--------------------------------------------------
-    // 1. Advance Given (Debit)
-    //--------------------------------------------------
-
-    const advanceSnap = await getDocs(
+    const ledgerSnap = await getDocs(
         query(
-            collection(db,"advances"),
-            where("aadhaarNumber","==",selectedMember.aadhaarNumber)
+            collection(db, "memberLedger"),
+            where(
+                "aadhaarNumber",
+                "==",
+                selectedMember.aadhaarNumber
+            ),
+            orderBy("transactionDate")
         )
     );
 
-    advanceSnap.forEach(doc=>{
+    ledgerSnap.forEach(doc => {
 
         const data = doc.data();
 
-        const amount =
-            Number(data.advanceAmount || 0);
+        const debit =
+            Number(data.debit || 0);
 
-        debitTotal += amount;
+        const credit =
+            Number(data.credit || 0);
+
+        debitTotal += debit;
+        creditTotal += credit;
 
         ledger.push({
 
             date:
+                data.transactionDate?.toDate?.() ||
                 data.createdAt?.toDate?.() ||
                 new Date(),
 
-            type:"Advance Given",
-
-            group:
-                data.advanceNo || "Advance",
-
-            debit:amount,
-
-            credit:0
-
-        });
-
-    });
-
-    //--------------------------------------------------
-    // 2. Advance Adjustment (Credit)
-    //--------------------------------------------------
-
-    const advanceLedgerSnap = await getDocs(
-    query(
-        collection(db, "advanceLedger"),
-        where("aadhaarNumber", "==", selectedMember.aadhaarNumber)
-    )
-);
-
-    advanceLedgerSnap.forEach(doc=>{
-
-        const data = doc.data();
-
-        const amount =
-            Number(data.adjustedAmount || 0);
-
-       ledger.push({
-
-    date:
-        data.createdAt?.toDate?.() ||
-        new Date(),
-
-    type:"Advance Adjustment",
-
-    group:
-        data.advanceNo || "Advance",
-
-    debit:0,
-
-    credit:0,
-
-    adjustedAmount:amount
-
-}); 
-
-    });
-        //--------------------------------------------------
-    // 3. Collections (Credit)
-    //--------------------------------------------------
-
-    const collectionSnap = await getDocs(
-        query(
-            collection(db,"collections"),
-            where("aadhaarNumber","==",selectedMember.aadhaarNumber)
-        )
-    );
-
-    collectionSnap.forEach(doc=>{
-
-        const data = doc.data();
-
-        const amount =
-            Number(data.receivedAmount || 0);
-
-        // Advance Adjustment collection-ஐ skip
-        if(data.groupCode === "ADVANCE"){
-            return;
-        }
-
-        creditTotal += amount;
-
-        ledger.push({
-
-            date:
-                data.createdAt?.toDate?.() ||
-                new Date(),
-
-            type:"Collection",
+            type:
+                data.transactionType || "-",
 
             group:
                 data.groupCode || "-",
 
-            debit:0,
+            debit: debit,
 
-            credit:amount
+            credit: credit,
+
+            adjustedAmount:
+                Number(data.adjustedAmount || 0)
 
         });
 
     });
-//--------------------------------------------------
-// 4. Installment Due (Debit)
-//--------------------------------------------------
 
-const pendingSnap = await getDocs(
-    query(
-        collection(db,"pendingRegister"),
-        where("aadhaarNumber","==",selectedMember.aadhaarNumber)
-    )
-);
+    ledger.sort((a, b) => a.date - b.date);
 
-pendingSnap.forEach(doc=>{
+    const outstandingTotal =
+        debitTotal - creditTotal;
 
-    const data = doc.data();
+    renderLedger(
+        debitTotal,
+        creditTotal,
+        outstandingTotal
+    );
 
-   const amount =
-Number(data.monthlyAmount || data.pendingAmount || 0);
-
-    debitTotal += amount;
-
-    ledger.push({
-
-        date:
-            data.createdAt?.toDate?.() ||
-            new Date(),
-
-        type:"Installment Due",
-
-        group:
-            data.groupCode || "-",
-
-        debit:amount,
-
-        credit:0
-
-    });
-
-});
-
-    //--------------------------------------------------
-    // Sort Ledger
-    //--------------------------------------------------
-
-    ledger.sort((a,b)=>a.date-b.date);
-
-   outstandingTotal =
-    debitTotal - creditTotal;
-
-renderLedger(
-    debitTotal,
-    creditTotal,
-    outstandingTotal
-); 
+}
 
 }
 //==================================================
