@@ -192,7 +192,6 @@ calculateDashboard(group, members, monthlyDue);
 // Part 3A
 // Dashboard Calculation
 //==================================================
-
 async function calculateDashboard(
 group,
 members,
@@ -208,138 +207,123 @@ let pendingCount = 0;
 
 dashboardBody.innerHTML = "";
 
-const collectionSnapshot =
-await getDocs(
+//----------------------------------
+// Load Collections
+//----------------------------------
+
+const collectionSnapshot = await getDocs(
 query(
 collection(db,"collections"),
 where("groupCode","==",group.groupCode)
 )
 );
 
-const pendingSnapshot =
-await getDocs(
-query(
-collection(db,"pendingRegister"),
-where("groupCode","==",group.groupCode)
-)
-);
 //----------------------------------
-// Member Status
+// Member Wise Collection
 //----------------------------------
 
-const memberStatus = {};
+const memberCollections = {};
 
-pendingSnapshot.forEach(doc=>{
+collectionSnapshot.forEach(doc=>{
 
 const data = doc.data();
 
-const key =
-data.aadhaarNumber;
+const key = data.aadhaarNumber;
 
-if(!memberStatus[key]){
+if(!memberCollections[key]){
 
-memberStatus[key]={
-
-pending:0,
-
-status:"PAID"
-
-};
+memberCollections[key] = 0;
 
 }
 
-memberStatus[key].pending +=
-Number(
-data.pendingAmount || 0
-);
-
-if(data.status==="PENDING"){
-
-memberStatus[key].status="PENDING";
-
-}
-
-if(data.status==="PARTIAL"){
-
-memberStatus[key].status="PARTIAL";
-
-}
+memberCollections[key] += Number(data.receivedAmount || 0);
 
 });
 
-members.forEach(member=>{
+//----------------------------------
+// Table Data
+//----------------------------------
 
-const status =
-memberStatus[
-member.aadhaarNumber
-];
+dashboardBody.innerHTML = "";
 
-if(!status){
+members.forEach((member,index)=>{
 
-paidCount++;
+const received =
+Number(
+memberCollections[member.aadhaarNumber] || 0
+);
 
-return;
+const pending =
+Math.max(monthlyDue - received,0);
 
-}
+totalReceivedAmount += received;
+totalPendingAmount += pending;
 
-totalPendingAmount +=
-status.pending;
-  const received =
-monthlyDue - status.pending;
+let statusText = "🟢 Paid";
+let statusClass = "paid";
 
-totalReceivedAmount +=
-Math.max(received, 0);
+if(received==0){
 
-if(status.status==="PAID"){
-
-paidCount++;
-
-}
-
-else if(
-status.status==="PARTIAL"
-){
-
-partialCount++;
-
-}
-
-else{
-
+statusText="🔴 Pending";
+statusClass="pending";
 pendingCount++;
 
 }
+else if(received<monthlyDue){
+
+statusText="🟡 Partial";
+statusClass="partial";
+partialCount++;
+
+}
+else{
+
+paidCount++;
+
+}
+
+dashboardBody.innerHTML += `
+
+<tr>
+
+<td>${index+1}</td>
+
+<td>${member.memberCode}</td>
+
+<td>${member.memberName}</td>
+
+<td>₹${monthlyDue.toLocaleString("en-IN")}</td>
+
+<td>₹${received.toLocaleString("en-IN")}</td>
+
+<td>₹${pending.toLocaleString("en-IN")}</td>
+
+<td class="${statusClass}">
+${statusText}
+</td>
+
+</tr>
+
+`;
 
 });
 
 //----------------------------------
-// Summary Cards
+// Summary
 //----------------------------------
 
+monthlyTarget.textContent =
+"₹"+(monthlyDue * members.length).toLocaleString("en-IN");
+
 totalReceived.textContent =
-"₹"+
-totalReceivedAmount.toLocaleString("en-IN");
+"₹"+totalReceivedAmount.toLocaleString("en-IN");
 
 totalPending.textContent =
-"₹"+
-totalPendingAmount.toLocaleString("en-IN");
+"₹"+totalPendingAmount.toLocaleString("en-IN");
 
-paidMembers.textContent =
-paidCount;
-
-partialMembers.textContent =
-partialCount;
-
-pendingMembers.textContent =
-pendingCount;
-
-// Continue Part 3B
-
-renderMembersTable(
-members,
-memberStatus,
-monthlyDue
-);
+paidMembers.textContent = paidCount;
+partialMembers.textContent = partialCount;
+pendingMembers.textContent = pendingCount;
 
 }
 //==================================================
