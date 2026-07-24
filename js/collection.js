@@ -251,7 +251,7 @@ await loadPendingDetails();
 //==================================================
 
 async function loadPendingDetails(){
-
+console.count("loadPendingDetails Called");
 pendingList.innerHTML="";
 
 totalPending.textContent="₹0";
@@ -371,7 +371,7 @@ renderPendingCards();
 // Render Pending Cards
 //==================================================
 function renderGroupCards(){
-
+console.count("renderGroupCards Called");
     groupList.innerHTML = "";
 
     const groups = {};
@@ -440,7 +440,11 @@ function renderGroupCards(){
 
 }
 function renderPendingCards(){
+function renderPendingCards(){
 
+console.count("renderPendingCards Called");
+
+pendingList.innerHTML="";
 pendingList.innerHTML="";
 
 if(pendingRecords.length===0){
