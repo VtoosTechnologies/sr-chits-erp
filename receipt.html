@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SR Chits Receipt</title>
+
+<link rel="stylesheet" href="receipt.css">
+
+</head>
+
+<body>
+
+<div class="receipt-container">
+
+    <!-- Header -->
+
+    <div class="receipt-header">
+
+        <img src="images/logo.png"
+             class="logo"
+             alt="SR Chits">
+
+        <h1>SR CHITS</h1>
+
+        <h3>Powered by VTOOS Software Solution</h3>
+
+        <p>
+            Trust • Transparency • Growth
+        </p>
+
+    </div>
+
+    <hr>
+
+    <!-- Receipt Title -->
+
+    <h2 class="title">
+        COLLECTION RECEIPT
+    </h2>
+
+    <!-- Receipt Information -->
+
+    <table class="info-table">
+
+        <tr>
+            <td>Receipt No</td>
+            <td id="receiptNo">-</td>
+        </tr>
+
+        <tr>
+            <td>Date</td>
+            <td id="receiptDate">-</td>
+        </tr>
+
+        <tr>
+            <td>Member Name</td>
+            <td id="memberName">-</td>
+        </tr>
+
+        <tr>
+            <td>Member Code</td>
+            <td id="memberCode">-</td>
+        </tr>
+
+        <tr>
+            <td>Group Name</td>
+            <td id="groupName">-</td>
+        </tr>
+
+        <tr>
+            <td>Group Code</td>
+            <td id="groupCode">-</td>
+        </tr>
+
+        <tr>
+            <td>Installment</td>
+            <td id="installment">-</td>
+        </tr>
+
+        <tr>
+            <td>Previous Pending</td>
+            <td id="previousPending">₹0</td>
+        </tr>
+
+        <tr>
+            <td>Received Amount</td>
+            <td id="receivedAmount">₹0</td>
+        </tr>
+
+        <tr>
+            <td>Balance Pending</td>
+            <td id="balancePending">₹0</td>
+        </tr>
+
+        <tr>
+            <td>Payment Mode</td>
+            <td id="paymentMode">-</td>
+        </tr>
+
+        <tr>
+            <td>Remarks</td>
+            <td id="remarks">-</td>
+        </tr>
+
+    </table>
+
+    <hr>
+
+    <!-- Footer -->
+
+    <div class="footer">
+
+        <p>
+            Thank You for Your Payment
+        </p>
+
+        <p>
+            SR CHITS
+        </p>
+
+        <small>
+            Powered by VTOOS Software Solution
+        </small>
+
+    </div>
+
+    <div class="button-area">
+
+        <button onclick="window.print()">
+            🖨 Print Receipt
+        </button>
+
+        <button onclick="window.close()">
+            ❌ Close
+        </button>
+
+    </div>
+
+</div>
+
+<script type="module" src="receipt.js"></script>
+
+</body>
+
+</html>
