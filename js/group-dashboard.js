@@ -208,38 +208,44 @@ let pendingCount = 0;
 dashboardBody.innerHTML = "";
 
 //----------------------------------
-// Load Collections
+// Load Pending Register
 //----------------------------------
 
-const collectionSnapshot = await getDocs(
+const pendingSnapshot = await getDocs(
 query(
-collection(db,"collections"),
+collection(db,"pendingRegister"),
 where("groupCode","==",group.groupCode)
 )
 );
 
 //----------------------------------
-// Member Wise Collection
+// Member Wise Pending
 //----------------------------------
 
-const memberCollections = {};
+const memberPending = {};
 
-collectionSnapshot.forEach(doc=>{
+pendingSnapshot.forEach(doc=>{
 
 const data = doc.data();
 
 const key = data.aadhaarNumber;
 
-if(!memberCollections[key]){
+if(!memberPending[key]){
 
-memberCollections[key] = 0;
+memberPending[key]={
+paid:0,
+pending:0
+};
 
 }
 
-memberCollections[key] += Number(data.receivedAmount || 0);
+memberPending[key].paid +=
+Number(data.paidAmount || 0);
+
+memberPending[key].pending +=
+Number(data.pendingAmount || 0);
 
 });
-
 //----------------------------------
 // Table Data
 //----------------------------------
@@ -248,13 +254,17 @@ dashboardBody.innerHTML = "";
 
 members.forEach((member,index)=>{
 
+const memberData =
+memberPending[member.aadhaarNumber] || {
+paid:0,
+pending:monthlyDue
+};
+
 const received =
-Number(
-memberCollections[member.aadhaarNumber] || 0
-);
+Number(memberData.paid);
 
 const pending =
-Math.max(monthlyDue - received,0);
+Number(memberData.pending);
 
 totalReceivedAmount += received;
 totalPendingAmount += pending;
