@@ -223,22 +223,6 @@ collection(db,"pendingRegister"),
 where("groupCode","==",group.groupCode)
 )
 );
-
-//----------------------------------
-// Total Collection
-//----------------------------------
-
-collectionSnapshot.forEach(doc=>{
-
-const data = doc.data();
-
-totalReceivedAmount +=
-Number(
-data.receivedAmount || 0
-);
-
-});
-
 //----------------------------------
 // Member Status
 //----------------------------------
@@ -300,6 +284,11 @@ return;
 
 totalPendingAmount +=
 status.pending;
+  const received =
+monthlyDue - status.pending;
+
+totalReceivedAmount +=
+Math.max(received, 0);
 
 if(status.status==="PAID"){
 
