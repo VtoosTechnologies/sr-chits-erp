@@ -610,6 +610,21 @@ async function loadOpenAdvances(aadhaarNumber){
     );
 
     const snapshot = await getDocs(q);
+  console.clear();
+
+snapshot.forEach(doc => {
+    const d = doc.data();
+
+    console.log({
+        id: doc.id,
+        groupCode: d.groupCode,
+        groupName: d.groupName,
+        pending: d.pendingAmount,
+        paid: d.paidAmount,
+        monthly: d.monthlyAmount,
+        status: d.status
+    });
+});
 
     const advances = [];
 
