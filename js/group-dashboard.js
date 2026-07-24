@@ -42,7 +42,8 @@ Select Group
 </option>`;
 
 const snapshot = await getDocs(collection(db, "groups"));
-
+alert("Groups Found : " + snapshot.size);
+console.log(snapshot.size);
 snapshot.forEach(doc => {
 
 const group = doc.data();
