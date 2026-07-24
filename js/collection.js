@@ -1083,10 +1083,13 @@ serverTimestamp()
 //----------------------------------
 // Save Member Ledger
 //----------------------------------
-
 await addDoc(
     collection(db, "memberLedger"),
     {
+
+        ledgerId: entry.transactionNo,
+
+        memberId: selectedMember.id,
 
         aadhaarNumber: entry.aadhaarNumber,
 
@@ -1100,13 +1103,25 @@ await addDoc(
 
         transactionType: "COLLECTION",
 
-        amount: entry.receivedAmount,
+        transactionDate: serverTimestamp(),
+
+        installmentNo: entry.installmentNo,
+
+        debit: 0,
+
+        credit: Number(entry.receivedAmount),
+
+        adjustedAmount: 0,
 
         paymentMode: entry.paymentMode,
 
+        receiptNo: entry.transactionNo,
+
+        referenceNo: entry.transactionNo,
+
         remarks: entry.remarks,
-      transactionNo:
-entry.transactionNo,
+
+        createdBy: "Admin",
 
         createdAt: serverTimestamp()
 
