@@ -1,0 +1,263 @@
+/*==================================================
+  My Chits
+==================================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    color:#333;
+}
+
+/*==================================================
+Header
+==================================================*/
+
+.header{
+    background:#1565c0;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    padding:15px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+.back-btn{
+    background:none;
+    border:none;
+    color:#fff;
+    font-size:20px;
+    cursor:pointer;
+    margin-right:15px;
+}
+
+.header h2{
+    font-size:22px;
+    font-weight:600;
+}
+
+/*==================================================
+Container
+==================================================*/
+
+.container{
+    max-width:700px;
+    margin:auto;
+    padding:15px;
+}
+
+/*==================================================
+Top Card
+==================================================*/
+
+.chit-card{
+    background:#fff;
+    border-radius:15px;
+    padding:25px;
+    text-align:center;
+    margin-bottom:20px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.chit-card h2{
+    color:#1565c0;
+    font-size:24px;
+    margin-bottom:10px;
+}
+
+.status{
+    display:inline-block;
+    padding:7px 18px;
+    border-radius:30px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.status.active{
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+/*==================================================
+Summary Cards
+==================================================*/
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.summary-card{
+    background:#fff;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.summary-card i{
+    font-size:28px;
+    color:#1565c0;
+    margin-bottom:12px;
+}
+
+.summary-card h4{
+    font-size:15px;
+    color:#666;
+    margin-bottom:8px;
+}
+
+.summary-card p{
+    font-size:22px;
+    font-weight:bold;
+    color:#1565c0;
+}
+
+/*==================================================
+Cards
+==================================================*/
+
+.card{
+    background:#fff;
+    border-radius:15px;
+    overflow:hidden;
+    margin-bottom:18px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.card h3{
+    background:#1565c0;
+    color:#fff;
+    padding:14px 18px;
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 18px;
+    border-bottom:1px solid #eee;
+}
+
+.row:last-child{
+    border-bottom:none;
+}
+
+.row span:first-child{
+    font-weight:600;
+    color:#555;
+}
+
+.row span:last-child{
+    color:#222;
+    text-align:right;
+}
+
+/*==================================================
+Buttons
+==================================================*/
+
+.action-buttons{
+    display:flex;
+    gap:15px;
+    margin:25px 0;
+}
+
+.action-buttons button{
+    flex:1;
+    border:none;
+    border-radius:10px;
+    padding:14px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+    color:#fff;
+    transition:.3s;
+}
+
+#passbookBtn{
+    background:#1565c0;
+}
+
+#paymentBtn{
+    background:#2e7d32;
+}
+
+#passbookBtn:hover{
+    background:#0d47a1;
+}
+
+#paymentBtn:hover{
+    background:#1b5e20;
+}
+
+/*==================================================
+Footer
+==================================================*/
+
+footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#666;
+}
+
+footer strong{
+    color:#1565c0;
+}
+
+footer small{
+    display:block;
+    margin-top:8px;
+}
+
+/*==================================================
+Responsive
+==================================================*/
+
+@media(max-width:600px){
+
+.summary-grid{
+    grid-template-columns:1fr 1fr;
+}
+
+.summary-card{
+    padding:15px;
+}
+
+.summary-card p{
+    font-size:18px;
+}
+
+.card h3{
+    font-size:17px;
+}
+
+.row{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+}
+
+.row span:last-child{
+    text-align:left;
+}
+
+.action-buttons{
+    flex-direction:column;
+}
+
+}
