@@ -140,21 +140,8 @@ if (data.groupCode) {
         accountStatus.textContent =
             data.accountStatus || "Active";
 
-        groupName.textContent =
-            data.groupName || "-";
-
         groupCode.textContent =
             data.groupCode || "-";
-
-        chitAmount.textContent =
-            data.chitAmount || "-";
-
-        monthlyAmount.textContent =
-            data.monthlyAmount || "-";
-
-        totalInstallments.textContent =
-            data.totalInstallments || "-";
-
        joinDate.textContent =
     data.joinDate ||
     data.createdAt ||
