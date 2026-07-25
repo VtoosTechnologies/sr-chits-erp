@@ -1,23 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>My Chits | SR Chits ERP</title>
-
-    <link rel="stylesheet"
-          href="css/member-chits.css">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-</head>
-
 <body>
 
     <!-- Header -->
@@ -39,273 +19,36 @@
 
     <div class="container">
 
-    <!-- Member Summary -->
+        <!-- Member Summary -->
 
-    <div class="member-summary">
+        <div class="member-summary">
 
-        <h2 id="memberName">
-            Loading...
-        </h2>
+            <h2 id="memberName">
+                Loading...
+            </h2>
 
-        <p>
-            Customer ID :
-            <span id="referenceNo">-</span>
-        </p>
+            <p>
 
-        <p>
-            Total Active Chits :
-            <span id="totalGroups">0</span>
-        </p>
+                Customer ID :
+                <span id="referenceNo">-</span>
 
-    </div>
+            </p>
 
-    <!-- All Chits -->
+            <p>
 
-    <div id="chitContainer">
+                Total Active Chits :
+                <span id="totalGroups">0</span>
 
-        <!-- JS will create cards here -->
-
-    </div>
-
-    </div>
-
-        <!-- Summary -->
-
-        <div class="summary-grid">
-
-            <div class="summary-card">
-
-                <i class="fas fa-sack-dollar"></i>
-
-                <h4>Chit Value</h4>
-
-                <p id="chitAmount">
-                    ₹0
-                </p>
-
-            </div>
-
-            <div class="summary-card">
-
-                <i class="fas fa-wallet"></i>
-
-                <h4>Monthly Amount</h4>
-
-                <p id="monthlyAmount">
-                    ₹0
-                </p>
-
-            </div>
-
-            <div class="summary-card">
-
-                <i class="fas fa-check-circle"></i>
-
-                <h4>Paid</h4>
-
-                <p id="paidInstallments">
-                    0 / 0
-                </p>
-
-            </div>
-
-            <div class="summary-card">
-
-                <i class="fas fa-clock"></i>
-
-                <h4>Pending</h4>
-
-                <p id="pendingInstallments">
-                    0
-                </p>
-
-            </div>
+            </p>
 
         </div>
 
-        <!-- Group Details -->
+        <!-- All Chit Cards -->
 
-        <div class="card">
-
-            <h3>
-
-                <i class="fas fa-users"></i>
-
-                Group Details
-
-            </h3>
-
-            <div class="row">
-
-                <span>Group Name</span>
-
-                <span id="detailGroupName">-</span>
-
-            </div>
-
-            <div class="row">
-
-                <span>Group Code</span>
-
-                <span id="groupCode">-</span>
-
-            </div>
-
-            <div class="row">
-
-                <span>Member Code</span>
-
-                <span id="memberCode">-</span>
-
-            </div>
-
-            <div class="row">
-
-                <span>Member Number</span>
-
-                <span id="memberNumber">-</span>
-
-            </div>
-
-            <div class="row">
-
-                <span>Join Date</span>
-
-                <span id="joinDate">-</span>
-
-            </div>
-
-            <div class="row">
-
-                <span>Total Installments</span>
-
-                <span id="totalInstallments">-</span>
-
-            </div>
+        <div id="chitContainer">
 
         </div>
-
-        <!-- Auction Details -->
-
-        <div class="card">
-
-            <h3>
-
-                <i class="fas fa-gavel"></i>
-
-                Auction Details
-
-            </h3>
-
-            <div class="row">
-
-                <span>Status</span>
-
-                <span id="auctionStatus">
-
-                    Not Taken
-
-                </span>
-
-            </div>
-
-            <div class="row">
-
-                <span>Auction Month</span>
-
-                <span id="auctionMonth">
-
-                    -
-
-                </span>
-
-            </div>
-
-            <div class="row">
-
-                <span>Prize Amount</span>
-
-                <span id="prizeAmount">
-
-                    ₹0
-
-                </span>
-
-            </div>
-
-        </div>
-
-        <!-- Payment Summary -->
-
-        <div class="card">
-
-            <h3>
-
-                <i class="fas fa-chart-line"></i>
-
-                Payment Summary
-
-            </h3>
-
-            <div class="row">
-
-                <span>Total Paid</span>
-
-                <span id="totalPaid">
-
-                    ₹0
-
-                </span>
-
-            </div>
-
-            <div class="row">
-
-                <span>Total Pending</span>
-
-                <span id="totalPending">
-
-                    ₹0
-
-                </span>
-
-            </div>
-
-            <div class="row">
-
-                <span>Outstanding</span>
-
-                <span id="outstanding">
-
-                    ₹0
-
-                </span>
-
-            </div>
-
-        </div>
-
-        <!-- Action Buttons -->
-
-        <div class="action-buttons">
-
-            <button id="passbookBtn">
-
-                <i class="fas fa-book"></i>
-
-                Passbook
-
-            </button>
-
-            <button id="paymentBtn">
-
-                <i class="fas fa-money-bill-wave"></i>
-
-                Payments
-
-            </button>
-
-        </div>
+                <!-- End of Dynamic Chit Cards -->
 
     </div>
 
@@ -322,11 +65,13 @@
 
         <small>
 
-            Version 1.0.0
+            Version 2.0.0
 
         </small>
 
     </footer>
+
+    <!-- JavaScript -->
 
     <script type="module"
             src="js/member-chits.js"></script>
