@@ -1,12 +1,12 @@
 //==================================================
-// Member Passbook
+// SR Chits ERP
+// Member Passbook V2.0
+// Aadhaar Based Multi Group
 //==================================================
 
 import { db } from "./firebase.js";
 
 import {
-doc,
-getDoc,
 collection,
 query,
 where,
@@ -15,14 +15,16 @@ getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
-// Session Check
+// Session
 //==================================================
 
-const memberId = sessionStorage.getItem("memberId");
+const aadhaarNumber =
+sessionStorage.getItem("aadhaarNumber");
 
-if (!memberId) {
+if (!aadhaarNumber) {
 
-    window.location.href = "member-login.html";
+    window.location.href =
+    "member-login.html";
 
 }
 
@@ -30,157 +32,241 @@ if (!memberId) {
 // Elements
 //==================================================
 
-const memberName = document.getElementById("memberName");
-const referenceNo = document.getElementById("referenceNo");
-const groupName = document.getElementById("groupName");
-const memberCode = document.getElementById("memberCode");
+const memberName =
+document.getElementById("memberName");
 
-const totalDebit = document.getElementById("totalDebit");
-const totalCredit = document.getElementById("totalCredit");
-const balance = document.getElementById("balance");
+const referenceNo =
+document.getElementById("referenceNo");
 
-const transactionList = document.getElementById("transactionList");
+const groupName =
+document.getElementById("groupName");
+
+const memberCode =
+document.getElementById("memberCode");
+
+const totalDebit =
+document.getElementById("totalDebit");
+
+const totalCredit =
+document.getElementById("totalCredit");
+
+const balance =
+document.getElementById("balance");
+
+const transactionList =
+document.getElementById("transactionList");
 
 //==================================================
-// Currency Format
+// Helpers
 //==================================================
 
-function formatCurrency(value) {
+function formatCurrency(value){
 
-    return "₹" + Number(value || 0).toLocaleString("en-IN");
+return "₹" +
+Number(value || 0)
+.toLocaleString("en-IN");
 
 }
 
+function formatDate(timestamp){
+
+if(!timestamp) return "-";
+
+if(timestamp.seconds){
+
+const date =
+new Date(timestamp.seconds * 1000);
+
+return date.toLocaleDateString(
+"en-GB"
+);
+
+}
+
+return timestamp;
+
+}
 //==================================================
 // Load Passbook
 //==================================================
 
-async function loadPassbook() {
+async function loadPassbook(){
 
-    try {
+try{
 
-        //--------------------------------------------------
-        // Member Details
-        //--------------------------------------------------
+//--------------------------------------
+// Get All Member Records
+//--------------------------------------
 
-        const memberRef = doc(db, "members", memberId);
+const memberQuery = query(
+collection(db,"members"),
+where("aadhaarNumber","==",aadhaarNumber)
+);
 
-        const memberSnap = await getDoc(memberRef);
+const memberSnapshot =
+await getDocs(memberQuery);
 
-        if (!memberSnap.exists()) {
+if(memberSnapshot.empty){
 
-            alert("Member not found.");
+alert("Member not found.");
 
-            return;
+return;
 
-        }
+}
 
-        const member = memberSnap.data();
+let memberIds = [];
 
-        memberName.textContent =
-            member.memberName || "-";
+let memberCodes = [];
 
-        referenceNo.textContent =
-            member.referenceNo || "-";
+let groupNames = [];
 
-        memberCode.textContent =
-            member.memberCode || "-";
+let firstMember = null;
 
-        groupName.textContent =
-            member.groupName || "-";
+memberSnapshot.forEach(docSnap=>{
 
-        //--------------------------------------------------
-        // Ledger Entries
-        //--------------------------------------------------
+const data = docSnap.data();
 
-        const ledgerQuery = query(
-            collection(db, "memberLedger"),
-            where("memberId", "==", memberId),
-            orderBy("transactionDate", "asc")
-        );
+if(!firstMember){
 
-        const ledgerSnapshot = await getDocs(ledgerQuery);
+firstMember = data;
 
-        if (ledgerSnapshot.empty) {
+}
 
-            transactionList.innerHTML =
-            `
-            <div class="empty">
-                No transactions found.
-            </div>
-            `;
+memberIds.push(docSnap.id);
 
-            return;
+memberCodes.push(data.memberCode);
 
-        }
+groupNames.push(data.groupName);
 
-        let html = "";
+});
 
-        let debitTotal = 0;
-        let creditTotal = 0;
-        let runningBalance = 0;
+//--------------------------------------
+// Header
+//--------------------------------------
 
-        ledgerSnapshot.forEach(docSnap => {
+memberName.textContent =
+firstMember.memberName || "-";
 
-            const data = docSnap.data();
+referenceNo.textContent =
+firstMember.referenceNo || "-";
 
-            const debit =
-                Number(data.debit || 0);
+memberCode.textContent =
+memberCodes.join(", ");
 
-            const credit =
-                Number(data.credit || 0);
+groupName.textContent =
+groupNames.join(", ");
+
+//--------------------------------------
+// Read Ledger
+//--------------------------------------
+
+let allTransactions = [];
+
+for(const id of memberIds){
+
+const ledgerQuery = query(
+collection(db,"memberLedger"),
+where("memberId","==",id),
+orderBy("transactionDate","asc")
+);
+
+const ledgerSnapshot =
+await getDocs(ledgerQuery);
+
+ledgerSnapshot.forEach(doc=>{
+
+allTransactions.push(doc.data());
+
+});
+
+}
+
+//--------------------------------------
+// Sort Date
+//--------------------------------------
+
+allTransactions.sort((a,b)=>{
+
+const d1 =
+a.transactionDate.seconds || 0;
+
+const d2 =
+b.transactionDate.seconds || 0;
+
+return d1-d2;
+
+});
+
+if(allTransactions.length===0){
+
+transactionList.innerHTML=
+`
+<div class="empty">
+No Transactions Found.
+</div>
+`;
+
+return;
+
+}
+
+let html="";
+
+let debitTotal=0;
+
+let creditTotal=0;
+
+let runningBalance=0;
+            //--------------------------------------
+        // Prepare Transactions
+        //--------------------------------------
+
+        allTransactions.forEach(data => {
+
+            const debit = Number(data.debit || 0);
+            const credit = Number(data.credit || 0);
 
             debitTotal += debit;
             creditTotal += credit;
 
-            runningBalance =
-                debitTotal - creditTotal;
+            runningBalance = debitTotal - creditTotal;
 
-            html +=
-
-            `
+            html += `
             <div class="transaction-item">
 
                 <div class="transaction-header">
 
-                    <span>
-                        ${data.transactionDate || "-"}
-                    </span>
+                    <span>${formatDate(data.transactionDate)}</span>
 
-                    <span>
-                        ${data.transactionType || "-"}
-                    </span>
+                    <span>${data.transactionType || "-"}</span>
 
                 </div>
 
                 <div class="transaction-body">
 
                     <div>
+                        <strong>Group</strong><br>
+                        ${data.groupName || "-"}
+                    </div>
 
+                    <div>
                         <strong>Receipt</strong><br>
                         ${data.receiptNo || "-"}
-
                     </div>
 
                     <div>
-
                         <strong>Installment</strong><br>
                         ${data.installmentNo || "-"}
-
                     </div>
 
                     <div>
-
                         <strong>Debit</strong><br>
                         ${formatCurrency(debit)}
-
                     </div>
 
                     <div>
-
                         <strong>Credit</strong><br>
                         ${formatCurrency(credit)}
-
                     </div>
 
                 </div>
@@ -193,25 +279,18 @@ async function loadPassbook() {
                 </div>
 
             </div>
-
             `;
 
         });
 
         transactionList.innerHTML = html;
 
-        totalDebit.textContent =
-            formatCurrency(debitTotal);
-
-        totalCredit.textContent =
-            formatCurrency(creditTotal);
-
-        balance.textContent =
-            formatCurrency(runningBalance);
+        totalDebit.textContent = formatCurrency(debitTotal);
+        totalCredit.textContent = formatCurrency(creditTotal);
+        balance.textContent = formatCurrency(runningBalance);
 
     }
-
-    catch (error) {
+    catch(error){
 
         console.error(error);
 
@@ -229,9 +308,9 @@ loadPassbook();
 
 document
 .getElementById("backBtn")
-.addEventListener("click", () => {
+.addEventListener("click",()=>{
 
     window.location.href =
-        "member-dashboard.html";
+    "member-dashboard.html";
 
 });
