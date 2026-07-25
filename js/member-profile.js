@@ -12,9 +12,12 @@ import { db } from "./firebase.js";
 
 import {
     doc,
-    getDoc
+    getDoc,
+    collection,
+    query,
+    where,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
 //==================================================
 // Session Check
 //==================================================
@@ -86,6 +89,38 @@ async function loadProfile() {
         }
 
         const data = snap.data();
+        //----------------------------------
+// Load Group Details
+//----------------------------------
+
+if (data.groupCode) {
+
+    const groupQuery = query(
+        collection(db, "groups"),
+        where("groupCode", "==", data.groupCode)
+    );
+
+    const groupSnapshot = await getDocs(groupQuery);
+
+    if (!groupSnapshot.empty) {
+
+        const groupData = groupSnapshot.docs[0].data();
+
+        groupName.textContent =
+            groupData.groupName || "-";
+
+        chitAmount.textContent =
+            "₹" + Number(groupData.chitAmount || 0).toLocaleString("en-IN");
+
+        monthlyAmount.textContent =
+            "₹" + Number(groupData.monthlyAmount || 0).toLocaleString("en-IN");
+
+        totalInstallments.textContent =
+            groupData.totalInstallments || "-";
+
+    }
+
+}
 
         memberName.textContent = data.memberName || "-";
         userId.textContent = data.userId || "-";
@@ -120,8 +155,10 @@ async function loadProfile() {
         totalInstallments.textContent =
             data.totalInstallments || "-";
 
-        joinDate.textContent =
-            data.joinDate || "-";
+       joinDate.textContent =
+    data.joinDate ||
+    data.createdAt ||
+    "-";
 
         if (data.photoURL) {
 
