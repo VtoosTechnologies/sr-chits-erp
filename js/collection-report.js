@@ -86,12 +86,14 @@ async function loadChitAmounts() {
     `<option value="">All Chit Amounts</option>`;
 
     const snapshot = await getDocs(groupsRef);
+    console.log("Groups Count :", snapshot.size);
 
     const chitSet = new Set();
 
     snapshot.forEach(doc => {
 
         const data = doc.data();
+        console.log(doc.data());
 
         if (data.chitAmount) {
             chitSet.add(data.chitAmount);
