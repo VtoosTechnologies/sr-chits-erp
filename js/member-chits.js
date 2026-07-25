@@ -1,134 +1,235 @@
 //==================================================
-// My Chits
+// SR Chits ERP
+// My Chits V2.0
+// Aadhaar Based
 //==================================================
 
 import { db } from "./firebase.js";
 
 import {
-    doc,
-    getDoc,
-    collection,
-    query,
-    where,
-    getDocs
+collection,
+query,
+where,
+getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
-// Session Check
+// Session
 //==================================================
 
-const memberId = sessionStorage.getItem("memberId");
+const aadhaarNumber =
+sessionStorage.getItem("aadhaarNumber");
 
-if (!memberId) {
-    window.location.href = "member-login.html";
+if(!aadhaarNumber){
+
+window.location.href =
+"member-login.html";
+
 }
 
 //==================================================
 // Elements
 //==================================================
 
-const groupName = document.getElementById("groupName");
-const detailGroupName = document.getElementById("detailGroupName");
+const memberName =
+document.getElementById("memberName");
 
-const statusBadge = document.getElementById("statusBadge");
+const referenceNo =
+document.getElementById("referenceNo");
 
-const chitAmount = document.getElementById("chitAmount");
-const monthlyAmount = document.getElementById("monthlyAmount");
+const totalGroups =
+document.getElementById("totalGroups");
 
-const groupCode = document.getElementById("groupCode");
-const memberCode = document.getElementById("memberCode");
-const memberNumber = document.getElementById("memberNumber");
-const joinDate = document.getElementById("joinDate");
-const totalInstallments = document.getElementById("totalInstallments");
-
+const chitContainer =
+document.getElementById("chitContainer");
 //==================================================
-// Load Member & Group
+// Load My Chits
 //==================================================
 
-async function loadChitDetails() {
+async function loadMyChits(){
 
-    try {
+try{
 
-        const memberRef = doc(db, "members", memberId);
+const memberQuery = query(
+collection(db,"members"),
+where("aadhaarNumber","==",aadhaarNumber)
+);
 
-        const memberSnap = await getDoc(memberRef);
+const memberSnapshot =
+await getDocs(memberQuery);
 
-        if (!memberSnap.exists()) {
+if(memberSnapshot.empty){
 
-            alert("Member not found.");
+alert("No Chits Found.");
 
-            return;
-
-        }
-
-        const member = memberSnap.data();
-
-        memberCode.textContent =
-            member.memberCode || "-";
-
-        memberNumber.textContent =
-            member.memberNumber || "-";
-
-        groupCode.textContent =
-            member.groupCode || "-";
-
-        joinDate.textContent =
-            member.joinDate ||
-            member.createdAt ||
-            "-";
-
-        statusBadge.textContent =
-            member.accountStatus || "Active";
-
-        if (member.groupCode) {
-
-            const q = query(
-                collection(db, "groups"),
-                where("groupCode", "==", member.groupCode)
-            );
-
-            const snapshot = await getDocs(q);
-
-            if (!snapshot.empty) {
-
-                const group = snapshot.docs[0].data();
-
-                groupName.textContent =
-                    group.groupName || "-";
-
-                detailGroupName.textContent =
-                    group.groupName || "-";
-
-                chitAmount.textContent =
-                    "₹" +
-                    Number(group.chitAmount || 0)
-                    .toLocaleString("en-IN");
-
-                monthlyAmount.textContent =
-                    "₹" +
-                    Number(group.monthlyAmount || 0)
-                    .toLocaleString("en-IN");
-
-                totalInstallments.textContent =
-                    group.totalInstallments || "-";
-
-            }
-
-        }
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        alert("Unable to load chit details.");
-
-    }
+return;
 
 }
 
-loadChitDetails();
+let html = "";
+
+let firstMember = null;
+
+let totalActive = 0;
+
+memberName.textContent = "Loading...";
+
+memberSnapshot.forEach(docSnap=>{
+
+const member = docSnap.data();
+
+if(!firstMember){
+
+firstMember = member;
+
+memberName.textContent =
+member.memberName || "-";
+
+referenceNo.textContent =
+member.referenceNo || "-";
+
+}
+
+totalActive++;
+
+html += `
+<div class="chit-card">
+
+<div class="chit-title">
+
+${member.groupName || "-"}
+
+</div>
+
+<div class="chit-row">
+
+<span>Status</span>
+
+<span class="status-active">
+
+${member.accountStatus || "Active"}
+
+</span>
+
+</div>
+
+<div class="chit-row">
+
+<span>Member Code</span>
+
+<span>
+
+${member.memberCode || "-"}
+
+</span>
+
+</div>
+
+<div class="chit-row">
+
+<span>Group Code</span>
+
+<span>
+
+${member.groupCode || "-"}
+
+</span>
+
+</div>
+
+<div class="card-buttons">
+
+<button
+class="passbook-btn"
+data-member="${docSnap.id}">
+
+Passbook
+
+</button>
+
+<button
+class="payment-btn"
+data-member="${docSnap.id}">
+
+Payments
+
+</button>
+
+</div>
+
+</div>
+`;
+
+});
+
+totalGroups.textContent =
+totalActive;
+
+chitContainer.innerHTML =
+html;
+    //--------------------------------------------------
+// Render Completed
+//--------------------------------------------------
+
+}
+catch(error){
+
+console.error(error);
+
+alert("Unable to load My Chits.");
+
+}
+
+}
+
+loadMyChits();
+
+//==================================================
+// Button Events
+//==================================================
+
+document.addEventListener("click",(e)=>{
+
+//----------------------------
+// Passbook
+//----------------------------
+
+if(e.target.classList.contains("passbook-btn")){
+
+const memberId =
+e.target.dataset.member;
+
+// Selected Group
+sessionStorage.setItem(
+"selectedMemberId",
+memberId
+);
+
+window.location.href =
+"member-passbook.html";
+
+}
+
+//----------------------------
+// Payments
+//----------------------------
+
+if(e.target.classList.contains("payment-btn")){
+
+const memberId =
+e.target.dataset.member;
+
+sessionStorage.setItem(
+"selectedMemberId",
+memberId
+);
+
+window.location.href =
+"member-payment-history.html";
+
+}
+
+});
 
 //==================================================
 // Back
@@ -136,35 +237,9 @@ loadChitDetails();
 
 document
 .getElementById("backBtn")
-.addEventListener("click", () => {
+.addEventListener("click",()=>{
 
-    window.location.href =
-        "member-dashboard.html";
-
-});
-
-//==================================================
-// Passbook
-//==================================================
-
-document
-.getElementById("passbookBtn")
-.addEventListener("click", () => {
-
-    window.location.href =
-        "member-passbook.html";
-
-});
-
-//==================================================
-// Payment History
-//==================================================
-
-document
-.getElementById("paymentBtn")
-.addEventListener("click", () => {
-
-    window.location.href =
-        "member-payment-history.html";
+window.location.href =
+"member-dashboard.html";
 
 });
