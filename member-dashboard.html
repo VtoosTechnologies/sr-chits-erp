@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+SR Chits ERP - Member Dashboard
+</title>
+
+<link
+rel="stylesheet"
+href="css/member-dashboard.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Header -->
+
+    <header class="header">
+
+        <div>
+
+            <h1>SR Chits ERP</h1>
+
+            <p>Member Dashboard</p>
+
+        </div>
+
+        <button
+        id="logoutBtn"
+        class="logout-btn">
+
+            Logout
+
+        </button>
+
+    </header>
+
+    <!-- Welcome Card -->
+
+    <section class="welcome-card">
+
+        <h2 id="memberName">
+            Welcome
+        </h2>
+
+        <p>
+
+            Customer ID :
+            <strong id="userId">
+                SR000001
+            </strong>
+
+        </p>
+
+        <p id="groupName">
+
+            Group :
+            --
+
+        </p>
+
+    </section>
+
+    <!-- Summary -->
+
+    <section class="summary-grid">
+
+        <div class="summary-card">
+
+            <span class="title">
+                Total Chit Value
+            </span>
+
+            <h3 id="chitAmount">
+                ₹0
+            </h3>
+
+        </div>
+
+        <div class="summary-card">
+
+            <span class="title">
+                Pending Amount
+            </span>
+
+            <h3 id="pendingAmount">
+                ₹0
+            </h3>
+
+        </div>
+
+        <div class="summary-card">
+
+            <span class="title">
+                Next Due Date
+            </span>
+
+            <h3 id="nextDueDate">
+                --
+            </h3>
+
+        </div>
+
+        <div class="summary-card">
+
+            <span class="title">
+                Last Payment
+            </span>
+
+            <h3 id="lastPayment">
+                --
+            </h3>
+
+        </div>
+
+    </section>
+
+    <!-- Menu -->
+
+    <section class="menu-grid">
+
+        <a
+        href="member-profile.html"
+        class="menu-card">
+
+            <div class="menu-title">
+
+                My Profile
+
+            </div>
+
+            <div class="menu-desc">
+
+                View personal details
+
+            </div>
+
+        </a>
+
+        <a
+        href="my-chits.html"
+        class="menu-card">
+
+            <div class="menu-title">
+
+                My Chits
+
+            </div>
+
+            <div class="menu-desc">
+
+                Group information
+
+            </div>
+
+        </a>
+
+        <a
+        href="member-passbook.html"
+        class="menu-card">
+
+            <div class="menu-title">
+
+                Passbook
+
+            </div>
+
+            <div class="menu-desc">
+
+                Ledger & balance
+
+            </div>
+
+        </a>
+
+        <a
+        href="payment-history.html"
+        class="menu-card">
+
+            <div class="menu-title">
+
+                Payment History
+
+            </div>
+
+            <div class="menu-desc">
+
+                Installment records
+
+            </div>
+
+        </a>
+
+        <a
+        href="pending-details.html"
+        class="menu-card">
+
+            <div class="menu-title">
+
+                Pending Details
+
+            </div>
+
+            <div class="menu-desc">
+
+                Due installments
+
+            </div>
+
+        </a>
+
+        <a
+        href="contact-office.html"
+        class="menu-card">
+
+            <div class="menu-title">
+
+                Contact Office
+
+            </div>
+
+            <div class="menu-desc">
+
+                Need Help?
+
+            </div>
+
+        </a>
+
+    </section>
+
+    <!-- Recent Activity -->
+
+    <section class="recent-section">
+
+        <div class="section-title">
+
+            Recent Transactions
+
+        </div>
+
+        <div
+        id="recentTransactions"
+        class="transaction-list">
+
+            No transactions available.
+
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+
+    <footer>
+
+        Powered by
+
+        <strong>
+
+            VTOOS Software Solutions
+
+        </strong>
+
+        <br>
+
+        Version 1.0.0
+
+    </footer>
+
+</div>
+
+<script
+type="module"
+src="js/member-dashboard.js">
+</script>
+
+</body>
+
+</html>
