@@ -18,7 +18,7 @@ getDocs
 //==================================================
 
 const userId =
-document.getElementById("memberCode");
+document.getElementById("userId");
 
 const password =
 document.getElementById("password");
