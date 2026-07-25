@@ -1,7 +1,7 @@
 //==================================================
 // SR Chits ERP
-// My Chits V2.0
-// Aadhaar Based
+// My Chits V2.1
+// Aadhaar Based Multi Group
 //==================================================
 
 import { db } from "./firebase.js";
@@ -14,16 +14,16 @@ getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
-// Session
+// Session Check
 //==================================================
 
 const aadhaarNumber =
 sessionStorage.getItem("aadhaarNumber");
 
-if(!aadhaarNumber){
+if (!aadhaarNumber) {
 
-window.location.href =
-"member-login.html";
+    window.location.href =
+    "member-login.html";
 
 }
 
@@ -42,6 +42,18 @@ document.getElementById("totalGroups");
 
 const chitContainer =
 document.getElementById("chitContainer");
+
+//==================================================
+// Currency
+//==================================================
+
+function formatCurrency(value){
+
+    return "₹" +
+    Number(value || 0)
+    .toLocaleString("en-IN");
+
+}
 //==================================================
 // Load My Chits
 //==================================================
@@ -68,19 +80,15 @@ return;
 
 let html = "";
 
-let firstMember = null;
-
 let totalActive = 0;
 
-memberName.textContent = "Loading...";
+let firstMember = true;
 
-memberSnapshot.forEach(docSnap=>{
+for(const docSnap of memberSnapshot.docs){
 
 const member = docSnap.data();
 
-if(!firstMember){
-
-firstMember = member;
+if(firstMember){
 
 memberName.textContent =
 member.memberName || "-";
@@ -88,95 +96,110 @@ member.memberName || "-";
 referenceNo.textContent =
 member.referenceNo || "-";
 
+firstMember = false;
+
 }
 
 totalActive++;
 
-html += `
-<div class="chit-card">
+let groupName = "-";
 
-<div class="chit-title">
+let chitAmount = 0;
 
-${member.groupName || "-"}
+let monthlyAmount = 0;
 
-</div>
+const groupQuery = query(
+collection(db,"groups"),
+where("groupCode","==",member.groupCode)
+);
 
-<div class="chit-row">
+const groupSnapshot =
+await getDocs(groupQuery);
 
-<span>Status</span>
+if(!groupSnapshot.empty){
 
-<span class="status-active">
+const group =
+groupSnapshot.docs[0].data();
 
-${member.accountStatus || "Active"}
+groupName =
+group.groupName || "-";
 
-</span>
+chitAmount =
+group.chitAmount || 0;
 
-</div>
+monthlyAmount =
+group.monthlyAmount || 0;
 
-<div class="chit-row">
+}
+        html += `
+        <div class="chit-card">
 
-<span>Member Code</span>
+            <div class="chit-title">
+                ${groupName}
+            </div>
 
-<span>
+            <div class="chit-row">
+                <span>Status</span>
+                <span class="status-active">
+                    ${member.accountStatus || "Active"}
+                </span>
+            </div>
 
-${member.memberCode || "-"}
+            <div class="chit-row">
+                <span>Member Code</span>
+                <span>${member.memberCode || "-"}</span>
+            </div>
 
-</span>
+            <div class="chit-row">
+                <span>Group Code</span>
+                <span>${member.groupCode || "-"}</span>
+            </div>
 
-</div>
+            <div class="chit-row">
+                <span>Chit Value</span>
+                <span>${formatCurrency(chitAmount)}</span>
+            </div>
 
-<div class="chit-row">
+            <div class="chit-row">
+                <span>Monthly Amount</span>
+                <span>${formatCurrency(monthlyAmount)}</span>
+            </div>
 
-<span>Group Code</span>
+            <div class="card-buttons">
 
-<span>
+                <button
+                    class="passbook-btn"
+                    data-member="${docSnap.id}">
 
-${member.groupCode || "-"}
+                    Passbook
 
-</span>
+                </button>
 
-</div>
+                <button
+                    class="payment-btn"
+                    data-member="${docSnap.id}">
 
-<div class="card-buttons">
+                    Payments
 
-<button
-class="passbook-btn"
-data-member="${docSnap.id}">
+                </button>
 
-Passbook
+            </div>
 
-</button>
+        </div>
+        `;
 
-<button
-class="payment-btn"
-data-member="${docSnap.id}">
+    }
 
-Payments
+    totalGroups.textContent = totalActive;
 
-</button>
-
-</div>
-
-</div>
-`;
-
-});
-
-totalGroups.textContent =
-totalActive;
-
-chitContainer.innerHTML =
-html;
-    //--------------------------------------------------
-// Render Completed
-//--------------------------------------------------
+    chitContainer.innerHTML = html;
 
 }
 catch(error){
 
-console.error(error);
+    console.error(error);
 
-alert("Unable to load My Chits.");
+    alert("Unable to load My Chits.");
 
 }
 
@@ -190,56 +213,41 @@ loadMyChits();
 
 document.addEventListener("click",(e)=>{
 
-//----------------------------
-// Passbook
-//----------------------------
+    if(e.target.classList.contains("passbook-btn")){
 
-if(e.target.classList.contains("passbook-btn")){
+        sessionStorage.setItem(
+            "selectedMemberId",
+            e.target.dataset.member
+        );
 
-const memberId =
-e.target.dataset.member;
+        window.location.href =
+        "member-passbook.html";
 
-// Selected Group
-sessionStorage.setItem(
-"selectedMemberId",
-memberId
-);
+    }
 
-window.location.href =
-"member-passbook.html";
+    if(e.target.classList.contains("payment-btn")){
 
-}
+        sessionStorage.setItem(
+            "selectedMemberId",
+            e.target.dataset.member
+        );
 
-//----------------------------
-// Payments
-//----------------------------
+        window.location.href =
+        "member-payment-history.html";
 
-if(e.target.classList.contains("payment-btn")){
-
-const memberId =
-e.target.dataset.member;
-
-sessionStorage.setItem(
-"selectedMemberId",
-memberId
-);
-
-window.location.href =
-"member-payment-history.html";
-
-}
+    }
 
 });
 
 //==================================================
-// Back
+// Back Button
 //==================================================
 
 document
 .getElementById("backBtn")
 .addEventListener("click",()=>{
 
-window.location.href =
-"member-dashboard.html";
+    window.location.href =
+    "member-dashboard.html";
 
 });
