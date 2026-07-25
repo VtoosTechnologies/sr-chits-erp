@@ -1,9 +1,3 @@
-console.log("Profile JS Loaded");
-
-const memberId = sessionStorage.getItem("memberId");
-
-console.log("Member ID:", memberId);
-console.log("DB:", db);
 //==================================================
 // Member Profile
 //==================================================
