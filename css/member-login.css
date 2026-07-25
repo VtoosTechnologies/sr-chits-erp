@@ -1,0 +1,112 @@
+/*==================================================
+SR Chits ERP
+Member Login
+Part - 1B
+==================================================*/
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#1565c0,#0d47a1);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.login-container{
+width:100%;
+max-width:420px;
+}
+
+.login-card{
+background:#fff;
+border-radius:15px;
+padding:35px 30px;
+box-shadow:0 10px 30px rgba(0,0,0,.2);
+text-align:center;
+}
+
+.logo h1{
+font-size:30px;
+color:#1565c0;
+margin-bottom:8px;
+}
+
+.logo p{
+color:#666;
+font-size:14px;
+margin-bottom:25px;
+}
+
+.login-title{
+font-size:22px;
+font-weight:600;
+margin-bottom:8px;
+}
+
+.login-subtitle{
+font-size:14px;
+color:#777;
+margin-bottom:25px;
+}
+
+.input-group{
+margin-bottom:18px;
+text-align:left;
+}
+
+.input-group label{
+display:block;
+margin-bottom:6px;
+font-weight:500;
+}
+
+.input-group input{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:15px;
+}
+
+.input-group input:focus{
+outline:none;
+border-color:#1565c0;
+}
+
+.login-btn{
+width:100%;
+padding:13px;
+background:#1565c0;
+color:#fff;
+border:none;
+border-radius:8px;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+}
+
+.login-btn:hover{
+background:#0d47a1;
+}
+
+.footer{
+margin-top:25px;
+font-size:13px;
+color:#666;
+line-height:22px;
+}
+
+.version{
+margin-top:10px;
+font-size:12px;
+color:#999;
+}
