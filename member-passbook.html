@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Member Passbook | SR Chits ERP
+</title>
+
+<link
+rel="stylesheet"
+href="css/member-passbook.css">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+
+    <header class="header">
+
+        <button
+        id="backBtn"
+        class="back-btn">
+
+            <i class="fas fa-arrow-left"></i>
+
+        </button>
+
+        <h2>
+
+            Member Passbook
+
+        </h2>
+
+    </header>
+
+    <!-- Member Information -->
+
+    <div class="member-card">
+
+        <h3 id="memberName">
+
+            Loading...
+
+        </h3>
+
+        <p>
+
+            Customer ID :
+            <span id="referenceNo">
+                -
+            </span>
+
+        </p>
+
+        <p>
+
+            Group :
+            <span id="groupName">
+                -
+            </span>
+
+        </p>
+
+        <p>
+
+            Member Code :
+            <span id="memberCode">
+                -
+            </span>
+
+        </p>
+
+    </div>
+
+    <!-- Summary -->
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+
+            <i class="fas fa-arrow-up"></i>
+
+            <h4>
+
+                Total Debit
+
+            </h4>
+
+            <p id="totalDebit">
+
+                ₹0
+
+            </p>
+
+        </div>
+
+        <div class="summary-card">
+
+            <i class="fas fa-arrow-down"></i>
+
+            <h4>
+
+                Total Credit
+
+            </h4>
+
+            <p id="totalCredit">
+
+                ₹0
+
+            </p>
+
+        </div>
+
+        <div class="summary-card">
+
+            <i class="fas fa-wallet"></i>
+
+            <h4>
+
+                Balance
+
+            </h4>
+
+            <p id="balance">
+
+                ₹0
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Transactions -->
+
+    <div class="card">
+
+        <h3>
+
+            <i class="fas fa-book"></i>
+
+            Passbook Entries
+
+        </h3>
+
+        <div
+        id="transactionList"
+        class="transaction-list">
+
+            <div class="empty">
+
+                No transactions found.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+
+    Powered by
+
+    <strong>
+
+        VTOOS Software Solutions
+
+    </strong>
+
+    <br>
+
+    Version 1.0.0
+
+</footer>
+
+<script
+type="module"
+src="js/member-passbook.js">
+</script>
+
+</body>
+
+</html>
