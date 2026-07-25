@@ -261,3 +261,132 @@ Responsive
 }
 
 }
+/*=========================================
+Member Summary
+=========================================*/
+
+.member-summary{
+
+    background:#ffffff;
+
+    border-radius:15px;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+    text-align:center;
+
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+}
+
+.member-summary h2{
+
+    margin-bottom:10px;
+
+    color:#0d47a1;
+
+}
+
+.member-summary p{
+
+    margin:5px 0;
+
+    color:#555;
+
+    font-size:15px;
+
+}
+
+/*=========================================
+Chit Cards
+=========================================*/
+
+.chit-card{
+
+    background:#fff;
+
+    border-radius:15px;
+
+    padding:18px;
+
+    margin-bottom:18px;
+
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+}
+
+.chit-title{
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    color:#0d47a1;
+
+    margin-bottom:10px;
+
+}
+
+.chit-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin:8px 0;
+
+    font-size:15px;
+
+}
+
+.status-active{
+
+    color:green;
+
+    font-weight:bold;
+
+}
+
+.card-buttons{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:15px;
+
+}
+
+.card-buttons button{
+
+    flex:1;
+
+    border:none;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+}
+
+.passbook-btn{
+
+    background:#1976d2;
+
+    color:#fff;
+
+}
+
+.payment-btn{
+
+    background:#43a047;
+
+    color:#fff;
+
+}
