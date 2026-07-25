@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | SR Chits ERP</title>
+
+    <link rel="stylesheet" href="css/member-profile.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+
+        <button class="back-btn" id="backBtn">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+
+        <h2>My Profile</h2>
+
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Profile Card -->
+        <div class="profile-card">
+
+            <img src="images/user.png"
+                 id="memberPhoto"
+                 class="profile-photo"
+                 alt="Member">
+
+            <h2 id="memberName">Loading...</h2>
+
+            <p id="userId">SR000001</p>
+
+        </div>
+
+        <!-- Personal Details -->
+        <div class="card">
+
+            <h3>
+                <i class="fas fa-user"></i>
+                Personal Details
+            </h3>
+
+            <div class="row">
+                <span>Member Name</span>
+                <span id="profileMemberName">-</span>
+            </div>
+
+            <div class="row">
+                <span>User ID</span>
+                <span id="profileUserId">-</span>
+            </div>
+
+            <div class="row">
+                <span>Reference No</span>
+                <span id="referenceNo">-</span>
+            </div>
+
+            <div class="row">
+                <span>Member Code</span>
+                <span id="memberCode">-</span>
+            </div>
+
+            <div class="row">
+                <span>Member Number</span>
+                <span id="memberNumber">-</span>
+            </div>
+
+        </div>
+
+        <!-- Contact Details -->
+        <div class="card">
+
+            <h3>
+                <i class="fas fa-phone"></i>
+                Contact Details
+            </h3>
+
+            <div class="row">
+                <span>Mobile Number</span>
+                <span id="mobileNumber">-</span>
+            </div>
+
+            <div class="row">
+                <span>Address</span>
+                <span id="address">-</span>
+            </div>
+
+        </div>
+
+        <!-- Identity Details -->
+        <div class="card">
+
+            <h3>
+                <i class="fas fa-id-card"></i>
+                Identity Details
+            </h3>
+
+            <div class="row">
+                <span>Aadhaar Number</span>
+                <span id="aadhaarNumber">-</span>
+            </div>
+
+            <div class="row">
+                <span>Account Status</span>
+                <span id="accountStatus">-</span>
+            </div>
+
+        </div>
+
+        <!-- Chit Details -->
+        <div class="card">
+
+            <h3>
+                <i class="fas fa-coins"></i>
+                Chit Details
+            </h3>
+
+            <div class="row">
+                <span>Group Name</span>
+                <span id="groupName">-</span>
+            </div>
+
+            <div class="row">
+                <span>Group Code</span>
+                <span id="groupCode">-</span>
+            </div>
+
+            <div class="row">
+                <span>Chit Amount</span>
+                <span id="chitAmount">-</span>
+            </div>
+
+            <div class="row">
+                <span>Monthly Amount</span>
+                <span id="monthlyAmount">-</span>
+            </div>
+
+            <div class="row">
+                <span>Total Installments</span>
+                <span id="totalInstallments">-</span>
+            </div>
+
+            <div class="row">
+                <span>Join Date</span>
+                <span id="joinDate">-</span>
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="action-buttons">
+
+            <button id="downloadPdfBtn">
+                <i class="fas fa-download"></i>
+                Download PDF
+            </button>
+
+            <button id="printBtn">
+                <i class="fas fa-print"></i>
+                Print
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+
+        <p>Powered by <strong>VTOOS Software Solutions</strong></p>
+
+        <small>Version 1.0.0</small>
+
+    </footer>
+
+    <script type="module" src="js/member-profile.js"></script>
+
+</body>
+
+</html>
