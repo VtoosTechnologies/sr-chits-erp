@@ -1,16 +1,19 @@
 import { db } from "./firebase.js";
 
 import {
-  collection,
-  addDoc,
-  getDocs,
-  doc,
-  getDoc,
-  updateDoc,
-  deleteDoc,
- serverTimestamp,
-  writeBatch
+    collection,
+    getDocs,
+    getDoc,
+    addDoc,
+    updateDoc,
+    deleteDoc,
+    doc,
+    writeBatch,
+    serverTimestamp
+  query,
+    where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
 //==================================================
 // Elements
 //==================================================
@@ -27,6 +30,16 @@ const fixedMonthly = document.getElementById("fixedMonthly");
 const monthlyAmount = document.getElementById("monthlyAmount");
 const status = document.getElementById("status");
 
+//==================================================
+// Member Selection
+//==================================================
+
+const memberSearch = document.getElementById("memberSearch");
+const searchResults = document.getElementById("searchResults");
+const selectedMembersDiv = document.getElementById("selectedMembers");
+const selectedCount = document.getElementById("selectedCount");
+
+let selectedMembers = [];
 let editId = null;
 
 //==================================================
@@ -44,7 +57,239 @@ fixedMonthly.addEventListener("change", () => {
     }
 
 });
+//==================================================
+// Render Selected Members
+//==================================================
 
+function renderSelectedMembers() {
+
+    selectedMembersDiv.innerHTML = "";
+
+    selectedCount.textContent = selectedMembers.length;
+
+    selectedMembers.forEach((member, index) => {
+
+        const card = document.createElement("div");
+
+        card.className = "member-card";
+
+        card.innerHTML = `
+            <h3>${member.memberName}</h3>
+            <p><b>Customer ID :</b> ${member.referenceNo}</p>
+            <p><b>Mobile :</b> ${member.mobileNumber}</p>
+
+            <button class="removeBtn" data-index="${index}">
+                ❌ Remove
+            </button>
+        `;
+
+        selectedMembersDiv.appendChild(card);
+
+    });
+
+    document.querySelectorAll(".removeBtn").forEach(btn => {
+
+        btn.addEventListener("click", () => {
+
+            selectedMembers.splice(Number(btn.dataset.index), 1);
+
+            renderSelectedMembers();
+
+            searchMembers(memberSearch.value);
+
+        });
+
+    });
+
+}
+
+//==================================================
+// Search Members
+//==================================================
+
+async function searchMembers(keyword = "") {
+
+    searchResults.innerHTML = "";
+
+    const snapshot = await getDocs(collection(db, "members"));
+
+    snapshot.forEach((memberDoc) => {
+
+        const data = memberDoc.data();
+
+        const text = (
+            (data.memberName || "") +
+            (data.mobileNumber || "") +
+            (data.aadhaarNumber || "") +
+            (data.referenceNo || "")
+        ).toLowerCase();
+
+        if (!text.includes(keyword.toLowerCase())) return;
+
+        if (selectedMembers.some(m => m.id === memberDoc.id)) return;
+
+        const card = document.createElement("div");
+
+        card.className = "member-card";
+
+        card.innerHTML = `
+            <h3>${data.memberName}</h3>
+            <p><b>Customer ID :</b> ${data.referenceNo}</p>
+            <p><b>Mobile :</b> ${data.mobileNumber}</p>
+
+            <button class="addBtn">
+                ➕ Add
+            </button>
+        `;
+
+        card.querySelector(".addBtn").addEventListener("click", () => {
+
+            selectedMembers.push({
+                id: memberDoc.id,
+                ...data
+            });
+
+            renderSelectedMembers();
+
+            searchMembers(memberSearch.value);
+
+        });
+
+        searchResults.appendChild(card);
+
+    });
+
+}
+
+//==================================================
+// Live Search
+//==================================================
+
+memberSearch.addEventListener("input", () => {
+
+    searchMembers(memberSearch.value);
+
+});
+
+// First Load
+searchMembers();
+//==================================================
+// Save Group
+//==================================================
+
+saveGroupBtn.addEventListener("click", async () => {
+
+    const chit = Number(chitAmount.value);
+    const members = Number(totalMembers.value);
+    const months = Number(duration.value);
+    const day = Number(auctionDay.value);
+    const start = startDate.value;
+    const groupStatus = status.value;
+
+    const isFixed = fixedMonthly.checked;
+
+    let monthly = 0;
+
+    if (isFixed) {
+
+        monthly = Number(monthlyAmount.value);
+
+        if (!monthly || monthly <= 0) {
+            alert("Please enter Monthly Amount");
+            return;
+        }
+
+    }
+
+    if (!chit || !members || !months || !day || !start) {
+        alert("Please fill all required fields");
+        return;
+    }
+
+    if (selectedMembers.length !== members) {
+        alert(`Please select exactly ${members} members.`);
+        return;
+    }
+
+    let groupName;
+
+    if (chit >= 100000) {
+        groupName = `${chit / 100000} Lakh Monthly Chit`;
+    } else {
+        groupName = `${chit / 1000}K Monthly Chit`;
+    }
+
+    const amountCode =
+        chit >= 100000
+            ? String(chit / 100000).padStart(2, "0") + "L"
+            : Math.floor(chit / 1000) + "K";
+
+    const dayCode = String(day).padStart(2, "0");
+
+    const groupSnapshot = await getDocs(collection(db, "groups"));
+
+    const nextNo = String(groupSnapshot.size + 1).padStart(2, "0");
+
+    const groupCode = `SR-${amountCode}-D${dayCode}-G${nextNo}`;
+
+    // Create Group
+
+    const groupRef = await addDoc(collection(db, "groups"), {
+
+        groupCode,
+        groupName,
+
+        chitAmount: chit,
+        totalMembers: members,
+        duration: months,
+
+        auctionDay: day,
+        startDate: start,
+
+        fixedMonthly: isFixed,
+        monthlyAmount: monthly,
+
+        status: groupStatus,
+
+        createdAt: serverTimestamp()
+
+    });
+
+    // Create Group Members
+
+    const batch = writeBatch(db);
+
+    selectedMembers.forEach((member, index) => {
+
+        const groupMemberRef =
+            doc(collection(db, "groupMembers"));
+
+        batch.set(groupMemberRef, {
+
+            groupId: groupRef.id,
+            groupCode: groupCode,
+
+            memberId: member.id,
+            referenceNo: member.referenceNo,
+
+            memberName: member.memberName,
+
+            memberNumber: index + 1,
+
+            memberCode:
+                `${groupCode}-M${String(index + 1).padStart(3, "0")}`,
+
+            joinedDate: serverTimestamp()
+
+        });
+
+    });
+
+    await batch.commit();
+
+    alert("Group Created Successfully");
+
+});
 //==================================================
 // Load Groups
 //==================================================
@@ -77,11 +322,6 @@ async function loadGroups() {
 
 <p><b>Start Date :</b> ${data.startDate}</p>
 
-${data.fixedMonthly
-? `<p><b>Monthly Amount :</b> ₹${data.monthlyAmount}</p>`
-: `<p><b>Monthly Amount :</b> Variable</p>`
-}
-
 <p><b>Status :</b> ${data.status}</p>
 
 <div style="display:flex;gap:10px;margin-top:15px">
@@ -106,170 +346,10 @@ ${data.fixedMonthly
 
 loadGroups();
 //==================================================
-// Save / Update Group
-//==================================================
-
-saveGroupBtn.addEventListener("click", async () => {
-
-    const chit = Number(chitAmount.value);
-    const members = Number(totalMembers.value);
-    const months = Number(duration.value);
-    const day = Number(auctionDay.value);
-    const start = startDate.value;
-    const groupStatus = status.value;
-
-    const isFixed = fixedMonthly.checked;
-
-    let monthly = 0;
-
-    if (isFixed) {
-
-        monthly = Number(monthlyAmount.value);
-
-        if (!monthly || monthly <= 0) {
-
-            alert("Please enter Monthly Amount");
-            return;
-
-        }
-
-    }
-
-    if (
-        !chit ||
-        !members ||
-        !months ||
-        !day ||
-        !start
-    ) {
-
-        alert("Please fill all required fields");
-        return;
-
-    }
-
-    //=========================================
-    // Group Name
-    //=========================================
-
-    let groupName = "";
-
-    if (chit >= 100000) {
-
-        groupName = `${chit / 100000} Lakh Monthly Chit`;
-
-    } else {
-
-        groupName = `${chit / 1000}K Monthly Chit`;
-
-    }
-
-    try {
-
-        //=====================================
-        // UPDATE
-        //=====================================
-
-        if (editId) {
-
-            const oldDoc = await getDoc(doc(db, "groups", editId));
-
-            const oldData = oldDoc.data();
-
-            await updateDoc(doc(db, "groups", editId), {
-
-                groupCode: oldData.groupCode,
-                groupName,
-                chitAmount: chit,
-                totalMembers: members,
-                duration: months,
-                auctionDay: day,
-                startDate: start,
-                fixedMonthly: isFixed,
-                monthlyAmount: monthly,
-                status: groupStatus
-
-            });
-
-            alert("Group Updated Successfully");
-
-            editId = null;
-
-            saveGroupBtn.innerText = "Save Group";
-
-        }
-
-        //=====================================
-        // NEW GROUP
-        //=====================================
-
-        else {
-
-            const amountCode =
-                chit >= 100000
-                    ? String(chit / 100000).padStart(2, "0") + "L"
-                    : Math.floor(chit / 1000) + "K";
-
-            const dayCode =
-                String(day).padStart(2, "0");
-
-            const groupSnapshot =
-                await getDocs(collection(db, "groups"));
-
-            const nextNo =
-                String(groupSnapshot.size + 1).padStart(2, "0");
-
-            const groupCode =
-                `SR-${amountCode}-D${dayCode}-G${nextNo}`;
-
-            await addDoc(collection(db, "groups"), {
-
-                groupCode,
-                groupName,
-                chitAmount: chit,
-                totalMembers: members,
-                duration: months,
-                auctionDay: day,
-                startDate: start,
-                fixedMonthly: isFixed,
-                monthlyAmount: monthly,
-                status: groupStatus,
-                createdAt: serverTimestamp()
-
-            });
-
-            alert("Group Added Successfully");
-
-        }
-                //=========================================
-        // Reset Form
-        //=========================================
-
-        chitAmount.value = "";
-        totalMembers.value = "";
-        duration.value = "";
-        auctionDay.value = "";
-        startDate.value = "";
-        fixedMonthly.checked = false;
-        monthlyAmount.value = "";
-        monthlyAmount.disabled = true;
-        status.value = "Active";
-
-        loadGroups();
-
-    } catch (error) {
-
-        alert(error.message);
-
-    }
-
-});
-
-//==================================================
 // Delete Group
 //==================================================
 
-window.deleteGroup = async function (id) {
+window.deleteGroup = async function (groupId) {
 
     const ok = confirm("Are you sure you want to delete this group?");
 
@@ -277,61 +357,30 @@ window.deleteGroup = async function (id) {
 
     try {
 
-        await deleteDoc(doc(db, "groups", id));
+        // Delete groupMembers
+        const q = query(
+            collection(db, "groupMembers"),
+            where("groupId", "==", groupId)
+        );
+
+        const snapshot = await getDocs(q);
+
+        const batch = writeBatch(db);
+
+        snapshot.forEach((item) => {
+
+            batch.delete(item.ref);
+
+        });
+
+        // Delete Group
+        batch.delete(doc(db, "groups", groupId));
+
+        await batch.commit();
 
         alert("Group Deleted Successfully");
 
         loadGroups();
-
-    } catch (error) {
-
-        alert(error.message);
-
-    }
-
-};
-
-//==================================================
-// Edit Group
-//==================================================
-
-window.editGroup = async function (id) {
-
-    try {
-
-        const groupRef = doc(db, "groups", id);
-
-        const snapshot = await getDoc(groupRef);
-
-        if (!snapshot.exists()) {
-
-            alert("Group not found");
-            return;
-
-        }
-
-        const data = snapshot.data();
-
-        editId = id;
-
-        chitAmount.value = data.chitAmount;
-        totalMembers.value = data.totalMembers;
-        duration.value = data.duration;
-        auctionDay.value = data.auctionDay;
-        startDate.value = data.startDate;
-
-        fixedMonthly.checked = data.fixedMonthly;
-        monthlyAmount.disabled = !data.fixedMonthly;
-        monthlyAmount.value = data.monthlyAmount || "";
-
-        status.value = data.status;
-
-        saveGroupBtn.innerText = "Update Group";
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
 
     } catch (error) {
 
