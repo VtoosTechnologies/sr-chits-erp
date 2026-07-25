@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SR Chits ERP - Groups</title>
@@ -72,15 +71,29 @@ disabled>
 
 <select id="status">
 
-<option value="Active">
-Active
-</option>
+<option value="Active">Active</option>
 
-<option value="Closed">
-Closed
-</option>
+<option value="Closed">Closed</option>
 
 </select>
+
+<hr>
+
+<h2>Add Members</h2>
+
+<input
+type="text"
+id="memberSearch"
+placeholder="Search Member by Name / Mobile / Aadhaar / Customer ID">
+
+<div id="searchResults"></div>
+
+<h3>
+Selected Members :
+<span id="selectedCount">0</span>
+</h3>
+
+<div id="selectedMembers"></div>
 
 <button id="saveGroupBtn">
 
@@ -95,8 +108,6 @@ Save Group
 <h2>Groups List</h2>
 
 <div id="groupsList">
-
-<!-- Groups will be loaded here -->
 
 </div>
 
