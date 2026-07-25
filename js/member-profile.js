@@ -157,7 +157,6 @@ document.getElementById("printBtn")
     window.print();
 
 });
-
 //==================================================
 // Download PDF
 //==================================================
@@ -165,6 +164,41 @@ document.getElementById("printBtn")
 document.getElementById("downloadPdfBtn")
 .addEventListener("click", () => {
 
-    alert("PDF Download will be available in next update.");
+    const element = document.querySelector(".container");
+
+    const member =
+        profileMemberName.textContent || "Member";
+
+    const user =
+        profileUserId.textContent || "Profile";
+
+    const options = {
+
+        margin: 0.4,
+
+        filename: `${user}_Profile.pdf`,
+
+        image: {
+            type: "jpeg",
+            quality: 1
+        },
+
+        html2canvas: {
+            scale: 2,
+            useCORS: true
+        },
+
+        jsPDF: {
+            unit: "in",
+            format: "a4",
+            orientation: "portrait"
+        }
+
+    };
+
+    html2pdf()
+        .set(options)
+        .from(element)
+        .save();
 
 });
