@@ -369,44 +369,24 @@ return first-second;
 let runningBalance = 0;
 
 records.forEach(item=>{
+const debit =
+Number(item.debit || 0);
 
-const amount =
-Number(item.amount || 0);
+const credit =
+Number(item.credit || 0);
 
-let debit = 0;
-let credit = 0;
+runningBalance =
+runningBalance + debit - credit;
 
-//------------------------------------------
-// Debit
-//------------------------------------------
-
-if(
-item.transactionType==="Advance Given" ||
-item.transactionType==="Installment Due"
-){
-
-debit = amount;
-runningBalance += amount;
-
-}
-
-//------------------------------------------
-// Credit
-//------------------------------------------
-
-if(
-item.transactionType==="COLLECTION"
-){
-
-credit = amount;
-runningBalance -= amount;
-
-}
 
 const date =
+item.transactionDate
+? new Date(item.transactionDate).toLocaleDateString("en-GB")
+: (
 item.createdAt?.toDate
 ? item.createdAt.toDate().toLocaleDateString("en-GB")
-: "-";
+: "-"
+);
 
 statementBody.innerHTML += `
 
@@ -414,7 +394,7 @@ statementBody.innerHTML += `
 
 <td>${date}</td>
 
-<td>${item.transactionType || "-"}</td>
+${(item.transactionType || "-").replaceAll("_"," ")}
 
 <td>${item.groupCode || "-"}</td>
 
