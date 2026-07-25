@@ -27,20 +27,21 @@ max-width:420px;
 
 .login-card{
 background:#fff;
-border-radius:15px;
+border-radius:12px;
 padding:35px 30px;
 box-shadow:0 10px 30px rgba(0,0,0,.2);
 text-align:center;
 }
 
 .logo h1{
-font-size:30px;
+font-size:28px;
+font-weight:700;
 color:#1565c0;
 margin-bottom:8px;
 }
 
 .logo p{
-color:#666;
+color:#777;
 font-size:14px;
 margin-bottom:25px;
 }
@@ -74,11 +75,13 @@ padding:12px;
 border:1px solid #ccc;
 border-radius:8px;
 font-size:15px;
+  transition:.3s;
 }
 
 .input-group input:focus{
 outline:none;
 border-color:#1565c0;
+box-shadow:0 0 0 3px rgba(21,101,192,.15);
 }
 
 .login-btn{
@@ -97,7 +100,9 @@ transition:.3s;
 .login-btn:hover{
 background:#0d47a1;
 }
-
+.login-btn:active{
+transform:scale(.98);
+}
 .footer{
 margin-top:25px;
 font-size:13px;
