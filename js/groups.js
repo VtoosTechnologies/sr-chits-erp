@@ -76,7 +76,6 @@ function renderSelectedMembers() {
         card.innerHTML = `
             <h3>${member.memberName}</h3>
             <p><b>Customer ID :</b> ${member.referenceNo}</p>
-            <p><b>Mobile :</b> ${member.mobileNumber}</p>
 
             <button class="removeBtn" data-index="${index}">
                 ❌ Remove
@@ -135,7 +134,6 @@ async function searchMembers(keyword = "") {
         card.innerHTML = `
             <h3>${data.memberName}</h3>
             <p><b>Customer ID :</b> ${data.referenceNo}</p>
-            <p><b>Mobile :</b> ${data.mobileNumber}</p>
 
             <button class="addBtn">
                 ➕ Add
