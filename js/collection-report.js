@@ -95,7 +95,9 @@ id:doc.id,
 ...doc.data()
 
 }));
-
+console.log("Members :", memberData.length);
+console.log("Ledger :", ledgerData.length);
+console.log("First Ledger :", ledgerData[0]);
 buildReport();
 
 }
