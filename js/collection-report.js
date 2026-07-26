@@ -126,6 +126,11 @@ console.log("Member :", member.referenceNo);
 const memberLedger =
 ledgerData.filter(item =>
     item.memberId === member.referenceNo
+console.log("Member Ref :", member.referenceNo);
+
+console.log(
+    "Ledger Member IDs :",
+    ledgerData.map(x => x.memberId)                  
 );
 
 console.log("Matched Ledger :", memberLedger);
