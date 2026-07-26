@@ -4,7 +4,7 @@ Collection Report
 Part - 1
 ==================================================*/
 
-import { db } from "../firebase.js";
+import { db } from "./firebase.js";
 
 import {
 collection,
