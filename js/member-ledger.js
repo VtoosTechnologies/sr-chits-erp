@@ -199,6 +199,7 @@ ${member.referenceNo}
 //==================================================
 
 async function selectMember(member){
+    alert("Selected : " + member.memberName);
 
     selectedMember = member;
 
