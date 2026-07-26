@@ -23,6 +23,7 @@ import {
 //==================================================
 
 const groupsRef = collection(db, "groups");
+const groupMembersRef = collection(db, "groupMembers");
 const membersRef = collection(db, "members");
 const auctionsRef = collection(db, "auctions");
 const pendingRef = collection(db, "pendingRegister");
@@ -445,7 +446,6 @@ function calculateDueDate() {
 //==================================================
 // Load Members
 //==================================================
-
 async function loadMembers() {
 
     winner.innerHTML =
@@ -456,7 +456,7 @@ async function loadMembers() {
     if (!selectedGroup) return;
 
     const q = query(
-        membersRef,
+        groupMembersRef,
         where("groupCode", "==", selectedGroup.groupCode)
     );
 
@@ -467,13 +467,14 @@ async function loadMembers() {
         const data = doc.data();
 
         winner.innerHTML += `
-        <option value="${doc.id}">
+        <option value="${data.referenceNo}">
             ${data.memberCode} - ${data.memberName}
         </option>`;
 
     });
 
 }
+
 //==================================================
 // Winner Change
 //==================================================
@@ -790,7 +791,7 @@ async function generatePendingRegister(auctionId){
     if(!selectedGroup) return;
 
     const memberQuery = query(
-        membersRef,
+        groupMembersRef,
         where(
             "groupCode",
             "==",
