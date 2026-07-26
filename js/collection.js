@@ -1125,7 +1125,7 @@ await addDoc(
 
         receiptNo: entry.transactionNo,
 
-        referenceNo: entry.transactionNo,
+        referenceNo: selectedMember.referenceNo,
 
         remarks: entry.remarks,
 
