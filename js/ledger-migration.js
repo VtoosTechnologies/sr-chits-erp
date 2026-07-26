@@ -65,14 +65,14 @@ startMigration.addEventListener(
 async function migrateLedger() {
 
     if (!confirm(
-        "This will migrate all Pending Register records into Member Ledger.\n\nContinue?"
+        "This will repair all Member Ledger records.\n\nContinue?"
     )) {
         return;
     }
 
     startMigration.disabled = true;
 
-    migrationStatus.textContent = "Reading Pending Register...";
+    migrationStatus.textContent = "Reading Member Ledger...";
 
     try {
 
@@ -113,11 +113,7 @@ referenceNo: data.memberCode || data.referenceNo || "",
 migrated++;
 migratedRecords.textContent = migrated;
 
-            migrated++;
-
-            migratedRecords.textContent = migrated;
-
-        }
+}
               migrationStatus.textContent =
         "✅ Migration Completed Successfully.";
 
