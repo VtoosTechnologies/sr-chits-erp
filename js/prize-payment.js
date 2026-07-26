@@ -258,26 +258,26 @@ async function loadWinner(){
 
             memberSnapshot.forEach(memberDoc=>{
 
-if(member.referenceNo === auction.winnerId){
+    const member = memberDoc.data();
 
-                    const member = memberDoc.data();
+    if(member.referenceNo === auction.winnerId){
 
-                    const option =
-                    document.createElement("option");
+        const option =
+        document.createElement("option");
 
-                    option.value = auction.winnerId;
-    option.dataset.auctionId =
-auctionDoc.id;
+        option.value = auction.winnerId;
 
-                    option.textContent =
-                    member.memberName;
+        option.dataset.auctionId =
+        auctionDoc.id;
 
-                    winner.appendChild(option);
+        option.textContent =
+        member.memberName;
 
-                }
+        winner.appendChild(option);
 
-            });
+    }
 
+});
         }
 
     });
