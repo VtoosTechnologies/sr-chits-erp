@@ -124,8 +124,8 @@ const memberId =
 member.referenceNo;
 
 const memberLedger =
-ledgerData.filter(item=>
-item.referenceNo===memberId
+ledgerData.filter(item =>
+    item.memberId === member.referenceNo
 );
 
 const memberGroups =
