@@ -755,6 +755,7 @@ paymentDate.value,
 
         memberName:
         memberName.value,
+        referenceNo: winnerReferenceNo.value,
 
         groupId:
         group.value,
