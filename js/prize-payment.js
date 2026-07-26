@@ -611,6 +611,8 @@ if(currentPaid > remaining){
 
         const receiptNo =
         await generateReceiptNo();
+        transactionNo.value =
+receiptNo;
         let previousBalance = 0;
 
 const ledgerQuery = query(
@@ -771,8 +773,7 @@ selectedGroupCode,
         credit:
         Number(paidAmount.value),
 
-       balance:
-Number(balanceAmount.value), 
+       balance: 0,
 
         paymentMethod:
         paymentMethod.value,
