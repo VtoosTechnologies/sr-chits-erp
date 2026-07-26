@@ -315,9 +315,7 @@ renderLedger(
     debitTotal,
     creditTotal,
     outstandingTotal
-); 
-
-}
+);
         } catch (error) {
 
         console.error(error);
