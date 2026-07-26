@@ -253,8 +253,7 @@ async function loadLedger() {
                 "aadhaarNumber",
                 "==",
                 selectedMember.aadhaarNumber
-            ),
-            orderBy("createdAt")
+            )
         )
     );
         alert("Ledger Count : " + ledgerSnap.size);
