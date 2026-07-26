@@ -214,7 +214,8 @@ async function selectMember(member){
     selectedMemberCard.style.display="block";
     referenceNo.textContent =
 member.referenceNo || "-";
-
+memberCode.textContent =
+member.memberCode || "-";
     memberName.textContent =
     member.memberName || "-";
     alert(member.memberName);
@@ -315,6 +316,14 @@ renderLedger(
     creditTotal,
     outstandingTotal
 ); 
+
+}
+        } catch (error) {
+
+        console.error(error);
+        alert(error.message);
+
+    }
 
 }
 //==================================================
