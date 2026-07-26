@@ -80,6 +80,7 @@ memberList.style.display="none";
 
 searchMember.addEventListener("input", async () => {
     try {
+        alert("Searching...");
 
         const keyword = searchMember.value.trim().toLowerCase();
 
@@ -89,6 +90,7 @@ searchMember.addEventListener("input", async () => {
         if (keyword.length < 2) return;
 
         const snapshot = await getDocs(collection(db, "members"));
+        alert("Members : " + snapshot.size);
 
         const results = [];
 
