@@ -18,9 +18,6 @@ import {
 // Firestore Collections
 //==================================================
 
-const pendingRef =
-collection(db, "pendingRegister");
-
 const ledgerRef =
 collection(db, "memberLedger");
 
