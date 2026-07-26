@@ -213,9 +213,6 @@ async function selectMember(member){
     referenceNo.textContent =
 member.referenceNo || "-";
 
-    memberCode.textContent =
-    member.memberCode || "-";
-
     memberName.textContent =
     member.memberName || "-";
     alert(member.memberName);
