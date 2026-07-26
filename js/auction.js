@@ -814,10 +814,10 @@ for (const memberDoc of memberSnapshot.docs) {
         groupCode: selectedGroup.groupCode,
         groupName: selectedGroup.groupName,
 
-        aadhaarNumber: member.aadhaarNumber,
+       aadhaarNumber: "", 
         memberCode: member.memberCode,
         memberName: member.memberName,
-        mobileNumber: member.mobileNumber,
+        mobileNumber: "",
 
         auctionMonth: currentAuctionMonth,
         installmentNo: currentAuctionMonth,
