@@ -9,9 +9,8 @@ import { db } from "./firebase.js";
 import {
     collection,
     getDocs,
-    addDoc,
-    query,
-    where,
+    doc,
+    updateDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
@@ -104,79 +103,20 @@ async function migrateLedger() {
 
             const data = docSnap.data();
 
-            const alreadyExists =
-            await checkLedgerExists(data);
+const data = docSnap.data();
 
-            if (alreadyExists) {
+await updateDoc(
+    doc(db, "memberLedger", docSnap.id),
+    {
+        memberId: data.memberCode || "",
+        referenceNo: data.memberCode || "",
+        updatedAt: serverTimestamp(),
+        updatedBy: "Repair Tool"
+    }
+);
 
-                skipped++;
-
-                skippedRecords.textContent = skipped;
-
-                continue;
-
-            }
-
-            await addDoc(ledgerRef, {
-
-                memberId:
-                    data.memberId || "",
-
-                aadhaarNumber:
-                    data.aadhaarNumber || "",
-
-                memberCode:
-                    data.memberCode || "",
-
-                memberName:
-                    data.memberName || "",
-
-                groupCode:
-                    data.groupCode || "",
-
-                groupName:
-                    data.groupName || "",
-
-                transactionType:
-                    "INSTALLMENT_DUE",
-
-                transactionDate:
-                    data.dueDate || new Date(),
-
-                installmentNo:
-                    data.installmentNo || 1,
-
-                debit:
-                    Number(data.pendingAmount || 0),
-
-                credit:
-                    0,
-
-                adjustedAmount:
-                    0,
-
-                paymentMode:
-                    "",
-
-                receiptNo:
-                    "",
-
-                referenceNo:
-                    "",
-
-                narration:
-                    "Migrated from Pending Register",
-
-                remarks:
-                    "One Time Migration",
-
-                createdAt:
-                    serverTimestamp(),
-
-                createdBy:
-                    "Migration Tool"
-
-            });
+migrated++;
+migratedRecords.textContent = migrated;
 
             migrated++;
 
@@ -211,31 +151,3 @@ async function migrateLedger() {
 //==================================================
 // Check Duplicate
 //==================================================
-
-async function checkLedgerExists(data) {
-
-    const q = query(
-        ledgerRef,
-        where(
-            "memberCode",
-            "==",
-            data.memberCode || ""
-        ),
-        where(
-            "installmentNo",
-            "==",
-            data.installmentNo || 1
-        ),
-        where(
-            "transactionType",
-            "==",
-            "INSTALLMENT_DUE"
-        )
-    );
-
-    const snapshot =
-    await getDocs(q);
-
-    return !snapshot.empty;
-
-}
