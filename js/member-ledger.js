@@ -236,6 +236,7 @@ member.referenceNo || "-";
 // Part 3
 //==================================================
 async function loadLedger() {
+    try {
 
     ledger = [];
 
@@ -253,6 +254,7 @@ async function loadLedger() {
             orderBy("createdAt")
         )
     );
+        alert("Ledger Count : " + ledgerSnap.size);
 
     ledgerSnap.forEach(doc => {
 
