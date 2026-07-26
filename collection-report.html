@@ -5,13 +5,11 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Collection Report</title>
 
-<link rel="stylesheet"
-href="css/collection-report.css">
+<link rel="stylesheet" href="css/collection-report.css">
 
 </head>
 
@@ -19,7 +17,35 @@ href="css/collection-report.css">
 
 <div class="container">
 
-<h2>Collection Report</h2>
+<h2>📊 Collection Report</h2>
+
+<!--=================================
+Summary Cards
+==================================-->
+
+<div class="summary">
+
+<div class="summary-card">
+<h4>Total Pending Amount</h4>
+<h2 id="totalPending">₹0</h2>
+</div>
+
+<div class="summary-card">
+<h4>Total Advance (Loan)</h4>
+<h2 id="totalAdvance">₹0</h2>
+</div>
+
+<div class="summary-card">
+<h4>Pending Members</h4>
+<h2 id="pendingMembers">0</h2>
+</div>
+
+<div class="summary-card">
+<h4>Completed Members</h4>
+<h2 id="completedMembers">0</h2>
+</div>
+
+</div>
 
 <!--=================================
 Filters
@@ -30,80 +56,20 @@ Filters
 <div class="row">
 
 <div class="form-group">
-
-<label>Chit Amount</label>
-
-<select id="chitAmountFilter">
-
-<option value="">
-Select Chit Amount
-</option>
-
+<label>Status</label>
+<select id="statusFilter">
+<option value="ALL">All</option>
+<option value="PENDING">Pending</option>
+<option value="COMPLETED">Completed</option>
 </select>
-
 </div>
 
 <div class="form-group">
-
-<label>Auction Day</label>
-
-<select id="auctionDayFilter">
-
-<option value="">
-Select Auction Day
-</option>
-
-</select>
-
-</div>
-
-<div class="form-group">
-
-<label>Member</label>
-
-<select id="memberFilter">
-
-<option value="">
-All Members
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-<div class="row">
-
-<div class="form-group">
-
-<label>Collection Month</label>
-
+<label>Search</label>
 <input
-type="number"
-id="collectionMonth"
-placeholder="Month">
-
-</div>
-
-<div class="form-group">
-
-<label>From Date</label>
-
-<input
-type="date"
-id="fromDate">
-
-</div>
-
-<div class="form-group">
-
-<label>To Date</label>
-
-<input
-type="date"
-id="toDate">
-
+type="text"
+id="searchInput"
+placeholder="Customer ID / Member Name / Mobile">
 </div>
 
 </div>
@@ -111,15 +77,15 @@ id="toDate">
 <div class="button-area">
 
 <button id="searchReport">
-
 🔍 Search
+</button>
 
+<button id="exportExcel">
+📊 Excel
 </button>
 
 <button id="printReport">
-
 🖨 Print
-
 </button>
 
 </div>
@@ -127,63 +93,7 @@ id="toDate">
 </div>
 
 <!--=================================
-Summary
-==================================-->
-
-<div class="summary">
-
-<div class="summary-card">
-
-<h4>Total Collection</h4>
-
-<h2 id="totalCollection">
-
-₹0
-
-</h2>
-
-</div>
-
-<div class="summary-card">
-
-<h4>Total Fine</h4>
-
-<h2 id="totalFine">
-
-₹0
-
-</h2>
-
-</div>
-
-<div class="summary-card">
-
-<h4>Grand Total</h4>
-
-<h2 id="grandTotal">
-
-₹0
-
-</h2>
-
-</div>
-
-<div class="summary-card">
-
-<h4>Total Records</h4>
-
-<h2 id="totalRecords">
-
-0
-
-</h2>
-
-</div>
-
-</div>
-
-<!--=================================
-Report Table
+Collection Report Table
 ==================================-->
 
 <div class="table-container">
@@ -194,21 +104,15 @@ Report Table
 
 <tr>
 
-<th>Date</th>
+<th>Customer ID</th>
 
-<th>Group</th>
+<th>Member Name</th>
 
-<th>Member</th>
+<th>Groups</th>
 
-<th>Month</th>
+<th>Pending Amount</th>
 
-<th>Collection</th>
-
-<th>Fine</th>
-
-<th>Total</th>
-
-<th>Payment</th>
+<th>Advance (Loan)</th>
 
 </tr>
 
@@ -218,7 +122,7 @@ Report Table
 
 <tr>
 
-<td colspan="8">
+<td colspan="5">
 
 No Records Found
 
@@ -227,6 +131,29 @@ No Records Found
 </tr>
 
 </tbody>
+
+<tfoot>
+
+<tr>
+
+<th colspan="2">
+Total Members :
+<span id="totalMembers">0</span>
+</th>
+
+<th id="totalGroups">0</th>
+
+<th id="footerPending">
+₹0
+</th>
+
+<th id="footerAdvance">
+₹0
+</th>
+
+</tr>
+
+</tfoot>
 
 </table>
 
@@ -237,7 +164,6 @@ No Records Found
 <script
 type="module"
 src="js/collection-report.js">
-
 </script>
 
 </body>
