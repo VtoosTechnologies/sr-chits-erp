@@ -306,14 +306,14 @@ Number(data.adjustedAmount || 0)
 
     ledger.sort((a, b) => a.date - b.date);
 
-    closingBalance.textContent =
-"₹" + runningBalance.toLocaleString("en-IN");
+   const outstandingTotal =
+debitTotal - creditTotal;
 
-    renderLedger(
-        debitTotal,
-        creditTotal,
-        outstandingTotal
-    );
+renderLedger(
+    debitTotal,
+    creditTotal,
+    outstandingTotal
+); 
 
 }
 //==================================================
