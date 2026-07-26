@@ -135,39 +135,28 @@ groupMemberData
 .map(g=>g.groupCode)
 );
 
-let pending = 0;
-let advance = 0;
+let balance = 0;
 
 memberLedger.forEach(entry=>{
 
-switch(entry.transactionType){
+balance += Number(entry.debit || 0);
 
-case "INSTALLMENT_DUE":
-pending += Number(entry.amount || 0);
-break;
-
-case "COLLECTION":
-pending -= Number(entry.amount || 0);
-break;
-
-case "ADVANCE":
-advance += Number(entry.amount || 0);
-break;
-
-case "ADVANCE_ADJUST":
-advance -= Number(entry.amount || 0);
-break;
-
-}
+balance -= Number(entry.credit || 0);
 
 });
 
-if(pending < 0){
-pending = 0;
-}
+let pending = 0;
+let advance = 0;
 
-if(advance < 0){
-advance = 0;
+if(balance > 0){
+
+pending = balance;
+
+}
+else if(balance < 0){
+
+advance = Math.abs(balance);
+
 }
 
 const status =
