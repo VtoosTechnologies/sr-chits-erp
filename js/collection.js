@@ -274,7 +274,7 @@ selectedMember.aadhaarNumber
 
 const snapshot=
 await getDocs(q);
-  console.log("Selected Member Code:", selectedMember.memberCode);
+  console.log("Selected Member Code:", selectedMember.referenceNo);
 console.log("Documents Found:", snapshot.size);
 let total=0;
 
@@ -828,7 +828,7 @@ if (balanceAmount === 0) {
 
         aadhaarNumber: selectedMember.aadhaarNumber,
 
-        memberCode: selectedMember.memberCode,
+        memberCode: selectedMember.referenceNo,
 
         memberName: selectedMember.memberName,
 
