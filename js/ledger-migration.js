@@ -79,10 +79,10 @@ async function migrateLedger() {
 
     try {
 
-        const pendingSnapshot =
-        await getDocs(pendingRef);
+       const ledgerSnapshot =
+await getDocs(ledgerRef);
 
-        total = pendingSnapshot.size;
+total = ledgerSnapshot.size;
 
         totalRecords.textContent = total;
 
@@ -94,7 +94,7 @@ async function migrateLedger() {
 
         let current = 0;
 
-        for (const docSnap of pendingSnapshot.docs) {
+        for (const docSnap of ledgerSnapshot.docs) {
 
             current++;
 
@@ -103,13 +103,11 @@ async function migrateLedger() {
 
             const data = docSnap.data();
 
-const data = docSnap.data();
-
 await updateDoc(
     doc(db, "memberLedger", docSnap.id),
     {
-        memberId: data.memberCode || "",
-        referenceNo: data.memberCode || "",
+      memberId: data.memberCode || data.referenceNo || "",
+referenceNo: data.memberCode || data.referenceNo || "",
         updatedAt: serverTimestamp(),
         updatedBy: "Repair Tool"
     }
