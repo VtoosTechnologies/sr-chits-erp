@@ -752,7 +752,8 @@ await addDoc(
 
         aadhaarNumber: selectedMember.aadhaarNumber,
 
-        memberCode: selectedMember.memberCode,
+        memberCode:
+selectedMember.referenceNo,
 
         memberName: selectedMember.memberName,
 
@@ -1089,7 +1090,7 @@ await addDoc(
 
         ledgerId: entry.transactionNo,
 
-        memberId: selectedMember.id,
+        memberId: selectedMember.referenceNo,
 
         aadhaarNumber: entry.aadhaarNumber,
 
