@@ -241,6 +241,8 @@ member.memberName;
 
 memberMobile.textContent=
 member.mobileNumber || "-";
+  console.log("Selected Member");
+console.log(selectedMember);
 await loadPendingDetails();
 
 }
@@ -273,6 +275,12 @@ selectedMember.aadhaarNumber
 
 const snapshot=
 await getDocs(q);
+  alert(
+"Aadhaar : " +
+selectedMember.aadhaarNumber +
+"\nFound : " +
+snapshot.size
+);
   console.log("Selected Member Code:", selectedMember.referenceNo);
 console.log("Documents Found:", snapshot.size);
 let total=0;
