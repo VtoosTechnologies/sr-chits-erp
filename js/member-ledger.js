@@ -307,8 +307,8 @@ Number(data.adjustedAmount || 0)
 
     ledger.sort((a, b) => a.date - b.date);
 
-    const outstandingTotal =
-        debitTotal - creditTotal;
+    closingBalance.textContent =
+"₹" + runningBalance.toLocaleString("en-IN");
 
     renderLedger(
         debitTotal,
