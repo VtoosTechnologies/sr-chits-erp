@@ -67,9 +67,6 @@ document.getElementById("remarks");
 const auctionId =
 document.getElementById("auctionId");
 
-const groupIdHidden =
-document.getElementById("groupIdHidden");
-
 const winnerReferenceNo =
 document.getElementById("winnerReferenceNo");
 
@@ -84,7 +81,8 @@ document.getElementById("paymentDate");
 //==================================================
 
 loadChitAmounts();
-
+paymentDate.value =
+new Date().toISOString().split("T")[0];
 //==================================================
 // Load Chit Amounts
 //==================================================
