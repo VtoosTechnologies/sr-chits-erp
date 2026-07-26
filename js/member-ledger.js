@@ -25,6 +25,9 @@ document.getElementById("memberList");
 
 const selectedMemberCard =
 document.getElementById("selectedMemberCard");
+const referenceNo =
+document.getElementById("referenceNo");
+
 
 const memberCode =
 document.getElementById("memberCode");
