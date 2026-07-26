@@ -6,9 +6,10 @@ import {
     getDocs,
     query,
     where,
-    serverTimestamp
+    serverTimestamp,
+    doc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
 //==================================================
 // Elements
 //==================================================
@@ -19,6 +20,7 @@ const membersList = document.getElementById("membersList");
 //==================================================
 // Load Members
 //==================================================
+let editId = null;
 
 async function loadMembers() {
 
@@ -26,9 +28,9 @@ async function loadMembers() {
 
     const snapshot = await getDocs(collection(db, "members"));
 
-    snapshot.forEach((doc) => {
+    snapshot.forEach((memberDoc) => {
 
-        const data = doc.data();
+        const data = memberDoc.data();
 
         membersList.innerHTML += `
 
@@ -46,6 +48,10 @@ async function loadMembers() {
 
 <p><b>Status :</b> ${data.status}</p>
 
+<button onclick="editMember('${memberDoc.id}')">
+✏️ Edit
+</button>
+
 </div>
 
 `;
@@ -53,6 +59,7 @@ async function loadMembers() {
     });
 
 }
+
 
 loadMembers();
 //==================================================
@@ -78,6 +85,39 @@ saveMemberBtn.addEventListener("click", async () => {
     }
 
     try {
+        //=========================================
+// Update Member
+//=========================================
+
+if (editId) {
+
+    await updateDoc(doc(db, "members", editId), {
+
+        memberName,
+        mobileNumber,
+        address,
+        aadhaarNumber,
+        status
+
+    });
+
+    alert("Member Updated Successfully");
+
+    editId = null;
+
+    saveMemberBtn.innerText = "Save Member";
+
+    document.getElementById("memberName").value = "";
+    document.getElementById("mobileNumber").value = "";
+    document.getElementById("address").value = "";
+    document.getElementById("aadhaarNumber").value = "";
+    document.getElementById("status").value = "Active";
+
+    loadMembers();
+
+    return;
+
+}
 
         //=========================================
         // Aadhaar Duplicate Check
@@ -179,3 +219,31 @@ if (searchMember) {
     });
 
 }
+//==================================================
+// Edit Member
+//==================================================
+
+window.editMember = async function(id) {
+
+    const snapshot = await getDocs(collection(db, "members"));
+
+    snapshot.forEach((memberDoc) => {
+
+        if (memberDoc.id === id) {
+
+            const data = memberDoc.data();
+
+            document.getElementById("memberName").value = data.memberName;
+            document.getElementById("mobileNumber").value = data.mobileNumber;
+            document.getElementById("address").value = data.address;
+            document.getElementById("aadhaarNumber").value = data.aadhaarNumber;
+            document.getElementById("status").value = data.status;
+
+            editId = id;
+
+            saveMemberBtn.innerText = "Update Member";
+        }
+
+    });
+
+};
