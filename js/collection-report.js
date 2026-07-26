@@ -121,7 +121,14 @@ let totalPendingMembers = 0;
 let totalCompletedMembers = 0;
 
 memberData.forEach(member=>{
+console.log("Member :", member.referenceNo);
 
+const memberLedger =
+ledgerData.filter(item =>
+    item.memberId === member.referenceNo
+);
+
+console.log("Matched Ledger :", memberLedger);
 const memberId =
 member.referenceNo;
 
