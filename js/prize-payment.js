@@ -314,6 +314,8 @@ if(data.referenceNo === winner.value){
 
             oldPending.value =
             data.pendingAmount || 0;
+    winnerReferenceNo.value =
+data.referenceNo;
 
         }
 
