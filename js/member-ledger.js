@@ -177,13 +177,7 @@ function renderMemberList(list){
 <strong>${member.memberName}</strong><br>
 
 <small>
-
 ${member.referenceNo}
-
-|
-
-${member.memberCode}
-
 </small>
 
 `;
