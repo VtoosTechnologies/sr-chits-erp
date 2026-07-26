@@ -355,24 +355,35 @@ function renderLedger(
         runningBalance -= Number(item.credit || 0);
 
         const tr = document.createElement("tr");
+tr.innerHTML = `
+<td>${formatDate(item.date)}</td>
 
-        tr.innerHTML = `
-            <td>${formatDate(item.date)}</td>
-            <td>${item.type}</td>
-            <td>${item.group}</td>
-            <td>₹${Number(item.debit || 0).toLocaleString("en-IN")}</td>
-            <td>
+<td>${item.receiptNo}</td>
+
+<td>${item.type}</td>
+
+<td>${item.group}</td>
+
+<td>
+₹${Number(item.debit || 0).toLocaleString("en-IN")}
+</td>
+
+<td>
 ${
-item.type==="Advance Adjustment"
+item.type === "Advance Adjustment"
 ?
-`Adjusted ₹${Number(item.adjustedAmount||0).toLocaleString("en-IN")}`
+`Adjusted ₹${Number(item.adjustedAmount || 0).toLocaleString("en-IN")}`
 :
-`₹${Number(item.credit||0).toLocaleString("en-IN")}`
+`₹${Number(item.credit || 0).toLocaleString("en-IN")}`
 }
 </td>
-            <td>₹${runningBalance.toLocaleString("en-IN")}</td>
-        `;
 
+<td>
+₹${runningBalance.toLocaleString("en-IN")}
+</td>
+
+<td>${item.remarks}</td>
+`;
         ledgerBody.appendChild(tr);
 
     });
