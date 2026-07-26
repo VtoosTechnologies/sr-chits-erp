@@ -116,7 +116,6 @@ let currentAuctionMonth = 0;
 //==================================================
 // Initial Load
 //==================================================
-alert("Auction JS New Version");
 loadChitAmounts();
 //==================================================
 // Load Chit Amount Filter
