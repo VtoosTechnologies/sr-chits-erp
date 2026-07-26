@@ -93,14 +93,28 @@ searchMember.addEventListener("input", async () => {
 
             const data = doc.data();
 
-            const code = (data.memberCode || "").toLowerCase();
-const name = (data.memberName || "").toLowerCase();
-const mobile = (data.mobileNumber || "").toLowerCase();
+            const reference =
+(data.referenceNo || "").toLowerCase();
 
-if (
-    code.includes(keyword) ||
-    name.includes(keyword) ||
-    mobile.includes(keyword)
+const code =
+(data.memberCode || "").toLowerCase();
+
+const name =
+(data.memberName || "").toLowerCase();
+
+const mobile =
+(data.mobileNumber || "").toLowerCase();
+
+if(
+
+reference.includes(keyword) ||
+
+code.includes(keyword) ||
+
+name.includes(keyword) ||
+
+mobile.includes(keyword)
+
 )
              {
 
@@ -149,7 +163,6 @@ function renderMemberList(list){
     }
 
     memberList.style.display="block";
-memberList.style.border = "2px solid red";
     list.forEach(member=>{
 
         const div=document.createElement("div");
@@ -157,9 +170,20 @@ memberList.style.border = "2px solid red";
         div.className="search-item";
 
         div.innerHTML=`
-            <strong>${member.memberName}</strong><br>
-            <small>${member.memberCode}</small>
-        `;
+
+<strong>${member.memberName}</strong><br>
+
+<small>
+
+${member.referenceNo}
+
+|
+
+${member.memberCode}
+
+</small>
+
+`;
 
         div.onclick=()=>{
 
@@ -188,6 +212,8 @@ async function selectMember(member){
     memberList.innerHTML="";
 
     selectedMemberCard.style.display="block";
+    referenceNo.textContent =
+member.referenceNo || "-";
 
     memberCode.textContent =
     member.memberCode || "-";
@@ -200,7 +226,7 @@ async function selectMember(member){
 
     ledgerBody.innerHTML = `
         <tr>
-            <td colspan="6">
+            <td colspan="8">
                 Loading Ledger...
             </td>
         </tr>
@@ -228,7 +254,7 @@ async function loadLedger() {
                 "==",
                 selectedMember.aadhaarNumber
             ),
-            orderBy("transactionDate")
+            orderBy("createdAt")
         )
     );
 
@@ -247,25 +273,35 @@ async function loadLedger() {
 
         ledger.push({
 
-            date:
-                data.transactionDate?.toDate?.() ||
-                data.createdAt?.toDate?.() ||
-                new Date(),
+date:
+data.transactionDate ||
+data.createdAt,
 
-            type:
-                data.transactionType || "-",
+receiptNo:
+data.receiptNo || "-",
 
-            group:
-                data.groupCode || "-",
+type:
+data.transactionType || "-",
 
-            debit: debit,
+group:
+data.groupCode || "-",
 
-            credit: credit,
+debit:
+debit,
 
-            adjustedAmount:
-                Number(data.adjustedAmount || 0)
+credit:
+credit,
 
-        });
+balance:
+Number(data.balance || 0),
+
+remarks:
+data.remarks || "",
+
+adjustedAmount:
+Number(data.adjustedAmount || 0)
+
+});
 
     });
 
@@ -297,7 +333,7 @@ function renderLedger(
 
         ledgerBody.innerHTML = `
         <tr>
-            <td colspan="6">
+            <td colspan="8">
                 No Ledger Records Found
             </td>
         </tr>
