@@ -12,6 +12,9 @@
 <body>
 
 <div class="container">
+    <input type="hidden" id="auctionId">
+<input type="hidden" id="groupIdHidden">
+<input type="hidden" id="winnerReferenceNo">
 
     <!-- Header -->
     <div class="page-header">
@@ -133,6 +136,19 @@
     <h3>Payment Details</h3>
 
     <div class="form-grid">
+        <div class="form-group">
+    <label>Transaction No</label>
+    <input
+        type="text"
+        id="transactionNo"
+        readonly>
+        </div>
+        <div class="form-group">
+    <label>Payment Date</label>
+    <input
+        type="date"
+        id="paymentDate">
+        </div>
 
         <div class="form-group">
             <label>Previously Paid</label>
