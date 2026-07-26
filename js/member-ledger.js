@@ -80,7 +80,6 @@ memberList.style.display="none";
 
 searchMember.addEventListener("input", async () => {
     try {
-        alert("Searching...");
 
         const keyword = searchMember.value.trim().toLowerCase();
 
@@ -90,7 +89,6 @@ searchMember.addEventListener("input", async () => {
         if (keyword.length < 2) return;
 
         const snapshot = await getDocs(collection(db, "members"));
-        alert("Members : " + snapshot.size);
 
         const results = [];
 
@@ -201,7 +199,6 @@ ${member.referenceNo}
 //==================================================
 
 async function selectMember(member){
-    alert("Selected : " + member.memberName);
 
     selectedMember = member;
 
@@ -218,7 +215,6 @@ memberCode.textContent =
 member.memberCode || "-";
     memberName.textContent =
     member.memberName || "-";
-    alert(member.memberName);
 
     memberMobile.textContent =
     member.mobileNumber || "-";
@@ -256,7 +252,6 @@ async function loadLedger() {
             )
         )
     );
-        alert("Ledger Count : " + ledgerSnap.size);
 
     ledgerSnap.forEach(doc => {
 
@@ -272,10 +267,12 @@ async function loadLedger() {
         creditTotal += credit;
 
         ledger.push({
-
 date:
+data.transactionDate?.toDate?.() ||
+data.createdAt?.toDate?.() ||
 data.transactionDate ||
 data.createdAt,
+
 
 receiptNo:
 data.receiptNo || "-",
@@ -408,22 +405,20 @@ item.type === "Advance Adjustment"
 //==================================================
 // Format Date
 //==================================================
-
 function formatDate(date){
 
     if(!date) return "-";
 
-    try{
+    const d = new Date(date);
 
-        const d = new Date(date);
-
-        return d.toLocaleDateString("en-GB");
-
-    }catch{
-
+    if(isNaN(d.getTime())){
         return "-";
-
     }
+
+    return d.toLocaleDateString("en-GB");
+
+}
+
 
 }
 
