@@ -258,9 +258,7 @@ async function loadWinner(){
 
             memberSnapshot.forEach(memberDoc=>{
 
-                const member = memberDoc.data();
-
-if(member.referenceNo === auction.winnerId){{
+if(member.referenceNo === auction.winnerId){
 
                     const member = memberDoc.data();
 
@@ -311,8 +309,6 @@ async function loadMemberDetails(){
 
 if(data.referenceNo === winner.value){
 
-            const data = doc.data();
-
             memberName.value =
             data.memberName || "";
 
@@ -336,12 +332,14 @@ if(data.referenceNo === winner.value){
 
     auctionResult.forEach(doc=>{
 
-        const data = doc.data();
+    const data = doc.data();
 
-        prizeAmount.value =
-        Number(data.prizeAmount) || 0;
+    auctionId.value = doc.id;
 
-    });
+    prizeAmount.value =
+    Number(data.prizeAmount) || 0;
+
+});
 
     // Load Previous Payments
     const paymentQuery = query(
@@ -638,7 +636,7 @@ group.options[group.selectedIndex]
                 receiptNo: receiptNo,
 
                 paymentDate:
-                new Date().toLocaleDateString("en-GB"),
+paymentDate.value,
 
                 groupId: group.value,
 
@@ -700,7 +698,7 @@ await addDoc(
     {
 
         transactionDate:
-        new Date().toLocaleDateString("en-GB"),
+paymentDate.value,
 
         receiptNo:
         receiptNo,
@@ -745,7 +743,7 @@ selectedGroupCode,
     {
 
         transactionDate:
-        new Date().toLocaleDateString("en-GB"),
+paymentDate.value,
 
         receiptNo:
         receiptNo,
