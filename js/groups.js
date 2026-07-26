@@ -262,24 +262,32 @@ saveGroupBtn.addEventListener("click", async () => {
         const groupMemberRef =
             doc(collection(db, "groupMembers"));
 
-        batch.set(groupMemberRef, {
+       batch.set(groupMemberRef, {
 
-            groupId: groupRef.id,
-            groupCode: groupCode,
+    groupId: groupRef.id,
 
-            memberId: member.id,
-            referenceNo: member.referenceNo,
+    groupCode: groupCode,
 
-            memberName: member.memberName,
+    memberId: member.id,
 
-            memberNumber: index + 1,
+    referenceNo: member.referenceNo,
 
-            memberCode:
-                `${groupCode}-M${String(index + 1).padStart(3, "0")}`,
+    aadhaarNumber: member.aadhaarNumber,
 
-            joinedDate: serverTimestamp()
+    mobileNumber: member.mobileNumber,
 
-        });
+    address: member.address,
+
+    memberName: member.memberName,
+
+    memberNumber: index + 1,
+
+    memberCode:
+    `${groupCode}-M${String(index + 1).padStart(3,"0")}`,
+
+    joinedDate: serverTimestamp()
+
+}); 
 
     });
 
