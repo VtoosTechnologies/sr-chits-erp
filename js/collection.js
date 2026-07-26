@@ -139,7 +139,7 @@ snapshot.forEach(doc=>{
 const data=doc.data();
 
 const code =
-(data.memberCode || "")
+(data.referenceNo || "")
 .toLowerCase();
 
 const name =
@@ -234,8 +234,8 @@ memberList.style.display="none";
 
 selectedMemberCard.style.display="block";
 
-memberCode.textContent=
-member.memberCode;
+memberCode.textContent =
+member.referenceNo;
 
 memberName.textContent=
 member.memberName;
