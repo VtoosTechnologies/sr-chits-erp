@@ -839,7 +839,7 @@ await addDoc(memberLedgerRef, {
 
     ledgerId: "LED-" + Date.now() + "-" + member.memberCode,
 
-    memberId: memberDoc.id,
+    memberId: member.referenceNo,
 
     aadhaarNumber: member.aadhaarNumber,
 
