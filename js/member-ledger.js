@@ -397,8 +397,22 @@ item.type === "Advance Adjustment"
     totalCredit.textContent =
         "₹" + totalCreditValue.toLocaleString("en-IN");
 
+    if(outstandingTotal > 0){
+
     closingBalance.textContent =
-        "₹" + outstandingTotal.toLocaleString("en-IN");
+    "₹" + outstandingTotal.toLocaleString("en-IN");
+
+}else if(outstandingTotal < 0){
+
+    closingBalance.textContent =
+    "Advance ₹" +
+    Math.abs(outstandingTotal).toLocaleString("en-IN");
+
+}else{
+
+    closingBalance.textContent = "₹0";
+
+    }
 
 }
 
