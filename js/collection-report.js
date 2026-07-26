@@ -1,332 +1,268 @@
-//==================================================
-// SR Chits ERP
-// Collection Report
-// Part - 3A
-//==================================================
+/*==================================================
+SR Chits ERP
+Collection Report
+Part - 1
+==================================================*/
 
-import { db } from "./firebase.js";
+import { db } from "../firebase.js";
 
 import {
 collection,
 getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-//==================================================
-// Collections
-//==================================================
+/*==================================================
+Elements
+==================================================*/
 
-const groupsRef = collection(db, "groups");
-const membersRef = collection(db, "members");
-const collectionsRef = collection(db, "collections");
+const totalPending =
+document.getElementById("totalPending");
 
-//==================================================
-// Elements
-//==================================================
+const totalAdvance =
+document.getElementById("totalAdvance");
 
-const chitAmountFilter =
-document.getElementById("chitAmountFilter");
+const pendingMembers =
+document.getElementById("pendingMembers");
 
-const auctionDayFilter =
-document.getElementById("auctionDayFilter");
+const completedMembers =
+document.getElementById("completedMembers");
 
-const memberFilter =
-document.getElementById("memberFilter");
+const totalMembers =
+document.getElementById("totalMembers");
 
-const collectionMonth =
-document.getElementById("collectionMonth");
+const footerPending =
+document.getElementById("footerPending");
 
-const fromDate =
-document.getElementById("fromDate");
-
-const toDate =
-document.getElementById("toDate");
-
-const searchReport =
-document.getElementById("searchReport");
-
-const printReport =
-document.getElementById("printReport");
+const footerAdvance =
+document.getElementById("footerAdvance");
 
 const reportBody =
 document.getElementById("reportBody");
 
-const totalCollection =
-document.getElementById("totalCollection");
+const statusFilter =
+document.getElementById("statusFilter");
 
-const totalFine =
-document.getElementById("totalFine");
+const searchInput =
+document.getElementById("searchInput");
 
-const grandTotal =
-document.getElementById("grandTotal");
+const searchReport =
+document.getElementById("searchReport");
 
-const totalRecords =
-document.getElementById("totalRecords");
+/*==================================================
+Variables
+==================================================*/
 
-//==================================================
-// Initial Load
-//==================================================
+let ledgerData = [];
+let memberData = [];
+let groupMemberData = [];
+let reportData = [];
 
-document.addEventListener("DOMContentLoaded", async () => {
+/*==================================================
+Load Data
+==================================================*/
 
-    await loadChitAmounts();
+async function loadData(){
 
-    await loadAuctionDays();
+const ledgerSnap =
+await getDocs(collection(db,"memberLedger"));
 
-    await loadMembers();
+ledgerData =
+ledgerSnap.docs.map(doc=>({
+
+id:doc.id,
+...doc.data()
+
+}));
+
+const memberSnap =
+await getDocs(collection(db,"members"));
+
+memberData =
+memberSnap.docs.map(doc=>({
+
+id:doc.id,
+...doc.data()
+
+}));
+
+const groupSnap =
+await getDocs(collection(db,"groupMembers"));
+
+groupMemberData =
+groupSnap.docs.map(doc=>({
+
+id:doc.id,
+...doc.data()
+
+}));
+
+buildReport();
+
+}
+
+/*==================================================
+Start
+==================================================*/
+
+loadData();
+/*==================================================
+Build Collection Report
+==================================================*/
+
+function buildReport(){
+
+reportData = [];
+
+let totalPendingAmount = 0;
+let totalAdvanceAmount = 0;
+let totalPendingMembers = 0;
+let totalCompletedMembers = 0;
+
+memberData.forEach(member=>{
+
+const memberId =
+member.referenceNo;
+
+const memberLedger =
+ledgerData.filter(item=>
+item.referenceNo===memberId
+);
+
+const memberGroups =
+new Set(
+groupMemberData
+.filter(g=>g.referenceNo===memberId)
+.map(g=>g.groupCode)
+);
+
+let pending = 0;
+let advance = 0;
+
+memberLedger.forEach(entry=>{
+
+switch(entry.transactionType){
+
+case "INSTALLMENT_DUE":
+pending += Number(entry.amount || 0);
+break;
+
+case "COLLECTION":
+pending -= Number(entry.amount || 0);
+break;
+
+case "ADVANCE":
+advance += Number(entry.amount || 0);
+break;
+
+case "ADVANCE_ADJUST":
+advance -= Number(entry.amount || 0);
+break;
+
+}
 
 });
 
-//==================================================
-// Load Chit Amount Filter
-//==================================================
-
-async function loadChitAmounts() {
-
-    chitAmountFilter.innerHTML =
-    `<option value="">All Chit Amounts</option>`;
-
-    const snapshot = await getDocs(groupsRef);
-    console.log("Groups Count :", snapshot.size);
-
-    const chitSet = new Set();
-
-    snapshot.forEach(doc => {
-
-        const data = doc.data();
-        console.log(doc.data());
-
-        if (data.chitAmount) {
-            chitSet.add(data.chitAmount);
-        }
-
-    });
-
-    [...chitSet]
-    .sort((a, b) => Number(a) - Number(b))
-    .forEach(amount => {
-
-        chitAmountFilter.innerHTML += `
-        <option value="${amount}">
-            ${amount}
-        </option>`;
-
-    });
-
+if(pending < 0){
+pending = 0;
 }
 
-//==================================================
-// Load Auction Day Filter
-//==================================================
-
-async function loadAuctionDays() {
-
-    auctionDayFilter.innerHTML =
-    `<option value="">All Auction Days</option>`;
-
-    const snapshot = await getDocs(groupsRef);
-
-    const daySet = new Set();
-
-    snapshot.forEach(doc => {
-
-        const data = doc.data();
-
-        if (data.auctionDay) {
-            daySet.add(data.auctionDay);
-        }
-
-    });
-
-    [...daySet]
-    .sort((a, b) => Number(a) - Number(b))
-    .forEach(day => {
-
-        auctionDayFilter.innerHTML += `
-        <option value="${day}">
-            ${day}
-        </option>`;
-
-    });
-
+if(advance < 0){
+advance = 0;
 }
 
-//==================================================
-// Load Member Filter
-//==================================================
+const status =
+pending>0
+? "PENDING"
+: "COMPLETED";
 
-async function loadMembers() {
+if(status==="PENDING"){
+totalPendingMembers++;
+}else{
+totalCompletedMembers++;
+}
 
-    memberFilter.innerHTML =
-    `<option value="">All Members</option>`;
+totalPendingAmount += pending;
+totalAdvanceAmount += advance;
 
-    const snapshot = await getDocs(membersRef);
+reportData.push({
 
-    snapshot.forEach(doc => {
+referenceNo:member.referenceNo,
+memberName:member.memberName,
+mobileNumber:member.mobileNumber || "",
+groups:memberGroups.size,
+pending,
+advance,
+status
 
-        const data = doc.data();
+});
 
-        memberFilter.innerHTML += `
-        <option value="${data.memberCode}">
-            ${data.memberCode} - ${data.memberName}
-        </option>`;
+});
 
-    });
+totalPending.textContent =
+"₹" +
+totalPendingAmount.toLocaleString("en-IN");
+
+totalAdvance.textContent =
+"₹" +
+totalAdvanceAmount.toLocaleString("en-IN");
+
+pendingMembers.textContent =
+totalPendingMembers;
+
+completedMembers.textContent =
+totalCompletedMembers;
+
+footerPending.textContent =
+"₹" +
+totalPendingAmount.toLocaleString("en-IN");
+
+footerAdvance.textContent =
+"₹" +
+totalAdvanceAmount.toLocaleString("en-IN");
+
+totalMembers.textContent =
+reportData.length;
+
+renderReport(reportData);
 
 }
-//==================================================
-// Search Report
-//==================================================
+/*==================================================
+Render Collection Report
+==================================================*/
 
-searchReport.addEventListener("click", loadReport);
-
-async function loadReport() {
-
-reportBody.innerHTML = `
-<tr>
-<td colspan="8">Loading...</td>
-</tr>`;
-
-let totalCollectionAmount = 0;
-let totalFineAmount = 0;
-let totalRecordCount = 0;
-
-const chitFilter = chitAmountFilter.value;
-const auctionFilter = auctionDayFilter.value;
-const memberCodeFilter = memberFilter.value;
-const monthFilter = collectionMonth.value;
-const fromFilter = fromDate.value;
-const toFilter = toDate.value;
-
-const snapshot = await getDocs(collectionsRef);
+function renderReport(data){
 
 reportBody.innerHTML = "";
 
-snapshot.forEach(doc => {
+if(data.length===0){
 
-const data = doc.data();
+reportBody.innerHTML = `
+<tr>
+<td colspan="5">No Records Found</td>
+</tr>
+`;
 
-let show = true;
-
-//----------------------------------
-// Chit Amount Filter
-//----------------------------------
-
-if (
-chitFilter &&
-data.chitAmount != chitFilter
-){
-
-show = false;
+return;
 
 }
 
-//----------------------------------
-// Auction Day Filter
-//----------------------------------
+data.sort((a,b)=>b.pending-a.pending);
 
-if (
-auctionFilter &&
-data.auctionDay != auctionFilter
-){
-
-show = false;
-
-}
-
-//----------------------------------
-// Member Filter
-//----------------------------------
-
-if (
-memberCodeFilter &&
-data.memberCode != memberCodeFilter
-){
-
-show = false;
-
-}
-
-//----------------------------------
-// Collection Month Filter
-//----------------------------------
-
-if (
-monthFilter &&
-String(data.collectionMonth) != monthFilter
-){
-
-show = false;
-
-}
-
-//----------------------------------
-// From Date
-//----------------------------------
-
-if (
-fromFilter &&
-data.collectionDate < fromFilter
-){
-
-show = false;
-
-}
-
-//----------------------------------
-// To Date
-//----------------------------------
-
-if (
-toFilter &&
-data.collectionDate > toFilter
-){
-
-show = false;
-
-}
-
-if(!show) return;
-
-//----------------------------------
-// Totals
-//----------------------------------
-
-const collectionValue =
-Number(data.monthlyAmount || 0);
-
-const fineValue =
-Number(data.fine || 0);
-
-const totalValue =
-collectionValue + fineValue;
-
-totalCollectionAmount += collectionValue;
-totalFineAmount += fineValue;
-totalRecordCount++;
-
-//----------------------------------
-// Table
-//----------------------------------
+data.forEach(item=>{
 
 reportBody.innerHTML += `
 
 <tr>
 
-<td>${data.collectionDate || ""}</td>
+<td>${item.referenceNo}</td>
 
-<td>${data.groupCode || ""}</td>
+<td>${item.memberName}</td>
 
-<td>${data.memberName || ""}</td>
+<td>${item.groups}</td>
 
-<td>${data.collectionMonth || ""}</td>
+<td>₹${Number(item.pending).toLocaleString("en-IN")}</td>
 
-<td>₹${collectionValue.toLocaleString()}</td>
-
-<td>₹${fineValue.toLocaleString()}</td>
-
-<td>₹${totalValue.toLocaleString()}</td>
-
-<td>${data.paymentMode || ""}</td>
+<td>₹${Number(item.advance).toLocaleString("en-IN")}</td>
 
 </tr>
 
@@ -334,139 +270,148 @@ reportBody.innerHTML += `
 
 });
 
-//----------------------------------
-// No Records
-//----------------------------------
+}
 
-if(totalRecordCount===0){
+/*==================================================
+Filter Report
+==================================================*/
 
-reportBody.innerHTML=`
-<tr>
-<td colspan="8">
-No Records Found
-</td>
-</tr>`;
+function filterReport(){
+
+const status =
+statusFilter.value;
+
+const keyword =
+searchInput.value
+.toLowerCase()
+.trim();
+
+let filtered =
+reportData;
+
+if(status!=="ALL"){
+
+filtered =
+filtered.filter(item=>
+item.status===status
+);
 
 }
 
-//----------------------------------
-// Summary Cards
-//----------------------------------
+if(keyword){
 
-totalCollection.textContent =
-"₹" +
-totalCollectionAmount.toLocaleString();
+filtered =
+filtered.filter(item=>
 
-totalFine.textContent =
-"₹" +
-totalFineAmount.toLocaleString();
+(item.referenceNo || "")
+.toLowerCase()
+.includes(keyword)
 
-grandTotal.textContent =
-"₹" +
-(totalCollectionAmount + totalFineAmount)
-.toLocaleString();
+||
 
-totalRecords.textContent =
-totalRecordCount;
+(item.memberName || "")
+.toLowerCase()
+.includes(keyword)
+
+||
+
+(item.mobileNumber || "")
+.includes(keyword)
+
+);
 
 }
-//==================================================
-// Default Date
-//==================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+renderReport(filtered);
 
-const today = new Date();
+}
 
-const yyyy = today.getFullYear();
+/*==================================================
+Events
+==================================================*/
 
-const mm = String(today.getMonth() + 1).padStart(2, "0");
+searchReport.addEventListener(
+"click",
+filterReport
+);
 
-const dd = String(today.getDate()).padStart(2, "0");
+statusFilter.addEventListener(
+"change",
+filterReport
+);
 
-const currentDate = `${yyyy}-${mm}-${dd}`;
+searchInput.addEventListener(
+"keyup",
+filterReport
+);
+/*==================================================
+Excel Export
+==================================================*/
 
-fromDate.value = currentDate;
+document
+.getElementById("exportExcel")
+.addEventListener("click", exportExcel);
 
-toDate.value = currentDate;
+function exportExcel(){
+
+let csv = [];
+
+csv.push([
+"Customer ID",
+"Member Name",
+"Groups",
+"Pending Amount",
+"Advance (Loan)"
+].join(","));
+
+reportData.forEach(item=>{
+
+csv.push([
+
+item.referenceNo,
+
+`"${item.memberName}"`,
+
+item.groups,
+
+item.pending,
+
+item.advance
+
+].join(","));
 
 });
 
-//==================================================
-// Auto Load Report
-//==================================================
-
-document.addEventListener("DOMContentLoaded", async () => {
-
-await loadReport();
-
+const blob =
+new Blob([csv.join("\n")],{
+type:"text/csv;charset=utf-8;"
 });
 
-//==================================================
-// Print Report
-//==================================================
+const link =
+document.createElement("a");
 
-printReport.addEventListener("click", () => {
+link.href =
+URL.createObjectURL(blob);
+
+link.download =
+"Collection_Report.csv";
+
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+}
+
+/*==================================================
+Print Report
+==================================================*/
+
+document
+.getElementById("printReport")
+.addEventListener("click",()=>{
 
 window.print();
 
 });
-
-//==================================================
-// Print Style
-//==================================================
-
-const style = document.createElement("style");
-
-style.innerHTML = `
-
-@media print{
-
-button{
-display:none;
-}
-
-.card{
-box-shadow:none;
-border:1px solid #000;
-}
-
-.summary{
-margin-top:20px;
-}
-
-.summary-card{
-border:1px solid #000;
-box-shadow:none;
-}
-
-table{
-font-size:12px;
-}
-
-body{
-background:#fff;
-padding:0;
-}
-
-}
-
-`;
-
-document.head.appendChild(style);
-
-//==================================================
-// Refresh Report when Filter Changes
-//==================================================
-
-chitAmountFilter.addEventListener("change", loadReport);
-
-auctionDayFilter.addEventListener("change", loadReport);
-
-memberFilter.addEventListener("change", loadReport);
-
-collectionMonth.addEventListener("keyup", loadReport);
-
-fromDate.addEventListener("change", loadReport);
-
-toDate.addEventListener("change", loadReport);
