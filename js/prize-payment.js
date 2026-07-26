@@ -64,6 +64,20 @@ document.getElementById("paymentStatus");
 
 const remarks =
 document.getElementById("remarks");
+const auctionId =
+document.getElementById("auctionId");
+
+const groupIdHidden =
+document.getElementById("groupIdHidden");
+
+const winnerReferenceNo =
+document.getElementById("winnerReferenceNo");
+
+const transactionNo =
+document.getElementById("transactionNo");
+
+const paymentDate =
+document.getElementById("paymentDate");
 
 //==================================================
 // Initial Load
@@ -244,7 +258,9 @@ async function loadWinner(){
 
             memberSnapshot.forEach(memberDoc=>{
 
-                if(memberDoc.id === auction.winnerId){
+                const member = memberDoc.data();
+
+if(member.referenceNo === auction.winnerId){{
 
                     const member = memberDoc.data();
 
@@ -252,6 +268,8 @@ async function loadWinner(){
                     document.createElement("option");
 
                     option.value = auction.winnerId;
+    option.dataset.auctionId =
+auctionDoc.id;
 
                     option.textContent =
                     member.memberName;
@@ -289,7 +307,9 @@ async function loadMemberDetails(){
 
     memberSnapshot.forEach(doc=>{
 
-        if(doc.id === winner.value){
+        const data = doc.data();
+
+if(data.referenceNo === winner.value){
 
             const data = doc.data();
 
