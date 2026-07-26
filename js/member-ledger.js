@@ -250,9 +250,9 @@ async function loadLedger() {
         query(
             collection(db, "memberLedger"),
             where(
-                "aadhaarNumber",
+                "memberId",
                 "==",
-                selectedMember.aadhaarNumber
+                selectedMember.referenceNo
             )
         )
     );
