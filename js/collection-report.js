@@ -310,7 +310,49 @@ filtered.filter(item=>
 );
 
 }
+let pendingAmount = 0;
+let advanceAmount = 0;
+let pendingCount = 0;
+let completedCount = 0;
 
+filtered.forEach(item=>{
+
+    pendingAmount += Number(item.pending || 0);
+
+    advanceAmount += Number(item.advance || 0);
+
+    if(item.status === "PENDING"){
+
+        pendingCount++;
+
+    }else{
+
+        completedCount++;
+
+    }
+
+});
+
+totalPending.textContent =
+"₹" + pendingAmount.toLocaleString("en-IN");
+
+totalAdvance.textContent =
+"₹" + advanceAmount.toLocaleString("en-IN");
+
+pendingMembers.textContent =
+pendingCount;
+
+completedMembers.textContent =
+completedCount;
+
+footerPending.textContent =
+"₹" + pendingAmount.toLocaleString("en-IN");
+
+footerAdvance.textContent =
+"₹" + advanceAmount.toLocaleString("en-IN");
+
+totalMembers.textContent =
+filtered.length;
 renderReport(filtered);
 
 }
