@@ -110,9 +110,23 @@ async function migrateLedger() {
             }
 
             // Find matching group member
-            const q = query(
-                collection(db, "groupMembers"),
-                where("memberCode", "==", ledger.memberCode)
+    // Skip records without a valid memberCode
+if (
+    !Object.prototype.hasOwnProperty.call(ledger, "memberCode") ||
+    ledger.memberCode == null ||
+    String(ledger.memberCode).trim() === ""
+) {
+    skipped++;
+    skippedRecords.textContent = skipped;
+    continue;
+}
+
+const memberCode = String(ledger.memberCode).trim();
+
+const q = query(
+    collection(db, "groupMembers"),
+    where("memberCode", "==", memberCode)
+);
             );
 
             const groupSnap = await getDocs(q);
