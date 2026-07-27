@@ -95,9 +95,6 @@ id:doc.id,
 ...doc.data()
 
 }));
-console.log("Members :", memberData.length);
-console.log("Ledger :", ledgerData.length);
-   console.log("First Ledger :", ledgerData[0]);
 buildReport();
 
 }
@@ -122,14 +119,22 @@ function buildReport(){
 
     memberData.forEach(member => {
 
-        const memberId = member.referenceNo;
+      const memberId = String(member.referenceNo).trim();
 
-        const memberLedger = ledgerData.filter(item =>
-            item.memberId === memberId
-        );
+const memberLedger = ledgerData.filter(item => {
 
-        console.log("Member :", memberId);
-        console.log("Matched :", memberLedger.length);
+    const ledgerMemberId =
+        String(item.memberId || "").trim();
+
+    const ledgerReferenceNo =
+        String(item.referenceNo || "").trim();
+
+    return (
+        ledgerMemberId === memberId ||
+        ledgerReferenceNo === memberId
+    );
+
+});
 
         const memberGroups = new Set(
             groupMemberData
