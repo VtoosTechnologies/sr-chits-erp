@@ -127,7 +127,6 @@ const q = query(
     collection(db, "groupMembers"),
     where("memberCode", "==", memberCode)
 );
-            );
 
             const groupSnap = await getDocs(q);
 
