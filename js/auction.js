@@ -697,7 +697,11 @@ async function saveAuctionData() {
         //==========================================
         // Save Firestore
         //==========================================
+const winnerDoc =
+await getDoc(doc(groupMembersRef, winner.value));
 
+const winnerData =
+winnerDoc.data();
         const auctionDoc = await addDoc(
     auctionsRef,
     {
