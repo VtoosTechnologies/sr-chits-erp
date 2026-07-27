@@ -9,6 +9,7 @@ import { db } from "./firebase.js";
 import {
     collection,
     getDocs,
+    getDoc,
     doc,
     query,
     where,
@@ -467,16 +468,15 @@ async function loadMembers() {
 
     const snapshot = await getDocs(q);
 
-    snapshot.forEach((doc) => {
+  snapshot.forEach((memberDoc) => {
 
-        const data = doc.data();
+    const data = memberDoc.data();
 
-      winner.innerHTML += `
-<option value="${memberDoc.id}">
-${data.memberCode} - ${data.memberName}
-</option>`;
-
-    });
+    winner.innerHTML += `
+    <option value="${memberDoc.id}">
+        ${data.memberCode} - ${data.memberName}
+    </option>`;
+});
 
 }
 
@@ -496,8 +496,6 @@ async function checkPreviousWinner() {
     if (winner.value == "") return;
 const memberDoc =
 await getDoc(doc(groupMembersRef, winner.value));
-const winnerData =
-winnerMember.data();
 const member =
 memberDoc.data();
 
@@ -738,6 +736,13 @@ async function saveAuctionData() {
 
                 remarks:
                 remarks.value.trim(),
+        winnerDocId: winner.value,
+
+referenceNo: winnerData.referenceNo,
+
+memberCode: winnerData.memberCode,
+
+memberName: winnerData.memberName,
 
                 createdAt:
                 serverTimestamp()
