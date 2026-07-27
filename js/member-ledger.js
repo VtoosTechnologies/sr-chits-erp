@@ -257,14 +257,24 @@ async function loadLedger() {
 
         const data = doc.data();
 
-        const debit =
-            Number(data.debit || 0);
+const debit =
+    Number(data.debit || 0);
 
-        const credit =
-            Number(data.credit || 0);
+const credit =
+    Number(data.credit || 0);
 
-        debitTotal += debit;
-        creditTotal += credit;
+// Outstanding calculation-ku
+// Installment transactions mattum eduthukkanum
+
+if (
+    data.transactionType === "INSTALLMENT_DUE" ||
+    data.transactionType === "INSTALLMENT_COLLECTION"
+) {
+
+    debitTotal += debit;
+    creditTotal += credit;
+
+}
 
         ledger.push({
 date:
