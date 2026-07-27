@@ -766,7 +766,7 @@ paymentDate.value,
 selectedGroupCode,
 
        transactionType:
-"PRIZE_AMOUNT_RECEIVED",
+"PRIZE_PAYMENT",
 
 debit:
 0,
@@ -775,8 +775,12 @@ credit:
 0,
 
 prizeAmount:
+Number(prizeAmount.value),
+paidAmount:
 Number(paidAmount.value),
 
+balanceAmount:
+Number(balanceAmount.value),
 balance:
 0,
 
@@ -784,8 +788,7 @@ paymentMethod:
 paymentMethod.value,
 
 remarks:
-remarks.value ||
-`Prize Amount Received ₹${Number(paidAmount.value).toLocaleString("en-IN")} (Information Only)`,
+`Prize Payment ₹${Number(paidAmount.value).toLocaleString("en-IN")} | Balance ₹${Number(balanceAmount.value).toLocaleString("en-IN")}`,
 
         createdAt:
         serverTimestamp()
