@@ -11,7 +11,9 @@ import {
     getDocs,
     doc,
     updateDoc,
-    serverTimestamp
+    serverTimestamp,
+    query,
+    where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
@@ -61,76 +63,76 @@ startMigration.addEventListener(
 //==================================================
 // Migration Function
 //==================================================
-
 async function migrateLedger() {
 
-    if (!confirm(
-        "This will repair all Member Ledger records.\n\nContinue?"
-    )) {
+    if (!confirm("Repair all Member Ledger records?")) {
         return;
     }
 
     startMigration.disabled = true;
-
-    migrationStatus.textContent = "Reading Member Ledger...";
+    migrationStatus.textContent = "Repairing...";
 
     try {
 
-       const ledgerSnapshot =
-await getDocs(ledgerRef);
+        const ledgerSnapshot =
+        await getDocs(collection(db, "memberLedger"));
 
-total = ledgerSnapshot.size;
+        total = ledgerSnapshot.size;
 
         totalRecords.textContent = total;
 
         migrated = 0;
         skipped = 0;
 
-        migratedRecords.textContent = migrated;
-        skippedRecords.textContent = skipped;
+        for (const ledgerDoc of ledgerSnapshot.docs) {
 
-        let current = 0;
+            const ledger = ledgerDoc.data();
 
-        for (const docSnap of ledgerSnapshot.docs) {
+            const q = query(
+                collection(db, "groupMembers"),
+                where("memberCode", "==", ledger.memberCode)
+            );
 
-            current++;
+            const groupSnap = await getDocs(q);
+
+            if (groupSnap.empty) {
+
+                skipped++;
+                skippedRecords.textContent = skipped;
+                continue;
+
+            }
+
+            const groupMember = groupSnap.docs[0].data();
+
+            await updateDoc(
+                doc(db, "memberLedger", ledgerDoc.id),
+                {
+                    memberId: groupMember.referenceNo,
+                    referenceNo: groupMember.referenceNo,
+                    updatedAt: serverTimestamp(),
+                    updatedBy: "Repair Tool"
+                }
+            );
+
+            migrated++;
+            migratedRecords.textContent = migrated;
 
             migrationStatus.textContent =
-            `Processing ${current} of ${total}`;
+                `Processing ${migrated} / ${total}`;
 
-            const data = docSnap.data();
+        }
 
-await updateDoc(
-    doc(db, "memberLedger", docSnap.id),
-    {
-      memberId: data.memberCode || data.referenceNo || "",
-referenceNo: data.memberCode || data.referenceNo || "",
-        updatedAt: serverTimestamp(),
-        updatedBy: "Repair Tool"
-    }
-);
-
-migrated++;
-migratedRecords.textContent = migrated;
-
-}
-              migrationStatus.textContent =
-        "✅ Migration Completed Successfully.";
+        migrationStatus.textContent =
+            "✅ Repair Completed";
 
         alert(
-            `Migration Completed!\n\n` +
-            `Total : ${total}\n` +
-            `Migrated : ${migrated}\n` +
-            `Skipped : ${skipped}`
+            `Repair Completed\n\nUpdated : ${migrated}\nSkipped : ${skipped}`
         );
 
     } catch (error) {
 
         console.error(error);
-
-        migrationStatus.textContent =
-        "❌ Migration Failed.";
-
         alert(error.message);
 
     }
@@ -138,7 +140,3 @@ migratedRecords.textContent = migrated;
     startMigration.disabled = false;
 
 }
-
-//==================================================
-// Check Duplicate
-//==================================================
