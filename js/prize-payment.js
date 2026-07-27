@@ -796,11 +796,54 @@ remarks:
     }
 );
         
-        alert(
-            "✅ Prize Payment Saved Successfully!\n\nReceipt No : " + receiptNo
-        );
+        localStorage.setItem("prizeReceipt", JSON.stringify({
 
-        resetForm();
+receiptNo: receiptNo,
+
+receiptDate: paymentDate.value,
+
+memberName: memberName.value,
+
+memberCode: winner.value,
+
+groupName: group.options[group.selectedIndex].text,
+
+groupCode: selectedGroupCode,
+
+auctionMonth: auctionMonth.value,
+
+chitAmount: chitAmount.value,
+
+prizeAmount: prizeAmount.value,
+
+adjustmentAmount: adjustAmount.value,
+
+paidAmount: paidAmount.value,
+
+balanceAmount: balanceAmount.value,
+
+paymentMethod: paymentMethod.value,
+
+paymentStatus: paymentStatus.value,
+
+remarks: remarks.value
+
+}));
+
+const openReceipt = confirm(
+"✅ Prize Payment Saved Successfully!\n\nDo you want to open the Receipt?"
+);
+
+if(openReceipt){
+
+window.open(
+"prize-payment-receipt.html",
+"_blank"
+);
+
+}
+
+resetForm();
 
     }
     catch(error){
