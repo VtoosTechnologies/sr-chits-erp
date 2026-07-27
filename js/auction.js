@@ -559,49 +559,72 @@ function calculateAmounts() {
 
     if (!selectedGroup) return;
 
+    //==========================================
+    // Basic Values
+    //==========================================
+
     const chit =
     Number(chitValue.value) || 0;
 
     const discount =
     Number(thallu.value) || 0;
 
-    const expense =
-    Number(kasar.value) || 0;
     const commission =
-Number(commissionPercent.value) || 0;
-
-const commissionValue =
-(chit * commission) / 100;
-
-commissionAmount.value =
-Math.round(commissionValue);
+    Number(commissionPercent.value) || 0;
 
     const members =
     Number(selectedGroup.totalMembers) || 1;
 
+    //==========================================
+    // Commission Amount
+    // Formula:
+    // Chit Value × Commission %
+    //==========================================
+
+    const commissionValue =
+    (chit * commission) / 100;
+
+    commissionAmount.value =
+    Math.round(commissionValue);
+
+    //==========================================
     // Prize Amount
+    // Formula:
+    // Chit Value - Thallu
+    //==========================================
+
+    const prize =
+    chit - discount;
 
     prizeAmount.value =
-Math.round(
-chit -
-discount -
-expense -
-commissionValue
-);
+    Math.round(prize);
 
-    // Dividend
+    //==========================================
+    // Kashir (Dividend Per Member)
+    // Formula:
+    // (Thallu - Commission) / Members
+    //==========================================
 
-    const dividend =
-    (discount + expense) / members;
+    const kashirPerMember =
+    (discount - commissionValue) / members;
 
-    // Monthly Amount
+    kasar.value =
+    Math.round(kashirPerMember);
 
-   const baseMonthly =
-Number(selectedGroup.chitAmount) /
-Number(selectedGroup.totalMembers);
+    //==========================================
+    // Monthly Payable
+    // Formula:
+    // (Chit Value / Members) - Kashir
+    //==========================================
 
-monthlyAmount.value =
-Math.ceil(baseMonthly - dividend); 
+    const baseMonthly =
+    chit / members;
+
+    const payable =
+    baseMonthly - kashirPerMember;
+
+    monthlyAmount.value =
+    Math.round(payable);
 
 }
 //==================================================
