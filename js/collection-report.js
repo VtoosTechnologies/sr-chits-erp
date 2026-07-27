@@ -121,81 +121,61 @@ let totalPendingMembers = 0;
 let totalCompletedMembers = 0;
 
 memberData.forEach(member=>{
-console.log("Member :", member.referenceNo);
 
-const memberLedger =
-ledgerData.filter(item =>
-    item.memberId === member.referenceNo
+    const memberId = member.referenceNo;
+
+    const memberLedger = ledgerData.filter(item =>
+        item.memberId === member.referenceNo
     );
-console.log(
-    member.referenceNo,
-    memberLedger.length
-);
 
-console.log(
-    "Ledger Member IDs :",
-    ledgerData.map(x => x.memberId)                  
-);
+    console.log("Member :", member.referenceNo);
+    console.log("Matched :", memberLedger.length);
+    console.table(memberLedger);
 
-console.log("Matched Ledger :", memberLedger);
-const memberId =
-member.referenceNo;
-);
+    const memberGroups = new Set(
+        groupMemberData
+            .filter(g => g.referenceNo === memberId)
+            .map(g => g.groupCode)
+    );
 
-const memberGroups =
-new Set(
-groupMemberData
-.filter(g=>g.referenceNo===memberId)
-.map(g=>g.groupCode)
-);
+    let balance = 0;
 
-let balance = 0;
+    memberLedger.forEach(entry => {
 
-memberLedger.forEach(entry=>{
+        balance += Number(entry.debit || 0);
+        balance -= Number(entry.credit || 0);
 
-balance += Number(entry.debit || 0);
+    });
 
-balance -= Number(entry.credit || 0);
+    let pending = 0;
+    let advance = 0;
 
-});
+    if(balance > 0){
+        pending = balance;
+    }else if(balance < 0){
+        advance = Math.abs(balance);
+    }
 
-let pending = 0;
-let advance = 0;
+    const status = pending > 0 ? "PENDING" : "COMPLETED";
 
-if(balance > 0){
+    if(status === "PENDING"){
+        totalPendingMembers++;
+    }else{
+        totalCompletedMembers++;
+    }
 
-pending = balance;
+    totalPendingAmount += pending;
+    totalAdvanceAmount += advance;
 
-}
-else if(balance < 0){
-
-advance = Math.abs(balance);
-
-}
-
-const status =
-pending>0
-? "PENDING"
-: "COMPLETED";
-
-if(status==="PENDING"){
-totalPendingMembers++;
-}else{
-totalCompletedMembers++;
-}
-
-totalPendingAmount += pending;
-totalAdvanceAmount += advance;
-
-reportData.push({
-
-referenceNo:member.referenceNo,
-memberName:member.memberName,
-mobileNumber:member.mobileNumber || "",
-groups:memberGroups.size,
-pending,
-advance,
-status
+    reportData.push({
+        referenceNo: member.referenceNo,
+        memberName: member.memberName,
+        mobileNumber: member.mobileNumber || "",
+        groups: memberGroups.size,
+        pending,
+        advance,
+        status
+    });
 
 });
 
