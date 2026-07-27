@@ -12,7 +12,10 @@ import {
 
 import {
     collection,
-    getDocs
+    getDocs,
+    query,
+    where,
+    Timestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
@@ -73,24 +76,49 @@ async function loadDashboard() {
         totalGroups.textContent =
             groupSnapshot.size;
 
-        // Collections
+ // Today's Collection
 
-        let total = 0;
+let total = 0;
 
-        const collectionSnapshot =
-            await getDocs(collection(db, "collections"));
+// Today 12:00 AM
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 
-        collectionSnapshot.forEach(doc => {
+// Tomorrow 12:00 AM
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
 
-            total += Number(
-                doc.data().totalAmount || 0
-            );
+const todayQuery = query(
+    collection(db, "collections"),
+    where(
+        "createdAt",
+        ">=",
+        Timestamp.fromDate(today)
+    ),
+    where(
+        "createdAt",
+        "<",
+        Timestamp.fromDate(tomorrow)
+    )
+);
 
-        });
+const collectionSnapshot =
+await getDocs(todayQuery);
 
-        todayCollection.textContent =
-            "₹ " +
-            total.toLocaleString("en-IN");
+collectionSnapshot.forEach(doc => {
+
+    const data = doc.data();
+
+    total += Number(
+        data.receivedAmount ||
+        data.totalAmount ||
+        0
+    );
+
+});
+
+todayCollection.textContent =
+"₹ " + total.toLocaleString("en-IN");
 
         // Staff
 
