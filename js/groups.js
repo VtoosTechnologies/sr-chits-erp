@@ -145,10 +145,14 @@ async function searchMembers(keyword = "") {
 
         card.querySelector(".addBtn").addEventListener("click", () => {
 
-            const seatCount =
-selectedMembers.filter(
-m => m.referenceNo === data.referenceNo
-).length + 1;
+     const customerSeats = selectedMembers
+    .filter(m => m.referenceNo === data.referenceNo)
+    .map(m => m.seatNo);
+
+const seatCount =
+customerSeats.length === 0
+    ? 1
+    : Math.max(...customerSeats) + 1;
 
 selectedMembers.push({
     id: memberDoc.id,
