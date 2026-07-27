@@ -142,12 +142,27 @@ const memberLedger = ledgerData.filter(item => {
                 .map(g => g.groupCode)
         );
 
-        let balance = 0;
+       let balance = 0;
 
-        memberLedger.forEach(entry => {
-            balance += Number(entry.debit || 0);
-            balance -= Number(entry.credit || 0);
-        });
+memberLedger.forEach(entry => {
+
+    const transactionType =
+    String(entry.transactionType || "").trim();
+
+    // Pending calculation-ku
+    // Installment transactions mattum use pannuvom
+
+    if (
+        transactionType === "INSTALLMENT_DUE" ||
+        transactionType === "INSTALLMENT_COLLECTION"
+    ) {
+
+        balance += Number(entry.debit || 0);
+        balance -= Number(entry.credit || 0);
+
+    }
+
+});
 
         let pending = 0;
         let advance = 0;
