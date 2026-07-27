@@ -113,96 +113,93 @@ Build Collection Report
 
 function buildReport(){
 
-reportData = [];
+    reportData = [];
 
-let totalPendingAmount = 0;
-let totalAdvanceAmount = 0;
-let totalPendingMembers = 0;
-let totalCompletedMembers = 0;
+    let totalPendingAmount = 0;
+    let totalAdvanceAmount = 0;
+    let totalPendingMembers = 0;
+    let totalCompletedMembers = 0;
 
-memberData.forEach(member=>{
+    memberData.forEach(member => {
 
-    const memberId = member.referenceNo;
+        const memberId = member.referenceNo;
 
-    const memberLedger = ledgerData.filter(item =>
-        item.memberId === member.referenceNo
-    );
+        const memberLedger = ledgerData.filter(item =>
+            item.memberId === memberId
+        );
 
-    console.log("Member :", member.referenceNo);
-    console.log("Matched :", memberLedger.length);
-    console.log(memberLedger);
+        console.log("Member :", memberId);
+        console.log("Matched :", memberLedger.length);
 
-    const memberGroups = new Set(
-        groupMemberData
-            .filter(g => g.referenceNo === memberId)
-            .map(g => g.groupCode)
-    );
+        const memberGroups = new Set(
+            groupMemberData
+                .filter(g => g.referenceNo === memberId)
+                .map(g => g.groupCode)
+        );
 
-    let balance = 0;
+        let balance = 0;
 
-    memberLedger.forEach(entry => {
+        memberLedger.forEach(entry => {
+            balance += Number(entry.debit || 0);
+            balance -= Number(entry.credit || 0);
+        });
 
-        balance += Number(entry.debit || 0);
-        balance -= Number(entry.credit || 0);
+        let pending = 0;
+        let advance = 0;
+
+        if (balance > 0) {
+            pending = balance;
+        } else if (balance < 0) {
+            advance = Math.abs(balance);
+        }
+
+        const status = pending > 0
+            ? "PENDING"
+            : "COMPLETED";
+
+        if (status === "PENDING") {
+            totalPendingMembers++;
+        } else {
+            totalCompletedMembers++;
+        }
+
+        totalPendingAmount += pending;
+        totalAdvanceAmount += advance;
+
+        reportData.push({
+            referenceNo: member.referenceNo,
+            memberName: member.memberName,
+            mobileNumber: member.mobileNumber || "",
+            groups: memberGroups.size,
+            pending: pending,
+            advance: advance,
+            status: status
+        });
 
     });
 
-    let pending = 0;
-    let advance = 0;
+    totalPending.textContent =
+        "₹" + totalPendingAmount.toLocaleString("en-IN");
 
-    if(balance > 0){
-        pending = balance;
-    }else if(balance < 0){
-        advance = Math.abs(balance);
-    }
+    totalAdvance.textContent =
+        "₹" + totalAdvanceAmount.toLocaleString("en-IN");
 
-    const status = pending > 0 ? "PENDING" : "COMPLETED";
+    pendingMembers.textContent =
+        totalPendingMembers;
 
-    if(status === "PENDING"){
-        totalPendingMembers++;
-    }else{
-        totalCompletedMembers++;
-    }
+    completedMembers.textContent =
+        totalCompletedMembers;
 
-    totalPendingAmount += pending;
-    totalAdvanceAmount += advance;
+    footerPending.textContent =
+        "₹" + totalPendingAmount.toLocaleString("en-IN");
 
-    reportData.push({
-        referenceNo: member.referenceNo,
-        memberName: member.memberName,
-        mobileNumber: member.mobileNumber || "",
-        groups: memberGroups.size,
-        pending,
-        advance,
-        status
-    });
-    });
-totalPending.textContent =
-"₹" +
-totalPendingAmount.toLocaleString("en-IN");
+    footerAdvance.textContent =
+        "₹" + totalAdvanceAmount.toLocaleString("en-IN");
 
-totalAdvance.textContent =
-"₹" +
-totalAdvanceAmount.toLocaleString("en-IN");
+    totalMembers.textContent =
+        reportData.length;
 
-pendingMembers.textContent =
-totalPendingMembers;
-
-completedMembers.textContent =
-totalCompletedMembers;
-
-footerPending.textContent =
-"₹" +
-totalPendingAmount.toLocaleString("en-IN");
-
-footerAdvance.textContent =
-"₹" +
-totalAdvanceAmount.toLocaleString("en-IN");
-
-totalMembers.textContent =
-reportData.length;
-
-renderReport(reportData);
+    renderReport(reportData);
 
 }
 /*==================================================
