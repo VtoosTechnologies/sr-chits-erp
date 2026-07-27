@@ -97,7 +97,7 @@ id:doc.id,
 }));
 console.log("Members :", memberData.length);
 console.log("Ledger :", ledgerData.length);
-    console.table(ledgerData);
+    console.log(ledgerData);
 buildReport();
 
 }
@@ -130,7 +130,7 @@ memberData.forEach(member=>{
 
     console.log("Member :", member.referenceNo);
     console.log("Matched :", memberLedger.length);
-    console.table(memberLedger);
+    console.log(memberLedger);
 
     const memberGroups = new Set(
         groupMemberData
@@ -176,9 +176,6 @@ memberData.forEach(member=>{
         advance,
         status
     });
-
-});
-
 totalPending.textContent =
 "₹" +
 totalPendingAmount.toLocaleString("en-IN");
