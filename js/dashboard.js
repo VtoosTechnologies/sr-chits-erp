@@ -58,7 +58,7 @@ async function loadDashboard() {
         totalMembers.textContent = "...";
         totalGroups.textContent = "...";
         todayCollection.textContent = "Loading...";
-        totalStaff.textContent = "...";
+        totalPending.textContent = "Loading...";
 
         // Members
 
@@ -120,9 +120,27 @@ collectionSnapshot.forEach(doc => {
 todayCollection.textContent =
 "₹ " + total.toLocaleString("en-IN");
 
-        // Staff
+        // Total Pending
 
-        totalStaff.textContent = "1";
+let pendingTotal = 0;
+
+const pendingSnapshot =
+await getDocs(collection(db, "pendingRegister"));
+
+pendingSnapshot.forEach(doc => {
+
+    const data = doc.data();
+
+    if (data.status === "PENDING") {
+
+        pendingTotal += Number(data.pendingAmount || 0);
+
+    }
+
+});
+
+totalPending.textContent =
+"₹ " + pendingTotal.toLocaleString("en-IN");
 
     }
 
