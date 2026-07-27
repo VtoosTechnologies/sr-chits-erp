@@ -257,7 +257,7 @@ async function loadWinner(){
             memberSnapshot.forEach(memberDoc=>{
 
     const member = memberDoc.data();
-                console.log("Auction Winner ID :", auction.winnerId);
+                console.log("Auction Winner ID :", auction.referenceNo);
 console.log("Member Reference :", member.referenceNo);
 console.log("Member Code :", member.memberCode);
 
@@ -325,7 +325,7 @@ data.referenceNo;
     const auctionQuery = query(
         collection(db,"auctions"),
         where("groupId","==",group.value),
-        where("winnerId","==",winner.value),
+        where("referenceNo","==",winner.value),
         where("month","==",Number(auctionMonth.value))
     );
 
