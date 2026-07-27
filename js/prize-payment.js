@@ -765,22 +765,27 @@ paymentDate.value,
         groupCode:
 selectedGroupCode,
 
-        transactionType:
-        "Prize Payment",
+       transactionType:
+"PRIZE_AMOUNT_RECEIVED",
 
-        debit:
-        0,
+debit:
+0,
 
-        credit:
-        Number(paidAmount.value),
+credit:
+0,
 
-       balance: 0,
+prizeAmount:
+Number(paidAmount.value),
 
-        paymentMethod:
-        paymentMethod.value,
+balance:
+0,
 
-        remarks:
-        remarks.value,
+paymentMethod:
+paymentMethod.value,
+
+remarks:
+remarks.value ||
+`Prize Amount Received ₹${Number(paidAmount.value).toLocaleString("en-IN")} (Information Only)`,
 
         createdAt:
         serverTimestamp()
