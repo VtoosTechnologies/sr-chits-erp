@@ -97,7 +97,7 @@ id:doc.id,
 }));
 console.log("Members :", memberData.length);
 console.log("Ledger :", ledgerData.length);
-    console.log(ledgerData);
+   console.log("First Ledger :", ledgerData[0]);
 buildReport();
 
 }
@@ -175,6 +175,7 @@ memberData.forEach(member=>{
         pending,
         advance,
         status
+    });
     });
 totalPending.textContent =
 "₹" +
