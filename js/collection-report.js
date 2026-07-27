@@ -140,10 +140,6 @@ console.log(
 console.log("Matched Ledger :", memberLedger);
 const memberId =
 member.referenceNo;
-
-const memberLedger =
-ledgerData.filter(item =>
-    item.memberId === member.referenceNo
 );
 
 const memberGroups =
