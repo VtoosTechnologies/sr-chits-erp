@@ -261,13 +261,12 @@ async function loadWinner(){
 console.log("Member Reference :", member.referenceNo);
 console.log("Member Code :", member.memberCode);
 
-    if(member.referenceNo === auction.winnerId){
+    if(member.referenceNo === auction.referenceNo){
 
         const option =
         document.createElement("option");
 
-        option.value = auction.winnerId;
-
+        option.value = auction.referenceNo;
         option.dataset.auctionId =
         auctionDoc.id;
 
