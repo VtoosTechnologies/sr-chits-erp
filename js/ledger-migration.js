@@ -70,24 +70,46 @@ async function migrateLedger() {
     }
 
     startMigration.disabled = true;
+
     migrationStatus.textContent = "Repairing...";
+
+    migrated = 0;
+    skipped = 0;
+
+    migratedRecords.textContent = "0";
+    skippedRecords.textContent = "0";
 
     try {
 
-        const ledgerSnapshot =
-        await getDocs(collection(db, "memberLedger"));
+        const ledgerSnapshot = await getDocs(ledgerRef);
 
         total = ledgerSnapshot.size;
-
         totalRecords.textContent = total;
 
-        migrated = 0;
-        skipped = 0;
+        let current = 0;
 
         for (const ledgerDoc of ledgerSnapshot.docs) {
 
+            current++;
+
+            migrationStatus.textContent =
+                `Processing ${current} / ${total}`;
+
             const ledger = ledgerDoc.data();
 
+            // Skip invalid records
+            if (
+                !ledger.memberCode ||
+                typeof ledger.memberCode !== "string" ||
+                ledger.memberCode.trim() === ""
+            ) {
+
+                skipped++;
+                skippedRecords.textContent = skipped;
+                continue;
+            }
+
+            // Find matching group member
             const q = query(
                 collection(db, "groupMembers"),
                 where("memberCode", "==", ledger.memberCode)
@@ -100,43 +122,59 @@ async function migrateLedger() {
                 skipped++;
                 skippedRecords.textContent = skipped;
                 continue;
-
             }
 
             const groupMember = groupSnap.docs[0].data();
 
-            await updateDoc(
-                doc(db, "memberLedger", ledgerDoc.id),
-                {
-                    memberId: groupMember.referenceNo,
-                    referenceNo: groupMember.referenceNo,
-                    updatedAt: serverTimestamp(),
-                    updatedBy: "Repair Tool"
-                }
-            );
+            // Update only if value is different
+            if (
+                ledger.memberId !== groupMember.referenceNo ||
+                ledger.referenceNo !== groupMember.referenceNo
+            ) {
 
-            migrated++;
+                await updateDoc(
+                    doc(db, "memberLedger", ledgerDoc.id),
+                    {
+                        memberId: groupMember.referenceNo,
+                        referenceNo: groupMember.referenceNo,
+                        updatedAt: serverTimestamp(),
+                        updatedBy: "Repair Tool"
+                    }
+                );
+
+                migrated++;
+
+            } else {
+
+                skipped++;
+
+            }
+
             migratedRecords.textContent = migrated;
-
-            migrationStatus.textContent =
-                `Processing ${migrated} / ${total}`;
-
+            skippedRecords.textContent = skipped;
         }
 
-        migrationStatus.textContent =
-            "✅ Repair Completed";
+        migrationStatus.textContent = "✅ Repair Completed";
 
         alert(
-            `Repair Completed\n\nUpdated : ${migrated}\nSkipped : ${skipped}`
+            `Repair Completed
+
+Total Records : ${total}
+
+Updated : ${migrated}
+
+Skipped : ${skipped}`
         );
 
     } catch (error) {
 
         console.error(error);
+
+        migrationStatus.textContent = "❌ Repair Failed";
+
         alert(error.message);
 
     }
 
     startMigration.disabled = false;
-
 }
