@@ -386,7 +386,17 @@ tr.innerHTML = `
 <td>${item.group}</td>
 
 <td>
-₹${Number(item.debit || 0).toLocaleString("en-IN")}
+${
+item.type === "PRIZE_AMOUNT_RECEIVED"
+
+?
+
+"-"
+
+:
+
+`₹${Number(item.debit || 0).toLocaleString("en-IN")}`
+}
 </td>
 
 <td>
@@ -394,7 +404,17 @@ ${
 item.type === "Advance Adjustment"
 ?
 `Adjusted ₹${Number(item.adjustedAmount || 0).toLocaleString("en-IN")}`
+
 :
+
+item.type === "PRIZE_AMOUNT_RECEIVED"
+
+?
+
+"-"
+
+:
+
 `₹${Number(item.credit || 0).toLocaleString("en-IN")}`
 }
 </td>
