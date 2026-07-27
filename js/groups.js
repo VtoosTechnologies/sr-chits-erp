@@ -75,7 +75,10 @@ function renderSelectedMembers() {
 
         card.innerHTML = `
             <h3>${member.memberName}</h3>
-            <p><b>Customer ID :</b> ${member.referenceNo}</p>
+
+<p><b>Customer ID :</b> ${member.referenceNo}</p>
+
+<p><b>Seat :</b> ${member.seatNo}</p>
 
             <button class="removeBtn" data-index="${index}">
                 ❌ Remove
@@ -125,8 +128,6 @@ async function searchMembers(keyword = "") {
 
         if (!text.includes(keyword.toLowerCase())) return;
 
-        if (selectedMembers.some(m => m.id === memberDoc.id)) return;
-
         const card = document.createElement("div");
 
         card.className = "member-card";
@@ -136,16 +137,24 @@ async function searchMembers(keyword = "") {
             <p><b>Customer ID :</b> ${data.referenceNo}</p>
 
             <button class="addBtn">
-                ➕ Add
-            </button>
+
+➕ Add / Add Again
+
+</button>
         `;
 
         card.querySelector(".addBtn").addEventListener("click", () => {
 
-            selectedMembers.push({
-                id: memberDoc.id,
-                ...data
-            });
+            const seatCount =
+selectedMembers.filter(
+m => m.referenceNo === data.referenceNo
+).length + 1;
+
+selectedMembers.push({
+    id: memberDoc.id,
+    ...data,
+    seatNo: seatCount
+});
 
             renderSelectedMembers();
 
@@ -280,7 +289,9 @@ saveGroupBtn.addEventListener("click", async () => {
 
     memberName: member.memberName,
 
-    memberNumber: index + 1,
+   memberNumber: index + 1,
+
+seatNumber: member.seatNo,
 
     memberCode:
     `${groupCode}-M${String(index + 1).padStart(3,"0")}`,
