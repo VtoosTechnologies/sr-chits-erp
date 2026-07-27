@@ -13,9 +13,6 @@ import {
 import {
     collection,
     getDocs,
-    query,
-    where,
-    Timestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
