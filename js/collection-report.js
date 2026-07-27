@@ -97,7 +97,7 @@ id:doc.id,
 }));
 console.log("Members :", memberData.length);
 console.log("Ledger :", ledgerData.length);
-console.log("First Ledger :", ledgerData[0]);
+    console.table(ledgerData);
 buildReport();
 
 }
@@ -126,7 +126,11 @@ console.log("Member :", member.referenceNo);
 const memberLedger =
 ledgerData.filter(item =>
     item.memberId === member.referenceNo
-console.log("Member Ref :", member.referenceNo);
+    );
+console.log(
+    member.referenceNo,
+    memberLedger.length
+);
 
 console.log(
     "Ledger Member IDs :",
