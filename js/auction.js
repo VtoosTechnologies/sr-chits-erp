@@ -9,6 +9,7 @@ import { db } from "./firebase.js";
 import {
     collection,
     getDocs,
+    doc,
     query,
     where,
     addDoc,
@@ -75,7 +76,11 @@ document.getElementById("winner");
 
 const winnerAlert =
 document.getElementById("winnerAlert");
+const winnerSeatInfo =
+document.getElementById("winnerSeatInfo");
 
+const auctionMonth =
+document.getElementById("auctionMonth");
 const chitValue =
 document.getElementById("chitValue");
 
@@ -380,7 +385,8 @@ async function loadCurrentAuctionMonth() {
     }
 
     currentMonth.textContent = currentAuctionMonth;
-
+auctionMonth.value =
+"Month " + currentAuctionMonth;
     calculateAuctionDate();
 
     calculateDueDate();
@@ -465,10 +471,10 @@ async function loadMembers() {
 
         const data = doc.data();
 
-        winner.innerHTML += `
-        <option value="${data.referenceNo}">
-            ${data.memberCode} - ${data.memberName}
-        </option>`;
+      winner.innerHTML += `
+<option value="${memberDoc.id}">
+${data.memberCode} - ${data.memberName}
+</option>`;
 
     });
 
@@ -488,7 +494,20 @@ async function checkPreviousWinner() {
     winnerAlert.style.display = "none";
 
     if (winner.value == "") return;
+const memberDoc =
+await getDoc(doc(groupMembersRef, winner.value));
+const winnerData =
+winnerMember.data();
+const member =
+memberDoc.data();
 
+winnerSeatInfo.style.display = "block";
+
+winnerSeatInfo.innerHTML = `
+<strong>Customer :</strong> ${member.memberName}<br>
+<strong>Customer ID :</strong> ${member.referenceNo}<br>
+<strong>Seat :</strong> ${member.memberCode}
+`;
     const q = query(
         auctionsRef,
         where("winnerId", "==", winner.value)
@@ -704,9 +723,6 @@ async function saveAuctionData() {
 
                 dueDate:
                 dueDate.value,
-
-                winnerId:
-                winner.value,
 
                 thallu:
                 Number(thallu.value),
