@@ -268,7 +268,7 @@ const credit =
 
 if (
     data.transactionType === "INSTALLMENT_DUE" ||
-    data.transactionType === "INSTALLMENT_COLLECTION"
+    data.transactionType === "COLLECTION"
 ) {
 
     debitTotal += debit;
@@ -367,7 +367,7 @@ function renderLedger(
     ledger.forEach(item=>{
 if (
     item.type === "INSTALLMENT_DUE" ||
-    item.type === "INSTALLMENT_COLLECTION"
+    item.type === "COLLECTION"
 ) {
 
     runningBalance += Number(item.debit || 0);
