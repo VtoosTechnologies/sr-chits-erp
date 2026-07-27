@@ -153,12 +153,12 @@ memberLedger.forEach(entry => {
     // Installment transactions mattum use pannuvom
 
     if (
-        transactionType === "INSTALLMENT_DUE" ||
-        transactionType === "INSTALLMENT_COLLECTION"
-    ) {
+    transactionType === "INSTALLMENT_DUE" ||
+    transactionType === "COLLECTION"
+) {
 
-        balance += Number(entry.debit || 0);
-        balance -= Number(entry.credit || 0);
+    balance += Number(entry.debit || 0);
+    balance -= Number(entry.credit || 0);
 
     }
 
