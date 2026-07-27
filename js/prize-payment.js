@@ -257,6 +257,9 @@ async function loadWinner(){
             memberSnapshot.forEach(memberDoc=>{
 
     const member = memberDoc.data();
+                console.log("Auction Winner ID :", auction.winnerId);
+console.log("Member Reference :", member.referenceNo);
+console.log("Member Code :", member.memberCode);
 
     if(member.referenceNo === auction.winnerId){
 
