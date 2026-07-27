@@ -179,8 +179,6 @@ memberData.forEach(member=>{
 
 });
 
-});
-
 totalPending.textContent =
 "₹" +
 totalPendingAmount.toLocaleString("en-IN");
