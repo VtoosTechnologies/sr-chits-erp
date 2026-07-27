@@ -304,6 +304,8 @@ Number(data.balance || 0),
 
 remarks:
 data.remarks || "",
+prizeAmount:
+Number(data.prizeAmount || 0),            
 
 adjustedAmount:
 Number(data.adjustedAmount || 0)
@@ -363,9 +365,15 @@ function renderLedger(
     let runningBalance = 0;
 
     ledger.forEach(item=>{
+if (
+    item.type === "INSTALLMENT_DUE" ||
+    item.type === "INSTALLMENT_COLLECTION"
+) {
 
-        runningBalance += Number(item.debit || 0);
-        runningBalance -= Number(item.credit || 0);
+    runningBalance += Number(item.debit || 0);
+    runningBalance -= Number(item.credit || 0);
+
+}
 
         const tr = document.createElement("tr");
 tr.innerHTML = `
@@ -395,7 +403,15 @@ item.type === "Advance Adjustment"
 ₹${runningBalance.toLocaleString("en-IN")}
 </td>
 
-<td>${item.remarks}</td>
+<td>
+${
+item.type === "PRIZE_AMOUNT_RECEIVED"
+?
+`Prize Amount Received ₹${item.prizeAmount.toLocaleString("en-IN")} (Information Only)`
+:
+item.remarks
+}
+</td>
 `;
         ledgerBody.appendChild(tr);
 
