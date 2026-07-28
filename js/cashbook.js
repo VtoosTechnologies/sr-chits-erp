@@ -177,13 +177,13 @@ ${collectionTime.toLocaleDateString("en-IN")}
 
 <td>
 
-${data.receiptNo || "-"}
+${data.transactionNo || "-"}
 
 </td>
 
 <td>
 
-${data.referenceNo || "-"}
+${data.memberCode || "-"}
 
 </td>
 
