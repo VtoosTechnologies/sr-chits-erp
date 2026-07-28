@@ -6,8 +6,8 @@
 import { db } from "../firebase.js";
 
 import {
-collection,
-getDocs
+    collection,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
@@ -40,52 +40,48 @@ document.getElementById("totalReceipts");
 let currentType = "collection";
 
 //==================================================
-// Tab Events
+// Tabs
 //==================================================
 
 collectionTab.onclick = () => {
 
-currentType = "collection";
+    currentType = "collection";
 
-collectionTab.classList.add("active");
-auctionTab.classList.remove("active");
+    collectionTab.classList.add("active");
+    auctionTab.classList.remove("active");
 
-clearTable();
+    clearTable();
 
 };
 
 auctionTab.onclick = () => {
 
-currentType = "auction";
+    currentType = "auction";
 
-auctionTab.classList.add("active");
-collectionTab.classList.remove("active");
+    auctionTab.classList.add("active");
+    collectionTab.classList.remove("active");
 
-clearTable();
+    clearTable();
 
 };
 
 //==================================================
 
-searchBtn.onclick = () => {
-
-loadReceipts();
-
-};
+searchBtn.onclick = loadReceipts;
 
 //==================================================
 
 function clearTable(){
 
-receiptTable.innerHTML = `
-<tr>
-<td colspan="5">
-No Records Found
-</td>
-</tr>
-`;
+    receiptTable.innerHTML = `
+    <tr>
+        <td colspan="5">
+            No Records Found
+        </td>
+    </tr>
+    `;
 
-totalReceipts.textContent = "0";
+    totalReceipts.textContent = "0";
 
 }
 
@@ -93,162 +89,154 @@ totalReceipts.textContent = "0";
 
 async function loadReceipts(){
 
-const from = fromDate.value;
-const to = toDate.value;
+    const from = fromDate.value;
+    const to = toDate.value;
 
-if(!from || !to){
+    if(!from || !to){
 
-alert("Select From Date and To Date");
+        alert("Select From Date and To Date");
 
-return;
+        return;
 
-}
+    }
 
-receiptTable.innerHTML="";
+    receiptTable.innerHTML = "";
 
-let count = 0;
+    let count = 0;
 
-//==================================================
-// Collection Receipt
-//==================================================
+    //==================================================
+    // Collection Receipts
+    //==================================================
 
-if(currentType=="collection"){
+    if(currentType === "collection"){
 
-const snapshot =
-await getDocs(collection(db,"transactions"));
+        const snapshot =
+        await getDocs(collection(db,"collections"));
 
-snapshot.forEach(doc=>{
+        snapshot.forEach(doc=>{
 
-const data = doc.data();
+            const data = doc.data();
 
-if(data.type!="COLLECTION") return;
+            if(!data.createdAt) return;
 
-const date =
-data.createdAt?.toDate();
+            const receiptDate =
+            data.createdAt
+            .toDate()
+            .toISOString()
+            .split("T")[0];
 
-if(!date) return;
+            if(receiptDate < from) return;
 
-const receiptDate =
-date.toISOString().split("T")[0];
+            if(receiptDate > to) return;
 
-if(receiptDate < from) return;
+            count++;
 
-if(receiptDate > to) return;
+            receiptTable.innerHTML += `
 
-count++;
+            <tr>
 
-receiptTable.innerHTML += `
+                <td>${data.receiptNo || "-"}</td>
 
-<tr>
+                <td>${receiptDate}</td>
 
-<td>${data.receiptNo || "-"}</td>
+                <td>${data.memberName || "-"}</td>
 
-<td>${receiptDate}</td>
+                <td>₹${Number(data.receivedAmount || 0).toLocaleString("en-IN")}</td>
 
-<td>${data.memberName || "-"}</td>
+                <td>
 
-<td>₹${data.amount || 0}</td>
+                    <button
+                    class="viewBtn"
+                    onclick="window.location='collection-receipt.html?id=${doc.id}'">
 
-<td>
+                    👁 View
 
-<button
-class="viewBtn"
-onclick="window.location='collection-receipt.html?id=${doc.id}'">
+                    </button>
 
-👁 View
+                </td>
 
-</button>
+            </tr>
 
-</td>
+            `;
 
-</tr>
+        });
 
-`;
+    }
 
-});
+    //==================================================
+    // Prize Payment Receipts
+    //==================================================
 
-}
+    else{
 
-//==================================================
-// Auction Receipt
-//==================================================
+        const snapshot =
+        await getDocs(collection(db,"prizePayments"));
 
-else{
+        snapshot.forEach(doc=>{
 
-const snapshot =
-await getDocs(collection(db,"auctionPayments"));
+            const data = doc.data();
 
-snapshot.forEach(doc=>{
+            if(!data.createdAt) return;
 
-const data = doc.data();
+            const receiptDate =
+            data.createdAt
+            .toDate()
+            .toISOString()
+            .split("T")[0];
 
-const date =
-data.createdAt?.toDate();
+            if(receiptDate < from) return;
 
-if(!date) return;
+            if(receiptDate > to) return;
 
-const receiptDate =
-date.toISOString().split("T")[0];
+            count++;
 
-if(receiptDate < from) return;
+            receiptTable.innerHTML += `
 
-if(receiptDate > to) return;
+            <tr>
 
-count++;
+                <td>${data.receiptNo || "-"}</td>
 
-receiptTable.innerHTML += `
+                <td>${receiptDate}</td>
 
-<tr>
+                <td>${data.memberName || "-"}</td>
 
-<td>${data.receiptNo || "-"}</td>
+                <td>₹${Number(data.paidAmount || 0).toLocaleString("en-IN")}</td>
 
-<td>${receiptDate}</td>
+                <td>
 
-<td>${data.winnerName || "-"}</td>
+                    <button
+                    class="viewBtn"
+                    onclick="window.location='prize-payment-receipt.html?id=${doc.id}'">
 
-<td>₹${data.prizeAmount || 0}</td>
+                    👁 View
 
-<td>
+                    </button>
 
-<button
-class="viewBtn"
-onclick="window.location='auction-receipt.html?id=${doc.id}'">
+                </td>
 
-👁 View
+            </tr>
 
-</button>
+            `;
 
-</td>
+        });
 
-</tr>
+    }
 
-`;
+    //==================================================
 
-});
+    if(count===0){
 
-}
+        receiptTable.innerHTML = `
+        <tr>
+            <td colspan="5">
+                No Records Found
+            </td>
+        </tr>
+        `;
 
-//==================================================
+    }
 
-if(count==0){
-
-receiptTable.innerHTML=`
-
-<tr>
-
-<td colspan="5">
-
-No Records Found
-
-</td>
-
-</tr>
-
-`;
-
-}
-
-totalReceipts.textContent = count;
+    totalReceipts.textContent = count;
 
 }
 
