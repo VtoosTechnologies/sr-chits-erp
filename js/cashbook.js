@@ -96,7 +96,7 @@ query(
 
 collection(db,"collections"),
 
-orderBy("collectionDate","desc")
+orderBy("createdAt","desc")
 
 )
 
@@ -123,17 +123,20 @@ const data = doc.data();
 
 let collectionTime = null;
 
-if(data.collectionDate){
+const dateField =
+data.collectionDate || data.createdAt;
 
-    if(data.collectionDate.toDate){
+if(dateField){
+
+    if(dateField.toDate){
 
         collectionTime =
-        data.collectionDate.toDate();
+        dateField.toDate();
 
     }else{
 
         collectionTime =
-        new Date(data.collectionDate);
+        new Date(dateField);
 
     }
 
