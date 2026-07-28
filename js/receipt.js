@@ -1,192 +1,257 @@
 //==================================================
+// Receipt History
 // SR Chits ERP
-// Receipt Module
-// receipt.js
-// Part 1
 //==================================================
 
-import { db } from "./firebase.js";
+import { db } from "../firebase.js";
 
 import {
 collection,
-getDocs,
-query,
-where
+getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-//==================================================
-// Get Transaction Number
-//==================================================
-
-const params = new URLSearchParams(window.location.search);
-
-const transactionNo =
-params.get("transactionNo");
 
 //==================================================
 // Elements
 //==================================================
 
-const receiptNo =
-document.getElementById("receiptNo");
+const collectionTab =
+document.getElementById("collectionTab");
 
-const receiptDate =
-document.getElementById("receiptDate");
+const auctionTab =
+document.getElementById("auctionTab");
 
-const memberName =
-document.getElementById("memberName");
+const searchBtn =
+document.getElementById("searchBtn");
 
-const memberCode =
-document.getElementById("memberCode");
+const fromDate =
+document.getElementById("fromDate");
 
-const groupName =
-document.getElementById("groupName");
+const toDate =
+document.getElementById("toDate");
 
-const groupCode =
-document.getElementById("groupCode");
+const receiptTable =
+document.getElementById("receiptTable");
 
-const installment =
-document.getElementById("installment");
-
-const previousPending =
-document.getElementById("previousPending");
-
-const receivedAmount =
-document.getElementById("receivedAmount");
-
-const balancePending =
-document.getElementById("balancePending");
-
-const paymentMode =
-document.getElementById("paymentMode");
-
-const remarks =
-document.getElementById("remarks");
+const totalReceipts =
+document.getElementById("totalReceipts");
 
 //==================================================
-// Start
+
+let currentType = "collection";
+
+//==================================================
+// Tab Events
 //==================================================
 
-if(!transactionNo){
+collectionTab.onclick = () => {
 
-alert("Transaction Number Missing");
+currentType = "collection";
 
-throw new Error("Transaction Number Missing");
+collectionTab.classList.add("active");
+auctionTab.classList.remove("active");
+
+clearTable();
+
+};
+
+auctionTab.onclick = () => {
+
+currentType = "auction";
+
+auctionTab.classList.add("active");
+collectionTab.classList.remove("active");
+
+clearTable();
+
+};
+
+//==================================================
+
+searchBtn.onclick = () => {
+
+loadReceipts();
+
+};
+
+//==================================================
+
+function clearTable(){
+
+receiptTable.innerHTML = `
+<tr>
+<td colspan="5">
+No Records Found
+</td>
+</tr>
+`;
+
+totalReceipts.textContent = "0";
 
 }
 
-loadReceipt();
-//==================================================
-// Load Receipt
-// Part 2
 //==================================================
 
-async function loadReceipt(){
+async function loadReceipts(){
 
-const q = query(
-collection(db,"collections"),
-where("transactionNo","==",transactionNo)
-);
+const from = fromDate.value;
+const to = toDate.value;
 
-const snapshot = await getDocs(q);
+if(!from || !to){
 
-if(snapshot.empty){
+alert("Select From Date and To Date");
 
-alert("Receipt Not Found");
 return;
 
 }
 
-//----------------------------------
-// First Collection Entry
-//----------------------------------
+receiptTable.innerHTML="";
 
-const firstData = snapshot.docs[0].data();
+let count = 0;
 
-receiptNo.textContent = transactionNo;
+//==================================================
+// Collection Receipt
+//==================================================
 
-memberName.textContent =
-firstData.memberName || "-";
+if(currentType=="collection"){
 
-memberCode.textContent =
-firstData.memberCode || "-";
-
-groupName.textContent =
-firstData.groupName || "-";
-
-groupCode.textContent =
-firstData.groupCode || "-";
-
-installment.textContent =
-firstData.installmentNo || "-";
-
-paymentMode.textContent =
-firstData.paymentMode || "-";
-
-remarks.textContent =
-firstData.remarks || "-";
-
-//----------------------------------
-// Receipt Date
-//----------------------------------
-
-if(firstData.createdAt){
-
-receiptDate.textContent =
-firstData.createdAt
-.toDate()
-.toLocaleString("en-IN");
-
-}
-
-//----------------------------------
-// Amount
-//----------------------------------
-
-let totalReceived = 0;
+const snapshot =
+await getDocs(collection(db,"transactions"));
 
 snapshot.forEach(doc=>{
 
 const data = doc.data();
 
-totalReceived +=
-Number(data.receivedAmount || 0);
+if(data.type!="COLLECTION") return;
+
+const date =
+data.createdAt?.toDate();
+
+if(!date) return;
+
+const receiptDate =
+date.toISOString().split("T")[0];
+
+if(receiptDate < from) return;
+
+if(receiptDate > to) return;
+
+count++;
+
+receiptTable.innerHTML += `
+
+<tr>
+
+<td>${data.receiptNo || "-"}</td>
+
+<td>${receiptDate}</td>
+
+<td>${data.memberName || "-"}</td>
+
+<td>₹${data.amount || 0}</td>
+
+<td>
+
+<button
+class="viewBtn"
+onclick="window.location='collection-receipt.html?id=${doc.id}'">
+
+👁 View
+
+</button>
+
+</td>
+
+</tr>
+
+`;
 
 });
-
-receivedAmount.textContent =
-"₹" +
-totalReceived.toLocaleString("en-IN");
-
-//----------------------------------
-// Previous Pending
-//----------------------------------
-
-const pendingQ = query(
-collection(db,"pendingRegister"),
-where("aadhaarNumber","==",firstData.aadhaarNumber),
-where("groupCode","==",firstData.groupCode)
-);
-
-const pendingSnapshot =
-await getDocs(pendingQ);
-
-let balance = 0;
-
-pendingSnapshot.forEach(doc=>{
-
-balance +=
-Number(doc.data().pendingAmount || 0);
-
-});
-
-balancePending.textContent =
-"₹" +
-balance.toLocaleString("en-IN");
-
-previousPending.textContent =
-"₹" +
-(balance + totalReceived)
-.toLocaleString("en-IN");
 
 }
+
+//==================================================
+// Auction Receipt
+//==================================================
+
+else{
+
+const snapshot =
+await getDocs(collection(db,"auctionPayments"));
+
+snapshot.forEach(doc=>{
+
+const data = doc.data();
+
+const date =
+data.createdAt?.toDate();
+
+if(!date) return;
+
+const receiptDate =
+date.toISOString().split("T")[0];
+
+if(receiptDate < from) return;
+
+if(receiptDate > to) return;
+
+count++;
+
+receiptTable.innerHTML += `
+
+<tr>
+
+<td>${data.receiptNo || "-"}</td>
+
+<td>${receiptDate}</td>
+
+<td>${data.winnerName || "-"}</td>
+
+<td>₹${data.prizeAmount || 0}</td>
+
+<td>
+
+<button
+class="viewBtn"
+onclick="window.location='auction-receipt.html?id=${doc.id}'">
+
+👁 View
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+//==================================================
+
+if(count==0){
+
+receiptTable.innerHTML=`
+
+<tr>
+
+<td colspan="5">
+
+No Records Found
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+totalReceipts.textContent = count;
+
+}
+
+//==================================================
+
+clearTable();
