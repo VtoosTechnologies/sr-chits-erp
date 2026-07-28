@@ -118,25 +118,40 @@ auctionDay.textContent = group.auctionDay || "-";
 // Load Members
 //----------------------------
 
-const memberSnapshot = await getDocs(
+const pendingSnapshot = await getDocs(
 query(
-collection(db, "members"),
-where("groupCode", "==", group.groupCode)
+collection(db,"pendingRegister"),
+where("groupCode","==",group.groupCode)
 )
 );
 
-const members = [];
+const membersMap = {};
 
-memberSnapshot.forEach(doc => {
+pendingSnapshot.forEach(doc=>{
 
-members.push({
-id: doc.id,
-...doc.data()
+const data = doc.data();
+
+if(!membersMap[data.aadhaarNumber]){
+
+membersMap[data.aadhaarNumber] = {
+
+aadhaarNumber: data.aadhaarNumber,
+
+memberCode: data.memberCode,
+
+memberName: data.memberName
+
+};
+
+}
+
 });
 
-});
+const members =
+Object.values(membersMap);
 
-totalMembers.textContent = members.length;
+totalMembers.textContent =
+members.length;
 
 // Monthly Target
 
