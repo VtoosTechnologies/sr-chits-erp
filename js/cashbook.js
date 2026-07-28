@@ -221,3 +221,53 @@ onclick="openReceipt('${data.transactionNo}')">
 });
 
 let html = "";
+//==================================================
+// No Records
+//==================================================
+
+if(html===""){
+
+cashbookTable.innerHTML=`
+
+<tr>
+
+<td colspan="7" class="no-record">
+
+No Collection Found
+
+</td>
+
+</tr>
+
+`;
+
+}
+else{
+
+cashbookTable.innerHTML=html;
+
+}
+
+grandTotal.textContent=
+
+"₹"+
+
+total.toLocaleString("en-IN");
+
+}
+
+//==================================================
+// Open Receipt
+//==================================================
+
+window.openReceipt=function(transactionNo){
+
+window.open(
+
+`receipt.html?transactionNo=${transactionNo}`,
+
+"_blank"
+
+);
+
+};
