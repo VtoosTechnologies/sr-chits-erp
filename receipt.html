@@ -6,131 +6,99 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Receipt History</title>
+<title>Collection Receipt</title>
 
-<link rel="stylesheet" href="css/receipt.css">
+<link rel="stylesheet" href="receipt.css">
 
 </head>
 
 <body>
 
-<div class="container">
+<div class="receipt-container">
 
-    <h1>📄 Receipt History</h1>
+    <h1>VTOOS SOFTWARE SOLUTIONS</h1>
 
-    <!-- Tabs -->
+    <h2>SR CHITS ERP</h2>
 
-    <div class="tabs">
+    <h3>COLLECTION RECEIPT</h3>
 
-        <button
-            id="collectionTab"
-            class="active">
+    <hr>
 
-            💰 Collection Receipts
+    <table>
 
+        <tr>
+            <td>Receipt No</td>
+            <td id="receiptNo">-</td>
+        </tr>
+
+        <tr>
+            <td>Transaction No</td>
+            <td id="transactionNo">-</td>
+        </tr>
+
+        <tr>
+            <td>Reference No</td>
+            <td id="referenceNo">-</td>
+        </tr>
+
+        <tr>
+            <td>Member Name</td>
+            <td id="memberName">-</td>
+        </tr>
+
+        <tr>
+            <td>Group Name</td>
+            <td id="groupName">-</td>
+        </tr>
+
+        <tr>
+            <td>Installment</td>
+            <td id="installmentNo">-</td>
+        </tr>
+
+        <tr>
+            <td>Payment Mode</td>
+            <td id="paymentMode">-</td>
+        </tr>
+
+        <tr>
+            <td>Collected Amount</td>
+            <td id="receivedAmount">₹0</td>
+        </tr>
+
+        <tr>
+            <td>Remarks</td>
+            <td id="remarks">-</td>
+        </tr>
+
+        <tr>
+            <td>Date</td>
+            <td id="collectionDate">-</td>
+        </tr>
+
+    </table>
+
+    <hr>
+
+    <p class="thanks">
+        Thank You! Visit Again.
+    </p>
+
+    <div class="buttons">
+
+        <button id="printReceipt">
+            Print
         </button>
 
-        <button
-            id="auctionTab">
-
-            🏆 Auction Receipts
-
+        <button id="shareReceipt">
+            Share
         </button>
-
-    </div>
-
-    <!-- Filters -->
-
-    <div class="filters">
-
-        <div>
-
-            <label>From Date</label>
-
-            <input
-                type="date"
-                id="fromDate">
-
-        </div>
-
-        <div>
-
-            <label>To Date</label>
-
-            <input
-                type="date"
-                id="toDate">
-
-        </div>
-
-        <button
-            id="searchBtn">
-
-            🔍 Search
-
-        </button>
-
-    </div>
-
-    <!-- Table -->
-
-    <div class="table-area">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>Receipt No</th>
-
-                    <th>Date</th>
-
-                    <th>Name</th>
-
-                    <th>Amount</th>
-
-                    <th>View</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="receiptTable">
-
-                <tr>
-
-                    <td colspan="5">
-
-                        No Records Found
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    <!-- Footer -->
-
-    <div class="footer">
-
-        Total Receipts :
-        <span id="totalReceipts">
-
-            0
-
-        </span>
 
     </div>
 
 </div>
 
-<script type="module" src="js/receipt.js"></script>
+<script type="module" src="receipt.js"></script>
 
 </body>
-
 </html>
