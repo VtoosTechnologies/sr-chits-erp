@@ -106,13 +106,13 @@ snapshot.docs[0].data();
 //==================================================
 
 receiptNo.textContent =
-data.receiptNo || "-";
+data.transactionNo || "-";
 
 transactionNo.textContent =
 data.transactionNo || "-";
 
 referenceNo.textContent =
-data.referenceNo || "-";
+data.memberCode || "-";
 
 memberName.textContent =
 data.memberName || "-";
@@ -135,21 +135,23 @@ data.receivedAmount || 0
 remarks.textContent =
 data.remarks || "-";
 
-if(data.collectionDate){
+const dateField =
+data.collectionDate || data.createdAt;
 
-    if(data.collectionDate.toDate){
+if(dateField){
+
+    if(dateField.toDate){
 
         collectionDate.textContent =
-        data.collectionDate
+        dateField
         .toDate()
         .toLocaleString("en-IN");
 
     }else{
 
         collectionDate.textContent =
-        new Date(
-        data.collectionDate
-        ).toLocaleString("en-IN");
+        new Date(dateField)
+        .toLocaleString("en-IN");
 
     }
 
@@ -158,9 +160,6 @@ if(data.collectionDate){
     collectionDate.textContent = "-";
 
 }
-
-}
-
 //==================================================
 // Print Receipt
 //==================================================
