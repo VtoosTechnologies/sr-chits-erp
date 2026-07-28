@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cash Book</title>
+
+<link rel="stylesheet" href="cashbook.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Cash Book</h2>
+
+    <div class="filter-card">
+
+        <div class="form-group">
+
+            <label>From Date</label>
+
+            <input
+                type="date"
+                id="fromDate"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>To Date</label>
+
+            <input
+                type="date"
+                id="toDate"
+            >
+
+        </div>
+
+        <button id="loadReport">
+            Search
+        </button>
+
+    </div>
+
+    <div class="summary-card">
+
+        <h3>Total Collection</h3>
+
+        <h1 id="grandTotal">
+            ₹0
+        </h1>
+
+    </div>
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Receipt No</th>
+
+                    <th>Reference No</th>
+
+                    <th>Member Name</th>
+
+                    <th>Payment</th>
+
+                    <th>Amount</th>
+
+                    <th>Receipt</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="cashbookTable">
+
+                <tr>
+
+                    <td colspan="7"
+                        style="text-align:center">
+
+                        No Records Found
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script type="module" src="cashbook.js"></script>
+
+</body>
+
+</html>
