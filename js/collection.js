@@ -1057,6 +1057,7 @@ entry.aadhaarNumber,
 
 memberCode:
 entry.memberCode,
+referenceNo: selectedMember.referenceNo,
 
 memberName:
 entry.memberName,
@@ -1083,6 +1084,8 @@ remarks:
 entry.remarks,
 transactionNo:
 entry.transactionNo,
+  receiptNo: entry.transactionNo,
+    collectionDate: serverTimestamp(),
 createdAt:
 serverTimestamp()
 
