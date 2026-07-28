@@ -1,190 +1,172 @@
-/*==================================================
-SR Chits Receipt
-receipt.css
-==================================================*/
-
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 body{
-
-background:#f2f5fa;
-padding:30px;
-
+    background:#f5f7fb;
+    padding:20px;
 }
 
-.receipt-container{
-
-width:800px;
-margin:auto;
-background:#fff;
-padding:30px;
-border-radius:10px;
-box-shadow:0 5px 20px rgba(0,0,0,.15);
-
+.container{
+    max-width:1100px;
+    margin:auto;
+    background:#fff;
+    border-radius:12px;
+    padding:25px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
 }
 
-.receipt-header{
-
-text-align:center;
-margin-bottom:20px;
-
+h1{
+    text-align:center;
+    color:#0d47a1;
+    margin-bottom:25px;
 }
 
-.logo{
+/* Tabs */
 
-width:90px;
-height:90px;
-margin-bottom:10px;
-
+.tabs{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-bottom:25px;
 }
 
-.receipt-header h1{
-
-font-size:32px;
-color:#0d47a1;
-letter-spacing:2px;
-
+.tabs button{
+    border:none;
+    background:#e0e0e0;
+    padding:12px 22px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:bold;
+    transition:.3s;
 }
 
-.receipt-header h3{
-
-margin-top:5px;
-color:#444;
-font-size:16px;
-font-weight:normal;
-
+.tabs button:hover{
+    background:#1976d2;
+    color:#fff;
 }
 
-.receipt-header p{
-
-margin-top:8px;
-font-size:14px;
-color:#777;
-
+.tabs button.active{
+    background:#0d47a1;
+    color:#fff;
 }
 
-hr{
+/* Filters */
 
-margin:20px 0;
-border:none;
-border-top:2px solid #ddd;
-
+.filters{
+    display:grid;
+    grid-template-columns:1fr 1fr auto;
+    gap:15px;
+    align-items:end;
+    margin-bottom:25px;
 }
 
-.title{
-
-text-align:center;
-margin-bottom:20px;
-color:#0d47a1;
-letter-spacing:1px;
-
+.filters label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+    color:#444;
 }
 
-.info-table{
-
-width:100%;
-border-collapse:collapse;
-
+.filters input{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
 }
 
-.info-table td{
-
-padding:12px;
-border-bottom:1px solid #ddd;
-font-size:15px;
-
+#searchBtn{
+    padding:11px 20px;
+    border:none;
+    background:#2e7d32;
+    color:#fff;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
 }
 
-.info-table td:first-child{
-
-width:40%;
-font-weight:bold;
-color:#444;
-
+#searchBtn:hover{
+    background:#1b5e20;
 }
 
-.info-table td:last-child{
+/* Table */
 
-color:#0d47a1;
-font-weight:bold;
+.table-area{
+    overflow-x:auto;
+}
 
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#0d47a1;
+    color:#fff;
+}
+
+th{
+    padding:14px;
+    text-align:center;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
+}
+
+tbody tr:hover{
+    background:#f5f5f5;
+}
+
+/* View Button */
+
+.viewBtn{
+    background:#1976d2;
+    color:#fff;
+    border:none;
+    padding:7px 15px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.viewBtn:hover{
+    background:#0d47a1;
+}
+
+/* Footer */
+
+.footer{
+    margin-top:20px;
+    text-align:right;
+    font-size:17px;
+    font-weight:bold;
+    color:#0d47a1;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+.filters{
+    grid-template-columns:1fr;
+}
+
+.tabs{
+    flex-direction:column;
+}
+
+.tabs button{
+    width:100%;
 }
 
 .footer{
-
-text-align:center;
-margin-top:25px;
-
-}
-
-.footer p{
-
-margin:5px 0;
-
-}
-
-.footer small{
-
-color:#777;
-
-}
-
-.button-area{
-
-margin-top:30px;
-text-align:center;
-
-}
-
-.button-area button{
-
-padding:12px 25px;
-margin:10px;
-border:none;
-border-radius:6px;
-background:#1565c0;
-color:#fff;
-cursor:pointer;
-font-size:15px;
-transition:.3s;
-
-}
-
-.button-area button:hover{
-
-background:#0d47a1;
-
-}
-
-/* Print */
-
-@media print{
-
-body{
-
-background:#fff;
-padding:0;
-
-}
-
-.receipt-container{
-
-width:100%;
-box-shadow:none;
-border:none;
-padding:0;
-
-}
-
-.button-area{
-
-display:none;
-
+    text-align:center;
 }
 
 }
