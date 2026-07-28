@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SR Chits Receipt</title>
+<title>Receipt History</title>
 
 <link rel="stylesheet" href="css/receipt.css">
 
@@ -14,129 +14,116 @@
 
 <body>
 
-<div class="receipt-container">
+<div class="container">
 
-    <!-- Header -->
+    <h1>📄 Receipt History</h1>
 
-    <div class="receipt-header">
+    <!-- Tabs -->
 
-        <img src="images/logo.png"
-             class="logo"
-             alt="SR Chits">
+    <div class="tabs">
 
-        <h1>SR CHITS</h1>
+        <button
+            id="collectionTab"
+            class="active">
 
-        <h3>Powered by VTOOS Software Solution</h3>
+            💰 Collection Receipts
 
-        <p>
-            Trust • Transparency • Growth
-        </p>
+        </button>
+
+        <button
+            id="auctionTab">
+
+            🏆 Auction Receipts
+
+        </button>
 
     </div>
 
-    <hr>
+    <!-- Filters -->
 
-    <!-- Receipt Title -->
+    <div class="filters">
 
-    <h2 class="title">
-        COLLECTION RECEIPT
-    </h2>
+        <div>
 
-    <!-- Receipt Information -->
+            <label>From Date</label>
 
-    <table class="info-table">
+            <input
+                type="date"
+                id="fromDate">
 
-        <tr>
-            <td>Receipt No</td>
-            <td id="receiptNo">-</td>
-        </tr>
+        </div>
 
-        <tr>
-            <td>Date</td>
-            <td id="receiptDate">-</td>
-        </tr>
+        <div>
 
-        <tr>
-            <td>Member Name</td>
-            <td id="memberName">-</td>
-        </tr>
+            <label>To Date</label>
 
-        <tr>
-            <td>Member Code</td>
-            <td id="memberCode">-</td>
-        </tr>
+            <input
+                type="date"
+                id="toDate">
 
-        <tr>
-            <td>Group Name</td>
-            <td id="groupName">-</td>
-        </tr>
+        </div>
 
-        <tr>
-            <td>Group Code</td>
-            <td id="groupCode">-</td>
-        </tr>
+        <button
+            id="searchBtn">
 
-        <tr>
-            <td>Installment</td>
-            <td id="installment">-</td>
-        </tr>
+            🔍 Search
 
-        <tr>
-            <td>Previous Pending</td>
-            <td id="previousPending">₹0</td>
-        </tr>
+        </button>
 
-        <tr>
-            <td>Received Amount</td>
-            <td id="receivedAmount">₹0</td>
-        </tr>
+    </div>
 
-        <tr>
-            <td>Balance Pending</td>
-            <td id="balancePending">₹0</td>
-        </tr>
+    <!-- Table -->
 
-        <tr>
-            <td>Payment Mode</td>
-            <td id="paymentMode">-</td>
-        </tr>
+    <div class="table-area">
 
-        <tr>
-            <td>Remarks</td>
-            <td id="remarks">-</td>
-        </tr>
+        <table>
 
-    </table>
+            <thead>
 
-    <hr>
+                <tr>
+
+                    <th>Receipt No</th>
+
+                    <th>Date</th>
+
+                    <th>Name</th>
+
+                    <th>Amount</th>
+
+                    <th>View</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="receiptTable">
+
+                <tr>
+
+                    <td colspan="5">
+
+                        No Records Found
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
 
     <!-- Footer -->
 
     <div class="footer">
 
-        <p>
-            Thank You for Your Payment
-        </p>
+        Total Receipts :
+        <span id="totalReceipts">
 
-        <p>
-            SR CHITS
-        </p>
+            0
 
-        <small>
-            Powered by VTOOS Software Solution
-        </small>
-
-    </div>
-
-    <div class="button-area">
-
-        <button onclick="window.print()">
-            🖨 Print Receipt
-        </button>
-
-        <button onclick="window.close()">
-            ❌ Close
-        </button>
+        </span>
 
     </div>
 
